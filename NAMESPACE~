@@ -1,3 +1,0 @@
-useDynLib(vifcopula)
-exportPattern("^[[:alpha:]]+")
-importFrom(Rcpp, evalCpp)

@@ -20,3 +20,6 @@
 #' @author Hoang Nguyen
 #' 
 #' @references 
+#' @useDynLib vifcopula
+#' @import Rcpp
+NULL
