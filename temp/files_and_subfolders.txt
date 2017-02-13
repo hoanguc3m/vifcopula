@@ -1,0 +1,1040 @@
+.
+├── files_and_subfolders.txt
+├── math
+│   ├── fwd
+│   │   ├── arr
+│   │   │   └── fun
+│   │   │       ├── log_sum_exp.hpp
+│   │   │       ├── sum.hpp
+│   │   │       └── to_fvar.hpp
+│   │   ├── arr.hpp
+│   │   ├── core
+│   │   │   ├── fvar.hpp
+│   │   │   ├── operator_addition.hpp
+│   │   │   ├── operator_division.hpp
+│   │   │   ├── operator_equal.hpp
+│   │   │   ├── operator_greater_than.hpp
+│   │   │   ├── operator_greater_than_or_equal.hpp
+│   │   │   ├── operator_less_than.hpp
+│   │   │   ├── operator_less_than_or_equal.hpp
+│   │   │   ├── operator_multiplication.hpp
+│   │   │   ├── operator_not_equal.hpp
+│   │   │   ├── operator_subtraction.hpp
+│   │   │   ├── operator_unary_minus.hpp
+│   │   │   └── std_numeric_limits.hpp
+│   │   ├── core.hpp
+│   │   ├── mat
+│   │   │   ├── fun
+│   │   │   │   ├── columns_dot_product.hpp
+│   │   │   │   ├── columns_dot_self.hpp
+│   │   │   │   ├── crossprod.hpp
+│   │   │   │   ├── determinant.hpp
+│   │   │   │   ├── divide.hpp
+│   │   │   │   ├── dot_product.hpp
+│   │   │   │   ├── dot_self.hpp
+│   │   │   │   ├── Eigen_NumTraits.hpp
+│   │   │   │   ├── inverse.hpp
+│   │   │   │   ├── log_determinant.hpp
+│   │   │   │   ├── log_softmax.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── mdivide_left.hpp
+│   │   │   │   ├── mdivide_left_ldlt.hpp
+│   │   │   │   ├── mdivide_left_tri_low.hpp
+│   │   │   │   ├── mdivide_right.hpp
+│   │   │   │   ├── mdivide_right_tri_low.hpp
+│   │   │   │   ├── multiply.hpp
+│   │   │   │   ├── multiply_lower_tri_self_transpose.hpp
+│   │   │   │   ├── qr_Q.hpp
+│   │   │   │   ├── qr_R.hpp
+│   │   │   │   ├── quad_form_sym.hpp
+│   │   │   │   ├── rows_dot_product.hpp
+│   │   │   │   ├── rows_dot_self.hpp
+│   │   │   │   ├── softmax.hpp
+│   │   │   │   ├── squared_distance.hpp
+│   │   │   │   ├── sum.hpp
+│   │   │   │   ├── tcrossprod.hpp
+│   │   │   │   ├── to_fvar.hpp
+│   │   │   │   ├── trace_gen_quad_form.hpp
+│   │   │   │   ├── trace_quad_form.hpp
+│   │   │   │   ├── typedefs.hpp
+│   │   │   │   └── unit_vector_constrain.hpp
+│   │   │   ├── functor
+│   │   │   │   ├── gradient.hpp
+│   │   │   │   └── jacobian.hpp
+│   │   │   └── vectorize
+│   │   │       └── apply_scalar_unary.hpp
+│   │   ├── mat.hpp
+│   │   ├── scal
+│   │   │   ├── fun
+│   │   │   │   ├── abs.hpp
+│   │   │   │   ├── acosh.hpp
+│   │   │   │   ├── acos.hpp
+│   │   │   │   ├── asinh.hpp
+│   │   │   │   ├── asin.hpp
+│   │   │   │   ├── atan2.hpp
+│   │   │   │   ├── atanh.hpp
+│   │   │   │   ├── atan.hpp
+│   │   │   │   ├── bessel_first_kind.hpp
+│   │   │   │   ├── bessel_second_kind.hpp
+│   │   │   │   ├── binary_log_loss.hpp
+│   │   │   │   ├── binomial_coefficient_log.hpp
+│   │   │   │   ├── cbrt.hpp
+│   │   │   │   ├── ceil.hpp
+│   │   │   │   ├── cosh.hpp
+│   │   │   │   ├── cos.hpp
+│   │   │   │   ├── digamma.hpp
+│   │   │   │   ├── erfc.hpp
+│   │   │   │   ├── erf.hpp
+│   │   │   │   ├── exp2.hpp
+│   │   │   │   ├── exp.hpp
+│   │   │   │   ├── expm1.hpp
+│   │   │   │   ├── fabs.hpp
+│   │   │   │   ├── falling_factorial.hpp
+│   │   │   │   ├── fdim.hpp
+│   │   │   │   ├── floor.hpp
+│   │   │   │   ├── fma.hpp
+│   │   │   │   ├── fmax.hpp
+│   │   │   │   ├── fmin.hpp
+│   │   │   │   ├── fmod.hpp
+│   │   │   │   ├── gamma_p.hpp
+│   │   │   │   ├── gamma_q.hpp
+│   │   │   │   ├── grad_inc_beta.hpp
+│   │   │   │   ├── hypot.hpp
+│   │   │   │   ├── inc_beta.hpp
+│   │   │   │   ├── inv_cloglog.hpp
+│   │   │   │   ├── inv.hpp
+│   │   │   │   ├── inv_logit.hpp
+│   │   │   │   ├── inv_Phi.hpp
+│   │   │   │   ├── inv_sqrt.hpp
+│   │   │   │   ├── inv_square.hpp
+│   │   │   │   ├── is_inf.hpp
+│   │   │   │   ├── is_nan.hpp
+│   │   │   │   ├── lbeta.hpp
+│   │   │   │   ├── lgamma.hpp
+│   │   │   │   ├── lmgamma.hpp
+│   │   │   │   ├── log10.hpp
+│   │   │   │   ├── log1m_exp.hpp
+│   │   │   │   ├── log1m.hpp
+│   │   │   │   ├── log1m_inv_logit.hpp
+│   │   │   │   ├── log1p_exp.hpp
+│   │   │   │   ├── log1p.hpp
+│   │   │   │   ├── log2.hpp
+│   │   │   │   ├── log_diff_exp.hpp
+│   │   │   │   ├── log_falling_factorial.hpp
+│   │   │   │   ├── log.hpp
+│   │   │   │   ├── log_inv_logit.hpp
+│   │   │   │   ├── logit.hpp
+│   │   │   │   ├── log_mix.hpp
+│   │   │   │   ├── log_rising_factorial.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── modified_bessel_first_kind.hpp
+│   │   │   │   ├── modified_bessel_second_kind.hpp
+│   │   │   │   ├── multiply_log.hpp
+│   │   │   │   ├── owens_t.hpp
+│   │   │   │   ├── Phi_approx.hpp
+│   │   │   │   ├── Phi.hpp
+│   │   │   │   ├── pow.hpp
+│   │   │   │   ├── primitive_value.hpp
+│   │   │   │   ├── rising_factorial.hpp
+│   │   │   │   ├── round.hpp
+│   │   │   │   ├── sinh.hpp
+│   │   │   │   ├── sin.hpp
+│   │   │   │   ├── sqrt.hpp
+│   │   │   │   ├── square.hpp
+│   │   │   │   ├── tanh.hpp
+│   │   │   │   ├── tan.hpp
+│   │   │   │   ├── tgamma.hpp
+│   │   │   │   ├── to_fvar.hpp
+│   │   │   │   ├── trigamma.hpp
+│   │   │   │   ├── trunc.hpp
+│   │   │   │   ├── value_of.hpp
+│   │   │   │   └── value_of_rec.hpp
+│   │   │   └── meta
+│   │   │       ├── ad_promotable.hpp
+│   │   │       ├── is_fvar.hpp
+│   │   │       ├── OperandsAndPartials.hpp
+│   │   │       └── partials_type.hpp
+│   │   └── scal.hpp
+│   ├── memory
+│   │   └── stack_alloc.hpp
+│   ├── mix
+│   │   ├── arr.hpp
+│   │   ├── mat
+│   │   │   ├── fun
+│   │   │   │   └── typedefs.hpp
+│   │   │   └── functor
+│   │   │       ├── derivative.hpp
+│   │   │       ├── finite_diff_grad_hessian.hpp
+│   │   │       ├── grad_hessian.hpp
+│   │   │       ├── gradient_dot_vector.hpp
+│   │   │       ├── grad_tr_mat_times_hessian.hpp
+│   │   │       ├── hessian.hpp
+│   │   │       ├── hessian_times_vector.hpp
+│   │   │       └── partial_derivative.hpp
+│   │   ├── mat.hpp
+│   │   └── scal.hpp
+│   ├── prim
+│   │   ├── arr
+│   │   │   ├── err
+│   │   │   │   ├── check_matching_sizes.hpp
+│   │   │   │   ├── check_nonzero_size.hpp
+│   │   │   │   └── check_ordered.hpp
+│   │   │   ├── fun
+│   │   │   │   ├── dot.hpp
+│   │   │   │   ├── dot_self.hpp
+│   │   │   │   ├── fill.hpp
+│   │   │   │   ├── inverse_softmax.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── promote_scalar.hpp
+│   │   │   │   ├── promote_scalar_type.hpp
+│   │   │   │   ├── rep_array.hpp
+│   │   │   │   ├── scaled_add.hpp
+│   │   │   │   ├── sort_asc.hpp
+│   │   │   │   ├── sort_desc.hpp
+│   │   │   │   ├── sub.hpp
+│   │   │   │   ├── sum.hpp
+│   │   │   │   ├── value_of.hpp
+│   │   │   │   └── value_of_rec.hpp
+│   │   │   ├── functor
+│   │   │   │   ├── coupled_ode_observer.hpp
+│   │   │   │   ├── coupled_ode_system.hpp
+│   │   │   │   └── integrate_ode_rk45.hpp
+│   │   │   └── meta
+│   │   │       ├── container_view.hpp
+│   │   │       ├── get.hpp
+│   │   │       ├── index_type.hpp
+│   │   │       ├── is_constant_struct.hpp
+│   │   │       ├── is_vector.hpp
+│   │   │       ├── length.hpp
+│   │   │       ├── value_type.hpp
+│   │   │       ├── VectorBuilderHelper.hpp
+│   │   │       └── VectorView.hpp
+│   │   ├── arr.hpp
+│   │   ├── mat
+│   │   │   ├── err
+│   │   │   │   ├── check_cholesky_factor_corr.hpp
+│   │   │   │   ├── check_cholesky_factor.hpp
+│   │   │   │   ├── check_column_index.hpp
+│   │   │   │   ├── check_corr_matrix.hpp
+│   │   │   │   ├── check_cov_matrix.hpp
+│   │   │   │   ├── check_ldlt_factor.hpp
+│   │   │   │   ├── check_lower_triangular.hpp
+│   │   │   │   ├── check_matching_dims.hpp
+│   │   │   │   ├── check_multiplicable.hpp
+│   │   │   │   ├── check_ordered.hpp
+│   │   │   │   ├── check_pos_definite.hpp
+│   │   │   │   ├── check_positive_ordered.hpp
+│   │   │   │   ├── check_pos_semidefinite.hpp
+│   │   │   │   ├── check_range.hpp
+│   │   │   │   ├── check_row_index.hpp
+│   │   │   │   ├── check_simplex.hpp
+│   │   │   │   ├── check_spsd_matrix.hpp
+│   │   │   │   ├── check_square.hpp
+│   │   │   │   ├── check_std_vector_index.hpp
+│   │   │   │   ├── check_symmetric.hpp
+│   │   │   │   ├── check_unit_vector.hpp
+│   │   │   │   ├── check_vector.hpp
+│   │   │   │   ├── constraint_tolerance.hpp
+│   │   │   │   └── validate_non_negative_index.hpp
+│   │   │   ├── fun
+│   │   │   │   ├── abs.hpp
+│   │   │   │   ├── accumulator.hpp
+│   │   │   │   ├── acosh.hpp
+│   │   │   │   ├── acos.hpp
+│   │   │   │   ├── add.hpp
+│   │   │   │   ├── append_col.hpp
+│   │   │   │   ├── append_row.hpp
+│   │   │   │   ├── array_builder.hpp
+│   │   │   │   ├── asinh.hpp
+│   │   │   │   ├── asin.hpp
+│   │   │   │   ├── assign.hpp
+│   │   │   │   ├── atanh.hpp
+│   │   │   │   ├── atan.hpp
+│   │   │   │   ├── autocorrelation.hpp
+│   │   │   │   ├── autocovariance.hpp
+│   │   │   │   ├── block.hpp
+│   │   │   │   ├── cbrt.hpp
+│   │   │   │   ├── ceil.hpp
+│   │   │   │   ├── cholesky_corr_constrain.hpp
+│   │   │   │   ├── cholesky_corr_free.hpp
+│   │   │   │   ├── cholesky_decompose.hpp
+│   │   │   │   ├── cholesky_factor_constrain.hpp
+│   │   │   │   ├── cholesky_factor_free.hpp
+│   │   │   │   ├── col.hpp
+│   │   │   │   ├── cols.hpp
+│   │   │   │   ├── columns_dot_product.hpp
+│   │   │   │   ├── columns_dot_self.hpp
+│   │   │   │   ├── common_type.hpp
+│   │   │   │   ├── corr_matrix_constrain.hpp
+│   │   │   │   ├── corr_matrix_free.hpp
+│   │   │   │   ├── cosh.hpp
+│   │   │   │   ├── cos.hpp
+│   │   │   │   ├── cov_exp_quad.hpp
+│   │   │   │   ├── cov_matrix_constrain.hpp
+│   │   │   │   ├── cov_matrix_constrain_lkj.hpp
+│   │   │   │   ├── cov_matrix_free.hpp
+│   │   │   │   ├── cov_matrix_free_lkj.hpp
+│   │   │   │   ├── crossprod.hpp
+│   │   │   │   ├── csr_extract_u.hpp
+│   │   │   │   ├── csr_extract_v.hpp
+│   │   │   │   ├── csr_extract_w.hpp
+│   │   │   │   ├── csr_matrix_times_vector.hpp
+│   │   │   │   ├── csr_to_dense_matrix.hpp
+│   │   │   │   ├── csr_u_to_z.hpp
+│   │   │   │   ├── cumulative_sum.hpp
+│   │   │   │   ├── determinant.hpp
+│   │   │   │   ├── diag_matrix.hpp
+│   │   │   │   ├── diagonal.hpp
+│   │   │   │   ├── diag_post_multiply.hpp
+│   │   │   │   ├── diag_pre_multiply.hpp
+│   │   │   │   ├── digamma.hpp
+│   │   │   │   ├── dims.hpp
+│   │   │   │   ├── distance.hpp
+│   │   │   │   ├── divide.hpp
+│   │   │   │   ├── dot_product.hpp
+│   │   │   │   ├── dot_self.hpp
+│   │   │   │   ├── Eigen.hpp
+│   │   │   │   ├── eigenvalues_sym.hpp
+│   │   │   │   ├── eigenvectors_sym.hpp
+│   │   │   │   ├── elt_divide.hpp
+│   │   │   │   ├── elt_multiply.hpp
+│   │   │   │   ├── erfc.hpp
+│   │   │   │   ├── erf.hpp
+│   │   │   │   ├── exp2.hpp
+│   │   │   │   ├── exp.hpp
+│   │   │   │   ├── expm1.hpp
+│   │   │   │   ├── fabs.hpp
+│   │   │   │   ├── factor_cov_matrix.hpp
+│   │   │   │   ├── factor_U.hpp
+│   │   │   │   ├── fill.hpp
+│   │   │   │   ├── floor.hpp
+│   │   │   │   ├── get_base1.hpp
+│   │   │   │   ├── get_base1_lhs.hpp
+│   │   │   │   ├── get_lp.hpp
+│   │   │   │   ├── head.hpp
+│   │   │   │   ├── initialize.hpp
+│   │   │   │   ├── inv_cloglog.hpp
+│   │   │   │   ├── inverse.hpp
+│   │   │   │   ├── inverse_spd.hpp
+│   │   │   │   ├── inv.hpp
+│   │   │   │   ├── inv_logit.hpp
+│   │   │   │   ├── inv_Phi.hpp
+│   │   │   │   ├── inv_sqrt.hpp
+│   │   │   │   ├── inv_square.hpp
+│   │   │   │   ├── LDLT_factor.hpp
+│   │   │   │   ├── lgamma.hpp
+│   │   │   │   ├── log10.hpp
+│   │   │   │   ├── log1m_exp.hpp
+│   │   │   │   ├── log1m.hpp
+│   │   │   │   ├── log1m_inv_logit.hpp
+│   │   │   │   ├── log1p_exp.hpp
+│   │   │   │   ├── log1p.hpp
+│   │   │   │   ├── log2.hpp
+│   │   │   │   ├── log_determinant.hpp
+│   │   │   │   ├── log_determinant_ldlt.hpp
+│   │   │   │   ├── log_determinant_spd.hpp
+│   │   │   │   ├── log.hpp
+│   │   │   │   ├── log_inv_logit.hpp
+│   │   │   │   ├── logit.hpp
+│   │   │   │   ├── log_softmax.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── make_nu.hpp
+│   │   │   │   ├── matrix_exp_2x2.hpp
+│   │   │   │   ├── matrix_exp.hpp
+│   │   │   │   ├── MatrixExponential.h
+│   │   │   │   ├── matrix_exp_pade.hpp
+│   │   │   │   ├── max.hpp
+│   │   │   │   ├── mdivide_left.hpp
+│   │   │   │   ├── mdivide_left_ldlt.hpp
+│   │   │   │   ├── mdivide_left_spd.hpp
+│   │   │   │   ├── mdivide_left_tri.hpp
+│   │   │   │   ├── mdivide_left_tri_low.hpp
+│   │   │   │   ├── mdivide_right.hpp
+│   │   │   │   ├── mdivide_right_ldlt.hpp
+│   │   │   │   ├── mdivide_right_spd.hpp
+│   │   │   │   ├── mdivide_right_tri.hpp
+│   │   │   │   ├── mdivide_right_tri_low.hpp
+│   │   │   │   ├── mean.hpp
+│   │   │   │   ├── min.hpp
+│   │   │   │   ├── minus.hpp
+│   │   │   │   ├── multiply.hpp
+│   │   │   │   ├── multiply_lower_tri_self_transpose.hpp
+│   │   │   │   ├── num_elements.hpp
+│   │   │   │   ├── ordered_constrain.hpp
+│   │   │   │   ├── ordered_free.hpp
+│   │   │   │   ├── Phi_approx.hpp
+│   │   │   │   ├── Phi.hpp
+│   │   │   │   ├── positive_ordered_constrain.hpp
+│   │   │   │   ├── positive_ordered_free.hpp
+│   │   │   │   ├── prod.hpp
+│   │   │   │   ├── promote_common.hpp
+│   │   │   │   ├── promoter.hpp
+│   │   │   │   ├── promote_scalar.hpp
+│   │   │   │   ├── promote_scalar_type.hpp
+│   │   │   │   ├── qr_Q.hpp
+│   │   │   │   ├── qr_R.hpp
+│   │   │   │   ├── quad_form_diag.hpp
+│   │   │   │   ├── quad_form.hpp
+│   │   │   │   ├── quad_form_sym.hpp
+│   │   │   │   ├── rank.hpp
+│   │   │   │   ├── read_corr_L.hpp
+│   │   │   │   ├── read_corr_matrix.hpp
+│   │   │   │   ├── read_cov_L.hpp
+│   │   │   │   ├── read_cov_matrix.hpp
+│   │   │   │   ├── rep_matrix.hpp
+│   │   │   │   ├── rep_row_vector.hpp
+│   │   │   │   ├── rep_vector.hpp
+│   │   │   │   ├── resize.hpp
+│   │   │   │   ├── round.hpp
+│   │   │   │   ├── row.hpp
+│   │   │   │   ├── rows_dot_product.hpp
+│   │   │   │   ├── rows_dot_self.hpp
+│   │   │   │   ├── rows.hpp
+│   │   │   │   ├── sd.hpp
+│   │   │   │   ├── segment.hpp
+│   │   │   │   ├── simplex_constrain.hpp
+│   │   │   │   ├── simplex_free.hpp
+│   │   │   │   ├── singular_values.hpp
+│   │   │   │   ├── sinh.hpp
+│   │   │   │   ├── sin.hpp
+│   │   │   │   ├── size.hpp
+│   │   │   │   ├── softmax.hpp
+│   │   │   │   ├── sort_asc.hpp
+│   │   │   │   ├── sort_desc.hpp
+│   │   │   │   ├── sort_indices_asc.hpp
+│   │   │   │   ├── sort_indices_desc.hpp
+│   │   │   │   ├── sort_indices.hpp
+│   │   │   │   ├── sqrt.hpp
+│   │   │   │   ├── squared_distance.hpp
+│   │   │   │   ├── square.hpp
+│   │   │   │   ├── stan_print.hpp
+│   │   │   │   ├── sub_col.hpp
+│   │   │   │   ├── sub_row.hpp
+│   │   │   │   ├── subtract.hpp
+│   │   │   │   ├── sum.hpp
+│   │   │   │   ├── tail.hpp
+│   │   │   │   ├── tanh.hpp
+│   │   │   │   ├── tan.hpp
+│   │   │   │   ├── tcrossprod.hpp
+│   │   │   │   ├── tgamma.hpp
+│   │   │   │   ├── to_array_1d.hpp
+│   │   │   │   ├── to_array_2d.hpp
+│   │   │   │   ├── to_matrix.hpp
+│   │   │   │   ├── to_row_vector.hpp
+│   │   │   │   ├── to_vector.hpp
+│   │   │   │   ├── trace_gen_inv_quad_form_ldlt.hpp
+│   │   │   │   ├── trace_gen_quad_form.hpp
+│   │   │   │   ├── trace.hpp
+│   │   │   │   ├── trace_inv_quad_form_ldlt.hpp
+│   │   │   │   ├── trace_quad_form.hpp
+│   │   │   │   ├── transpose.hpp
+│   │   │   │   ├── trigamma.hpp
+│   │   │   │   ├── trunc.hpp
+│   │   │   │   ├── typedefs.hpp
+│   │   │   │   ├── unit_vector_constrain.hpp
+│   │   │   │   ├── unit_vector_free.hpp
+│   │   │   │   ├── value_of.hpp
+│   │   │   │   ├── value_of_rec.hpp
+│   │   │   │   ├── variance.hpp
+│   │   │   │   ├── welford_covar_estimator.hpp
+│   │   │   │   └── welford_var_estimator.hpp
+│   │   │   ├── functor
+│   │   │   │   ├── finite_diff_gradient.hpp
+│   │   │   │   └── finite_diff_hessian.hpp
+│   │   │   ├── meta
+│   │   │   │   ├── container_view.hpp
+│   │   │   │   ├── get.hpp
+│   │   │   │   ├── index_type.hpp
+│   │   │   │   ├── is_constant_struct.hpp
+│   │   │   │   ├── is_vector.hpp
+│   │   │   │   ├── is_vector_like.hpp
+│   │   │   │   ├── length.hpp
+│   │   │   │   ├── length_mvt.hpp
+│   │   │   │   ├── scalar_type.hpp
+│   │   │   │   ├── seq_view.hpp
+│   │   │   │   ├── value_type.hpp
+│   │   │   │   ├── VectorView.hpp
+│   │   │   │   └── VectorViewMvt.hpp
+│   │   │   ├── prob
+│   │   │   │   ├── categorical_log.hpp
+│   │   │   │   ├── categorical_logit_log.hpp
+│   │   │   │   ├── categorical_rng.hpp
+│   │   │   │   ├── dirichlet_log.hpp
+│   │   │   │   ├── dirichlet_rng.hpp
+│   │   │   │   ├── gaussian_dlm_obs_log.hpp
+│   │   │   │   ├── inv_wishart_log.hpp
+│   │   │   │   ├── inv_wishart_rng.hpp
+│   │   │   │   ├── lkj_corr_cholesky_log.hpp
+│   │   │   │   ├── lkj_corr_cholesky_rng.hpp
+│   │   │   │   ├── lkj_corr_log.hpp
+│   │   │   │   ├── lkj_corr_rng.hpp
+│   │   │   │   ├── lkj_cov_log.hpp
+│   │   │   │   ├── matrix_normal_prec_log.hpp
+│   │   │   │   ├── multi_gp_cholesky_log.hpp
+│   │   │   │   ├── multi_gp_log.hpp
+│   │   │   │   ├── multinomial_log.hpp
+│   │   │   │   ├── multinomial_rng.hpp
+│   │   │   │   ├── multi_normal_cholesky_log.hpp
+│   │   │   │   ├── multi_normal_cholesky_rng.hpp
+│   │   │   │   ├── multi_normal_log.hpp
+│   │   │   │   ├── multi_normal_prec_log.hpp
+│   │   │   │   ├── multi_normal_rng.hpp
+│   │   │   │   ├── multi_student_t_log.hpp
+│   │   │   │   ├── multi_student_t_rng.hpp
+│   │   │   │   ├── ordered_logistic_log.hpp
+│   │   │   │   ├── ordered_logistic_rng.hpp
+│   │   │   │   ├── wishart_log.hpp
+│   │   │   │   └── wishart_rng.hpp
+│   │   │   └── vectorize
+│   │   │       └── apply_scalar_unary.hpp
+│   │   ├── mat.hpp
+│   │   ├── scal
+│   │   │   ├── err
+│   │   │   │   ├── check_bounded.hpp
+│   │   │   │   ├── check_consistent_size.hpp
+│   │   │   │   ├── check_consistent_sizes.hpp
+│   │   │   │   ├── check_equal.hpp
+│   │   │   │   ├── check_finite.hpp
+│   │   │   │   ├── check_greater.hpp
+│   │   │   │   ├── check_greater_or_equal.hpp
+│   │   │   │   ├── check_less.hpp
+│   │   │   │   ├── check_less_or_equal.hpp
+│   │   │   │   ├── check_nonnegative.hpp
+│   │   │   │   ├── check_not_nan.hpp
+│   │   │   │   ├── check_positive_finite.hpp
+│   │   │   │   ├── check_positive.hpp
+│   │   │   │   ├── check_positive_size.hpp
+│   │   │   │   ├── check_size_match.hpp
+│   │   │   │   ├── domain_error.hpp
+│   │   │   │   ├── domain_error_vec.hpp
+│   │   │   │   ├── invalid_argument.hpp
+│   │   │   │   ├── invalid_argument_vec.hpp
+│   │   │   │   └── out_of_range.hpp
+│   │   │   ├── fun
+│   │   │   │   ├── abs.hpp
+│   │   │   │   ├── acosh.hpp
+│   │   │   │   ├── as_bool.hpp
+│   │   │   │   ├── asinh.hpp
+│   │   │   │   ├── atanh.hpp
+│   │   │   │   ├── bessel_first_kind.hpp
+│   │   │   │   ├── bessel_second_kind.hpp
+│   │   │   │   ├── binary_log_loss.hpp
+│   │   │   │   ├── binomial_coefficient_log.hpp
+│   │   │   │   ├── boost_policy.hpp
+│   │   │   │   ├── cbrt.hpp
+│   │   │   │   ├── choose.hpp
+│   │   │   │   ├── constants.hpp
+│   │   │   │   ├── corr_constrain.hpp
+│   │   │   │   ├── corr_free.hpp
+│   │   │   │   ├── digamma.hpp
+│   │   │   │   ├── divide.hpp
+│   │   │   │   ├── erfc.hpp
+│   │   │   │   ├── erf.hpp
+│   │   │   │   ├── exp2.hpp
+│   │   │   │   ├── exp.hpp
+│   │   │   │   ├── expm1.hpp
+│   │   │   │   ├── F32.hpp
+│   │   │   │   ├── falling_factorial.hpp
+│   │   │   │   ├── fdim.hpp
+│   │   │   │   ├── fill.hpp
+│   │   │   │   ├── fma.hpp
+│   │   │   │   ├── fmax.hpp
+│   │   │   │   ├── fmin.hpp
+│   │   │   │   ├── gamma_p.hpp
+│   │   │   │   ├── gamma_q.hpp
+│   │   │   │   ├── grad_2F1.hpp
+│   │   │   │   ├── grad_F32.hpp
+│   │   │   │   ├── grad_inc_beta.hpp
+│   │   │   │   ├── grad_reg_inc_beta.hpp
+│   │   │   │   ├── grad_reg_inc_gamma.hpp
+│   │   │   │   ├── hypot.hpp
+│   │   │   │   ├── ibeta.hpp
+│   │   │   │   ├── identity_constrain.hpp
+│   │   │   │   ├── identity_free.hpp
+│   │   │   │   ├── if_else.hpp
+│   │   │   │   ├── inc_beta_dda.hpp
+│   │   │   │   ├── inc_beta_ddb.hpp
+│   │   │   │   ├── inc_beta_ddz.hpp
+│   │   │   │   ├── inc_beta.hpp
+│   │   │   │   ├── int_step.hpp
+│   │   │   │   ├── inv_cloglog.hpp
+│   │   │   │   ├── inv.hpp
+│   │   │   │   ├── inv_logit.hpp
+│   │   │   │   ├── inv_Phi.hpp
+│   │   │   │   ├── inv_sqrt.hpp
+│   │   │   │   ├── inv_square.hpp
+│   │   │   │   ├── is_inf.hpp
+│   │   │   │   ├── is_nan.hpp
+│   │   │   │   ├── is_uninitialized.hpp
+│   │   │   │   ├── lb_constrain.hpp
+│   │   │   │   ├── lbeta.hpp
+│   │   │   │   ├── lb_free.hpp
+│   │   │   │   ├── ldexp.hpp
+│   │   │   │   ├── lgamma.hpp
+│   │   │   │   ├── lmgamma.hpp
+│   │   │   │   ├── log1m_exp.hpp
+│   │   │   │   ├── log1m.hpp
+│   │   │   │   ├── log1m_inv_logit.hpp
+│   │   │   │   ├── log1p_exp.hpp
+│   │   │   │   ├── log1p.hpp
+│   │   │   │   ├── log2.hpp
+│   │   │   │   ├── log_diff_exp.hpp
+│   │   │   │   ├── log_falling_factorial.hpp
+│   │   │   │   ├── log.hpp
+│   │   │   │   ├── logical_and.hpp
+│   │   │   │   ├── logical_eq.hpp
+│   │   │   │   ├── logical_gte.hpp
+│   │   │   │   ├── logical_gt.hpp
+│   │   │   │   ├── logical_lte.hpp
+│   │   │   │   ├── logical_lt.hpp
+│   │   │   │   ├── logical_negation.hpp
+│   │   │   │   ├── logical_neq.hpp
+│   │   │   │   ├── logical_or.hpp
+│   │   │   │   ├── log_inv_logit.hpp
+│   │   │   │   ├── logit.hpp
+│   │   │   │   ├── log_mix.hpp
+│   │   │   │   ├── log_rising_factorial.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── lub_constrain.hpp
+│   │   │   │   ├── lub_free.hpp
+│   │   │   │   ├── modified_bessel_first_kind.hpp
+│   │   │   │   ├── modified_bessel_second_kind.hpp
+│   │   │   │   ├── modulus.hpp
+│   │   │   │   ├── multiply_log.hpp
+│   │   │   │   ├── owens_t.hpp
+│   │   │   │   ├── Phi_approx.hpp
+│   │   │   │   ├── Phi.hpp
+│   │   │   │   ├── positive_constrain.hpp
+│   │   │   │   ├── positive_free.hpp
+│   │   │   │   ├── primitive_value.hpp
+│   │   │   │   ├── prob_constrain.hpp
+│   │   │   │   ├── prob_free.hpp
+│   │   │   │   ├── promote_scalar.hpp
+│   │   │   │   ├── promote_scalar_type.hpp
+│   │   │   │   ├── rising_factorial.hpp
+│   │   │   │   ├── round.hpp
+│   │   │   │   ├── sign.hpp
+│   │   │   │   ├── squared_distance.hpp
+│   │   │   │   ├── square.hpp
+│   │   │   │   ├── step.hpp
+│   │   │   │   ├── tgamma.hpp
+│   │   │   │   ├── trigamma.hpp
+│   │   │   │   ├── trunc.hpp
+│   │   │   │   ├── ub_constrain.hpp
+│   │   │   │   ├── ub_free.hpp
+│   │   │   │   ├── value_of.hpp
+│   │   │   │   └── value_of_rec.hpp
+│   │   │   ├── meta
+│   │   │   │   ├── ad_promotable.hpp
+│   │   │   │   ├── child_type.hpp
+│   │   │   │   ├── container_view.hpp
+│   │   │   │   ├── contains_fvar.hpp
+│   │   │   │   ├── contains_nonconstant_struct.hpp
+│   │   │   │   ├── contains_vector.hpp
+│   │   │   │   ├── error_index.hpp
+│   │   │   │   ├── get.hpp
+│   │   │   │   ├── include_summand.hpp
+│   │   │   │   ├── index_type.hpp
+│   │   │   │   ├── is_constant.hpp
+│   │   │   │   ├── is_constant_struct.hpp
+│   │   │   │   ├── is_fvar.hpp
+│   │   │   │   ├── is_var.hpp
+│   │   │   │   ├── is_var_or_arithmetic.hpp
+│   │   │   │   ├── is_vector.hpp
+│   │   │   │   ├── is_vector_like.hpp
+│   │   │   │   ├── length.hpp
+│   │   │   │   ├── length_mvt.hpp
+│   │   │   │   ├── likely.hpp
+│   │   │   │   ├── max_size.hpp
+│   │   │   │   ├── max_size_mvt.hpp
+│   │   │   │   ├── OperandsAndPartials.hpp
+│   │   │   │   ├── partials_return_type.hpp
+│   │   │   │   ├── partials_type.hpp
+│   │   │   │   ├── return_type.hpp
+│   │   │   │   ├── scalar_type.hpp
+│   │   │   │   ├── scalar_type_pre.hpp
+│   │   │   │   ├── size_of.hpp
+│   │   │   │   ├── value_type.hpp
+│   │   │   │   ├── VectorBuilderHelper.hpp
+│   │   │   │   ├── VectorBuilder.hpp
+│   │   │   │   └── VectorView.hpp
+│   │   │   └── prob
+│   │   │       ├── bernoulli_ccdf_log.hpp
+│   │   │       ├── bernoulli_cdf.hpp
+│   │   │       ├── bernoulli_cdf_log.hpp
+│   │   │       ├── bernoulli_log.hpp
+│   │   │       ├── bernoulli_logit_log.hpp
+│   │   │       ├── bernoulli_logit_rng.hpp
+│   │   │       ├── bernoulli_rng.hpp
+│   │   │       ├── beta_binomial_ccdf_log.hpp
+│   │   │       ├── beta_binomial_cdf.hpp
+│   │   │       ├── beta_binomial_cdf_log.hpp
+│   │   │       ├── beta_binomial_log.hpp
+│   │   │       ├── beta_binomial_rng.hpp
+│   │   │       ├── beta_ccdf_log.hpp
+│   │   │       ├── beta_cdf.hpp
+│   │   │       ├── beta_cdf_log.hpp
+│   │   │       ├── beta_log.hpp
+│   │   │       ├── beta_rng.hpp
+│   │   │       ├── binomial_ccdf_log.hpp
+│   │   │       ├── binomial_cdf.hpp
+│   │   │       ├── binomial_cdf_log.hpp
+│   │   │       ├── binomial_log.hpp
+│   │   │       ├── binomial_logit_log.hpp
+│   │   │       ├── binomial_rng.hpp
+│   │   │       ├── cauchy_ccdf_log.hpp
+│   │   │       ├── cauchy_cdf.hpp
+│   │   │       ├── cauchy_cdf_log.hpp
+│   │   │       ├── cauchy_log.hpp
+│   │   │       ├── cauchy_rng.hpp
+│   │   │       ├── chi_square_ccdf_log.hpp
+│   │   │       ├── chi_square_cdf.hpp
+│   │   │       ├── chi_square_cdf_log.hpp
+│   │   │       ├── chi_square_log.hpp
+│   │   │       ├── chi_square_rng.hpp
+│   │   │       ├── double_exponential_ccdf_log.hpp
+│   │   │       ├── double_exponential_cdf.hpp
+│   │   │       ├── double_exponential_cdf_log.hpp
+│   │   │       ├── double_exponential_log.hpp
+│   │   │       ├── double_exponential_rng.hpp
+│   │   │       ├── exp_mod_normal_ccdf_log.hpp
+│   │   │       ├── exp_mod_normal_cdf.hpp
+│   │   │       ├── exp_mod_normal_cdf_log.hpp
+│   │   │       ├── exp_mod_normal_log.hpp
+│   │   │       ├── exp_mod_normal_rng.hpp
+│   │   │       ├── exponential_ccdf_log.hpp
+│   │   │       ├── exponential_cdf.hpp
+│   │   │       ├── exponential_cdf_log.hpp
+│   │   │       ├── exponential_log.hpp
+│   │   │       ├── exponential_rng.hpp
+│   │   │       ├── frechet_ccdf_log.hpp
+│   │   │       ├── frechet_cdf.hpp
+│   │   │       ├── frechet_cdf_log.hpp
+│   │   │       ├── frechet_log.hpp
+│   │   │       ├── frechet_rng.hpp
+│   │   │       ├── gamma_ccdf_log.hpp
+│   │   │       ├── gamma_cdf.hpp
+│   │   │       ├── gamma_cdf_log.hpp
+│   │   │       ├── gamma_log.hpp
+│   │   │       ├── gamma_rng.hpp
+│   │   │       ├── gumbel_ccdf_log.hpp
+│   │   │       ├── gumbel_cdf.hpp
+│   │   │       ├── gumbel_cdf_log.hpp
+│   │   │       ├── gumbel_log.hpp
+│   │   │       ├── gumbel_rng.hpp
+│   │   │       ├── hypergeometric_log.hpp
+│   │   │       ├── hypergeometric_rng.hpp
+│   │   │       ├── inv_chi_square_ccdf_log.hpp
+│   │   │       ├── inv_chi_square_cdf.hpp
+│   │   │       ├── inv_chi_square_cdf_log.hpp
+│   │   │       ├── inv_chi_square_log.hpp
+│   │   │       ├── inv_chi_square_rng.hpp
+│   │   │       ├── inv_gamma_ccdf_log.hpp
+│   │   │       ├── inv_gamma_cdf.hpp
+│   │   │       ├── inv_gamma_cdf_log.hpp
+│   │   │       ├── inv_gamma_log.hpp
+│   │   │       ├── inv_gamma_rng.hpp
+│   │   │       ├── logistic_ccdf_log.hpp
+│   │   │       ├── logistic_cdf.hpp
+│   │   │       ├── logistic_cdf_log.hpp
+│   │   │       ├── logistic_log.hpp
+│   │   │       ├── logistic_rng.hpp
+│   │   │       ├── lognormal_ccdf_log.hpp
+│   │   │       ├── lognormal_cdf.hpp
+│   │   │       ├── lognormal_cdf_log.hpp
+│   │   │       ├── lognormal_log.hpp
+│   │   │       ├── lognormal_rng.hpp
+│   │   │       ├── neg_binomial_2_ccdf_log.hpp
+│   │   │       ├── neg_binomial_2_cdf.hpp
+│   │   │       ├── neg_binomial_2_cdf_log.hpp
+│   │   │       ├── neg_binomial_2_log.hpp
+│   │   │       ├── neg_binomial_2_log_log.hpp
+│   │   │       ├── neg_binomial_2_log_rng.hpp
+│   │   │       ├── neg_binomial_2_rng.hpp
+│   │   │       ├── neg_binomial_ccdf_log.hpp
+│   │   │       ├── neg_binomial_cdf.hpp
+│   │   │       ├── neg_binomial_cdf_log.hpp
+│   │   │       ├── neg_binomial_log.hpp
+│   │   │       ├── neg_binomial_rng.hpp
+│   │   │       ├── normal_ccdf_log.hpp
+│   │   │       ├── normal_cdf.hpp
+│   │   │       ├── normal_cdf_log.hpp
+│   │   │       ├── normal_log.hpp
+│   │   │       ├── normal_rng.hpp
+│   │   │       ├── pareto_ccdf_log.hpp
+│   │   │       ├── pareto_cdf.hpp
+│   │   │       ├── pareto_cdf_log.hpp
+│   │   │       ├── pareto_log.hpp
+│   │   │       ├── pareto_rng.hpp
+│   │   │       ├── pareto_type_2_ccdf_log.hpp
+│   │   │       ├── pareto_type_2_cdf.hpp
+│   │   │       ├── pareto_type_2_cdf_log.hpp
+│   │   │       ├── pareto_type_2_log.hpp
+│   │   │       ├── pareto_type_2_rng.hpp
+│   │   │       ├── poisson_ccdf_log.hpp
+│   │   │       ├── poisson_cdf.hpp
+│   │   │       ├── poisson_cdf_log.hpp
+│   │   │       ├── poisson_log.hpp
+│   │   │       ├── poisson_log_log.hpp
+│   │   │       ├── poisson_log_rng.hpp
+│   │   │       ├── poisson_rng.hpp
+│   │   │       ├── rayleigh_ccdf_log.hpp
+│   │   │       ├── rayleigh_cdf.hpp
+│   │   │       ├── rayleigh_cdf_log.hpp
+│   │   │       ├── rayleigh_log.hpp
+│   │   │       ├── rayleigh_rng.hpp
+│   │   │       ├── scaled_inv_chi_square_ccdf_log.hpp
+│   │   │       ├── scaled_inv_chi_square_cdf.hpp
+│   │   │       ├── scaled_inv_chi_square_cdf_log.hpp
+│   │   │       ├── scaled_inv_chi_square_log.hpp
+│   │   │       ├── scaled_inv_chi_square_rng.hpp
+│   │   │       ├── skew_normal_ccdf_log.hpp
+│   │   │       ├── skew_normal_cdf.hpp
+│   │   │       ├── skew_normal_cdf_log.hpp
+│   │   │       ├── skew_normal_log.hpp
+│   │   │       ├── skew_normal_rng.hpp
+│   │   │       ├── student_t_ccdf_log.hpp
+│   │   │       ├── student_t_cdf.hpp
+│   │   │       ├── student_t_cdf_log.hpp
+│   │   │       ├── student_t_log.hpp
+│   │   │       ├── student_t_rng.hpp
+│   │   │       ├── uniform_ccdf_log.hpp
+│   │   │       ├── uniform_cdf.hpp
+│   │   │       ├── uniform_cdf_log.hpp
+│   │   │       ├── uniform_log.hpp
+│   │   │       ├── uniform_rng.hpp
+│   │   │       ├── von_mises_log.hpp
+│   │   │       ├── von_mises_rng.hpp
+│   │   │       ├── weibull_ccdf_log.hpp
+│   │   │       ├── weibull_cdf.hpp
+│   │   │       ├── weibull_cdf_log.hpp
+│   │   │       ├── weibull_log.hpp
+│   │   │       ├── weibull_rng.hpp
+│   │   │       └── wiener_log.hpp
+│   │   └── scal.hpp
+│   ├── rev
+│   │   ├── arr
+│   │   │   ├── fun
+│   │   │   │   ├── decouple_ode_states.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── sum.hpp
+│   │   │   │   └── to_var.hpp
+│   │   │   └── functor
+│   │   │       └── coupled_ode_system.hpp
+│   │   ├── arr.hpp
+│   │   ├── core
+│   │   │   ├── autodiffstackstorage.hpp
+│   │   │   ├── chainable_alloc.hpp
+│   │   │   ├── chainablestack.hpp
+│   │   │   ├── ddv_vari.hpp
+│   │   │   ├── dvd_vari.hpp
+│   │   │   ├── dv_vari.hpp
+│   │   │   ├── dvv_vari.hpp
+│   │   │   ├── empty_nested.hpp
+│   │   │   ├── gevv_vvv_vari.hpp
+│   │   │   ├── grad.hpp
+│   │   │   ├── matrix_vari.hpp
+│   │   │   ├── nested_size.hpp
+│   │   │   ├── operator_addition.hpp
+│   │   │   ├── operator_divide_equal.hpp
+│   │   │   ├── operator_division.hpp
+│   │   │   ├── operator_equal.hpp
+│   │   │   ├── operator_greater_than.hpp
+│   │   │   ├── operator_greater_than_or_equal.hpp
+│   │   │   ├── operator_less_than.hpp
+│   │   │   ├── operator_less_than_or_equal.hpp
+│   │   │   ├── operator_minus_equal.hpp
+│   │   │   ├── operator_multiplication.hpp
+│   │   │   ├── operator_multiply_equal.hpp
+│   │   │   ├── operator_not_equal.hpp
+│   │   │   ├── operator_plus_equal.hpp
+│   │   │   ├── operator_subtraction.hpp
+│   │   │   ├── operator_unary_decrement.hpp
+│   │   │   ├── operator_unary_increment.hpp
+│   │   │   ├── operator_unary_negative.hpp
+│   │   │   ├── operator_unary_not.hpp
+│   │   │   ├── operator_unary_plus.hpp
+│   │   │   ├── precomputed_gradients.hpp
+│   │   │   ├── precomp_v_vari.hpp
+│   │   │   ├── precomp_vv_vari.hpp
+│   │   │   ├── precomp_vvv_vari.hpp
+│   │   │   ├── print_stack.hpp
+│   │   │   ├── recover_memory.hpp
+│   │   │   ├── recover_memory_nested.hpp
+│   │   │   ├── set_zero_all_adjoints.hpp
+│   │   │   ├── set_zero_all_adjoints_nested.hpp
+│   │   │   ├── start_nested.hpp
+│   │   │   ├── std_isinf.hpp
+│   │   │   ├── std_isnan.hpp
+│   │   │   ├── std_numeric_limits.hpp
+│   │   │   ├── stored_gradient_vari.hpp
+│   │   │   ├── var.hpp
+│   │   │   ├── vari.hpp
+│   │   │   ├── vdd_vari.hpp
+│   │   │   ├── vd_vari.hpp
+│   │   │   ├── vdv_vari.hpp
+│   │   │   ├── vector_vari.hpp
+│   │   │   ├── v_vari.hpp
+│   │   │   ├── vvd_vari.hpp
+│   │   │   ├── vv_vari.hpp
+│   │   │   └── vvv_vari.hpp
+│   │   ├── core.hpp
+│   │   ├── mat
+│   │   │   ├── fun
+│   │   │   │   ├── cholesky_decompose.hpp
+│   │   │   │   ├── columns_dot_product.hpp
+│   │   │   │   ├── columns_dot_self.hpp
+│   │   │   │   ├── cov_exp_quad.hpp
+│   │   │   │   ├── crossprod.hpp
+│   │   │   │   ├── determinant.hpp
+│   │   │   │   ├── divide.hpp
+│   │   │   │   ├── dot_product.hpp
+│   │   │   │   ├── dot_self.hpp
+│   │   │   │   ├── Eigen_NumTraits.hpp
+│   │   │   │   ├── grad.hpp
+│   │   │   │   ├── initialize_variable.hpp
+│   │   │   │   ├── LDLT_alloc.hpp
+│   │   │   │   ├── LDLT_factor.hpp
+│   │   │   │   ├── log_determinant.hpp
+│   │   │   │   ├── log_determinant_ldlt.hpp
+│   │   │   │   ├── log_determinant_spd.hpp
+│   │   │   │   ├── log_softmax.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── mdivide_left.hpp
+│   │   │   │   ├── mdivide_left_ldlt.hpp
+│   │   │   │   ├── mdivide_left_spd.hpp
+│   │   │   │   ├── mdivide_left_tri.hpp
+│   │   │   │   ├── multiply.hpp
+│   │   │   │   ├── multiply_lower_tri_self_transpose.hpp
+│   │   │   │   ├── quad_form.hpp
+│   │   │   │   ├── quad_form_sym.hpp
+│   │   │   │   ├── rows_dot_product.hpp
+│   │   │   │   ├── sd.hpp
+│   │   │   │   ├── softmax.hpp
+│   │   │   │   ├── squared_distance.hpp
+│   │   │   │   ├── stan_print.hpp
+│   │   │   │   ├── sum.hpp
+│   │   │   │   ├── tcrossprod.hpp
+│   │   │   │   ├── to_var.hpp
+│   │   │   │   ├── trace_gen_inv_quad_form_ldlt.hpp
+│   │   │   │   ├── trace_gen_quad_form.hpp
+│   │   │   │   ├── trace_inv_quad_form_ldlt.hpp
+│   │   │   │   ├── trace_quad_form.hpp
+│   │   │   │   ├── typedefs.hpp
+│   │   │   │   ├── unit_vector_constrain.hpp
+│   │   │   │   └── variance.hpp
+│   │   │   ├── functor
+│   │   │   │   ├── cvodes_ode_data.hpp
+│   │   │   │   ├── cvodes_utils.hpp
+│   │   │   │   ├── gradient.hpp
+│   │   │   │   ├── integrate_ode_bdf.hpp
+│   │   │   │   ├── jacobian.hpp
+│   │   │   │   └── ode_system.hpp
+│   │   │   └── vectorize
+│   │   │       └── apply_scalar_unary.hpp
+│   │   ├── mat.hpp
+│   │   ├── scal
+│   │   │   ├── fun
+│   │   │   │   ├── abs.hpp
+│   │   │   │   ├── acosh.hpp
+│   │   │   │   ├── acos.hpp
+│   │   │   │   ├── as_bool.hpp
+│   │   │   │   ├── asinh.hpp
+│   │   │   │   ├── asin.hpp
+│   │   │   │   ├── atan2.hpp
+│   │   │   │   ├── atanh.hpp
+│   │   │   │   ├── atan.hpp
+│   │   │   │   ├── bessel_first_kind.hpp
+│   │   │   │   ├── bessel_second_kind.hpp
+│   │   │   │   ├── binary_log_loss.hpp
+│   │   │   │   ├── boost_fpclassify.hpp
+│   │   │   │   ├── boost_isfinite.hpp
+│   │   │   │   ├── boost_isinf.hpp
+│   │   │   │   ├── boost_isnan.hpp
+│   │   │   │   ├── boost_isnormal.hpp
+│   │   │   │   ├── calculate_chain.hpp
+│   │   │   │   ├── cbrt.hpp
+│   │   │   │   ├── ceil.hpp
+│   │   │   │   ├── cosh.hpp
+│   │   │   │   ├── cos.hpp
+│   │   │   │   ├── digamma.hpp
+│   │   │   │   ├── erfc.hpp
+│   │   │   │   ├── erf.hpp
+│   │   │   │   ├── exp2.hpp
+│   │   │   │   ├── exp.hpp
+│   │   │   │   ├── expm1.hpp
+│   │   │   │   ├── fabs.hpp
+│   │   │   │   ├── falling_factorial.hpp
+│   │   │   │   ├── fdim.hpp
+│   │   │   │   ├── floor.hpp
+│   │   │   │   ├── fma.hpp
+│   │   │   │   ├── fmax.hpp
+│   │   │   │   ├── fmin.hpp
+│   │   │   │   ├── fmod.hpp
+│   │   │   │   ├── gamma_p.hpp
+│   │   │   │   ├── gamma_q.hpp
+│   │   │   │   ├── grad_inc_beta.hpp
+│   │   │   │   ├── hypot.hpp
+│   │   │   │   ├── ibeta.hpp
+│   │   │   │   ├── if_else.hpp
+│   │   │   │   ├── inc_beta.hpp
+│   │   │   │   ├── inv_cloglog.hpp
+│   │   │   │   ├── inv.hpp
+│   │   │   │   ├── inv_logit.hpp
+│   │   │   │   ├── inv_Phi.hpp
+│   │   │   │   ├── inv_sqrt.hpp
+│   │   │   │   ├── inv_square.hpp
+│   │   │   │   ├── is_inf.hpp
+│   │   │   │   ├── is_nan.hpp
+│   │   │   │   ├── is_uninitialized.hpp
+│   │   │   │   ├── lgamma.hpp
+│   │   │   │   ├── lmgamma.hpp
+│   │   │   │   ├── log10.hpp
+│   │   │   │   ├── log1m_exp.hpp
+│   │   │   │   ├── log1m.hpp
+│   │   │   │   ├── log1m_inv_logit.hpp
+│   │   │   │   ├── log1p_exp.hpp
+│   │   │   │   ├── log1p.hpp
+│   │   │   │   ├── log2.hpp
+│   │   │   │   ├── log_diff_exp.hpp
+│   │   │   │   ├── log_falling_factorial.hpp
+│   │   │   │   ├── log.hpp
+│   │   │   │   ├── log_inv_logit.hpp
+│   │   │   │   ├── logit.hpp
+│   │   │   │   ├── log_mix.hpp
+│   │   │   │   ├── log_rising_factorial.hpp
+│   │   │   │   ├── log_sum_exp.hpp
+│   │   │   │   ├── modified_bessel_first_kind.hpp
+│   │   │   │   ├── modified_bessel_second_kind.hpp
+│   │   │   │   ├── multiply_log.hpp
+│   │   │   │   ├── owens_t.hpp
+│   │   │   │   ├── Phi_approx.hpp
+│   │   │   │   ├── Phi.hpp
+│   │   │   │   ├── pow.hpp
+│   │   │   │   ├── primitive_value.hpp
+│   │   │   │   ├── rising_factorial.hpp
+│   │   │   │   ├── round.hpp
+│   │   │   │   ├── sinh.hpp
+│   │   │   │   ├── sin.hpp
+│   │   │   │   ├── sqrt.hpp
+│   │   │   │   ├── squared_distance.hpp
+│   │   │   │   ├── square.hpp
+│   │   │   │   ├── step.hpp
+│   │   │   │   ├── tanh.hpp
+│   │   │   │   ├── tan.hpp
+│   │   │   │   ├── tgamma.hpp
+│   │   │   │   ├── to_var.hpp
+│   │   │   │   ├── trigamma.hpp
+│   │   │   │   ├── trunc.hpp
+│   │   │   │   ├── value_of.hpp
+│   │   │   │   └── value_of_rec.hpp
+│   │   │   └── meta
+│   │   │       ├── ad_promotable.hpp
+│   │   │       ├── is_var.hpp
+│   │   │       ├── OperandsAndPartials.hpp
+│   │   │       └── partials_type.hpp
+│   │   └── scal.hpp
+│   └── version.hpp
+└── math.hpp
+
+47 directories, 990 files

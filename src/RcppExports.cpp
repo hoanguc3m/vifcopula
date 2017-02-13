@@ -9,20 +9,23 @@
 
 using namespace Rcpp;
 
-// sum_example
-int sum_example();
-static SEXP vifcopula_sum_example_try() {
+// vifcop
+List vifcop(SEXP data_, SEXP init_, SEXP other_);
+static SEXP vifcopula_vifcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    rcpp_result_gen = Rcpp::wrap(sum_example());
+    Rcpp::traits::input_parameter< SEXP >::type data_(data_SEXP);
+    Rcpp::traits::input_parameter< SEXP >::type init_(init_SEXP);
+    Rcpp::traits::input_parameter< SEXP >::type other_(other_SEXP);
+    rcpp_result_gen = Rcpp::wrap(vifcop(data_, init_, other_));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP vifcopula_sum_example() {
+RcppExport SEXP vifcopula_vifcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(vifcopula_sum_example_try());
+        rcpp_result_gen = PROTECT(vifcopula_vifcop_try(data_SEXP, init_SEXP, other_SEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -43,14 +46,14 @@ RcppExport SEXP vifcopula_sum_example() {
 static int vifcopula_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("int(*sum_example)()");
+        signatures.insert("List(*vifcop)(SEXP,SEXP,SEXP)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP vifcopula_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("vifcopula", "vifcopula_sum_example", (DL_FUNC)vifcopula_sum_example_try);
+    R_RegisterCCallable("vifcopula", "vifcopula_vifcop", (DL_FUNC)vifcopula_vifcop_try);
     R_RegisterCCallable("vifcopula", "vifcopula_RcppExport_validate", (DL_FUNC)vifcopula_RcppExport_validate);
     return R_NilValue;
 }

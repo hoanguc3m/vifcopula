@@ -25,23 +25,23 @@ namespace vifcopula {
         }
     }
 
-    inline int sum_example() {
-        typedef SEXP(*Ptr_sum_example)();
-        static Ptr_sum_example p_sum_example = NULL;
-        if (p_sum_example == NULL) {
-            validateSignature("int(*sum_example)()");
-            p_sum_example = (Ptr_sum_example)R_GetCCallable("vifcopula", "vifcopula_sum_example");
+    inline List vifcop(SEXP data_, SEXP init_, SEXP other_) {
+        typedef SEXP(*Ptr_vifcop)(SEXP,SEXP,SEXP);
+        static Ptr_vifcop p_vifcop = NULL;
+        if (p_vifcop == NULL) {
+            validateSignature("List(*vifcop)(SEXP,SEXP,SEXP)");
+            p_vifcop = (Ptr_vifcop)R_GetCCallable("vifcopula", "vifcopula_vifcop");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_sum_example();
+            rcpp_result_gen = p_vifcop(Rcpp::wrap(data_), Rcpp::wrap(init_), Rcpp::wrap(other_));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<int >(rcpp_result_gen);
+        return Rcpp::as<List >(rcpp_result_gen);
     }
 
 }

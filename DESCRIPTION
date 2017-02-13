@@ -7,10 +7,16 @@ Maintainer: Hoang Nguyen  <hoang.nguyen@uc3m.es>
 URL: https://github.com/hoanguc3m/vifcopula
 BugReports: https://github.com/hoanguc3m/vifcopula/issue
 Description: Variational Inference and model selection for factor copulas.
-License:License: GPL (>= 2)
+License: License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 0.12.8)
+Imports:
+    Rcpp (>= 0.12.8)
 LinkingTo: Rcpp, StanHeaders, BH, RcppEigen, Rcpp11
-Depends: R (>= 3.0.2), Rcpp, StanHeaders, RcppEigen, Rcpp11
-RoxygenNote: 6.0.1
+Depends:
+    R (>= 3.0.2),
+    Rcpp,
+    StanHeaders,
+    RcppEigen,
+    Rcpp11
+RoxygenNote: 5.0.1
