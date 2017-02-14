@@ -5,6 +5,8 @@
 #include <RcppEigen.h>
 #include <stan/math.hpp>
 #include <omp.h>
+#include <bicopdist.h>
+
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -43,12 +45,28 @@ namespace vifcopula {
     typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
     typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
-    double logBifcop(const matrix_d& u_, const matrix_d& v_, const matrix_d& par_,
-                    const matrix_int& copula_type_, const int& t_max_,const int& i,
-                    const int& k_) {
-        static const char* function = "vifcopula::logBifcop";
+    double logBifcop(const matrix_d& u, const matrix_d& v, const matrix_d& par,
+                    const matrix_int& copula_type, const int& t_max,const int& i,
+                    const int& k) {
 
-        return 0;
+        static const char* function = "vifcopula::logBifcop";
+        double logLLbicop = 0;
+        switch ( copula_type(i,k) ) {
+        case 0:
+            // Independence copula
+                logLLbicop = bicop_independence_log(u,v);
+                break;
+        case 1:
+            // Gaussian copula
+                // logLLbicop = vifcopula::bicop_normal_log(u,v,par);
+                break;
+
+        default:
+                // Code to execute if <variable> does not equal the value following any of the cases
+                    break;
+        }
+        Rcpp::Rcout << " I am here" << std::endl;
+        return logLLbicop;
     }
 }
 #endif // VIFCOPULA_LOGBIFCOP_CPP

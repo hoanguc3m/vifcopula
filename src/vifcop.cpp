@@ -101,6 +101,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
     vifcopula::factor_model copula(u,v,par,copula_type, t_max, n_max, k_max);
     Rcpp::Rcout << " copula :" << " Checked" << std::endl;
+    Rcpp::Rcout << " copula LL :" << copula.log_prob() << std::endl;
+
 
 
 
