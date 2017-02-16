@@ -3,9 +3,9 @@ library("VineCopula")
 #library("statmod")
 
 
-n_max  <- 100           # Set the number of time series
+n_max  <- 10           # Set the number of time series
 n_group <- 10           # Set the number of G groups
-t_max  <-  1000         # Set the number of periods
+t_max  <-  1         # Set the number of periods
 k_max  <-  1         # Set the number of k latents
 
 gid <- sample(1:n_group, n_max, replace = T)
@@ -27,6 +27,6 @@ rho0_true <- rho0
 par  <-  runif(n_max,min = 0.1, max = 0.9)
 v0  <- runif(nsim)                           # The latent variable
 
-data <- list(u = u, n_max = n_max, n_group = n_group, t_max = t_max, k_max = k_max, gid = gid, bifactor = 1)
-init <- list(copula_type = copula_type, v0 = v0, par = par)
+data <- list(u = matrix(u,nrow = t_max), n_max = n_max, n_group = n_group, t_max = t_max, k_max = k_max, gid = gid, structfactor = 1)
+init <- list(copula_type = matrix(copula_type), v = matrix(v0), par = matrix(par))
 other <- list(seed = 126, core = 8, iter = 1000, n_monte_carlo_grad = 5, n_monte_carlo_elbo = 5)

@@ -53,7 +53,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
         int n_max  = as<int>(data["n_max"]);
         int k_max  = as<int>(data["k_max"]);
         matrix_d u = Rcpp::as<matrix_d>(data["u"]);
-        vector_d gid = Rcpp::as<vector_d>(data["gid"]);
+        vector_int gid = Rcpp::as<vector_int>(data["gid"]);
         int structfactor = as<int>(data["structfactor"]);
 
         stan::math::check_positive_finite(function, "Period", t_max);
@@ -100,7 +100,6 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     clock_t end;
 
     vifcopula::factor_model copula(u,v,par,copula_type, t_max, n_max, k_max);
-    Rcpp::Rcout << " copula :" << " Checked" << std::endl;
     Rcpp::Rcout << " copula LL :" << copula.log_prob() << std::endl;
 
 
@@ -112,7 +111,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
     std::cout << "It took " << delta_t << " seconds.\n"  <<  std::endl;
 
-    List MCMCout            = List::create(Rcpp::Named("delta_t") = delta_t
+    List MCMCout            = List::create(Rcpp::Named("delta_t") = 0
                                                );
     return MCMCout;
     PutRNGstate();
