@@ -97,8 +97,8 @@ using namespace stan;
 
         // Calculate the likelihood of Gaussian copula
         static double NEGATIVE_HALF = - 0.5;
-        if (include_summand<propto>::value)
-          logp += 0;
+        // if (include_summand<propto>::value)
+        //   logp += 0;
         if (include_summand<propto, T_rho>::value)
           logp += NEGATIVE_HALF * log_1mrhosq[n];
         if (include_summand<propto, T_u, T_v, T_rho>::value)

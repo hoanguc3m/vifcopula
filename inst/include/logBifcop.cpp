@@ -7,6 +7,10 @@
 #include <dist/bicop_independence_log.cpp>
 #include <dist/bicop_normal_log.cpp>
 #include <dist/bicop_student_log.cpp>
+#include <dist/bicop_clayton_log.cpp>
+#include <dist/bicop_gumbel_log.cpp>
+#include <dist/bicop_frank_log.cpp>
+#include <dist/bicop_joe_log.cpp>
 
 // [[Rcpp::depends(StanHeaders)]]
 // [[Rcpp::plugins(cpp11)]]
@@ -64,6 +68,26 @@ namespace vifcopula {
         case 2:
             // Student copula
             logLLbicop = vifcopula::bicop_student_log(u_temp,v,0.5, 5);
+            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
+            break;
+        case 3:
+            // Clayon copula
+            logLLbicop = vifcopula::bicop_clayton_log(u_temp,v,0.5);
+            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
+            break;
+        case 4:
+            // Gumbel copula
+            logLLbicop = vifcopula::bicop_gumbel_log(u_temp,v,2);
+            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
+            break;
+        case 5:
+            // Frank copula
+            logLLbicop = vifcopula::bicop_frank_log(u_temp,v,2);
+            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
+            break;
+        case 6:
+            // Joe copula
+            logLLbicop = vifcopula::bicop_joe_log(u_temp,v,3);
             Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
             break;
         default:

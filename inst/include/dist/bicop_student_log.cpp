@@ -79,11 +79,11 @@ using namespace stan;
       stan::VectorBuilder<include_summand<propto, T_rho>::value,
                     T_partials_return, T_rho> log_1mrhosq(length(rho));
 
-      stan::VectorBuilder<true, T_partials_return, T_rho> nu_value(length(nu));
-      stan::VectorBuilder<true, T_partials_return, T_rho> nud2(length(nu));
-      stan::VectorBuilder<true, T_partials_return, T_rho> nud2ph(length(nu));
-      stan::VectorBuilder<true, T_partials_return, T_rho> nud2m1(length(nu));
-      stan::VectorBuilder<true, T_partials_return, T_rho> nud2p1(length(nu));
+      stan::VectorBuilder<true, T_partials_return, T_nu> nu_value(length(nu));
+      stan::VectorBuilder<true, T_partials_return, T_nu> nud2(length(nu));
+      stan::VectorBuilder<true, T_partials_return, T_nu> nud2ph(length(nu));
+      stan::VectorBuilder<true, T_partials_return, T_nu> nud2m1(length(nu));
+      stan::VectorBuilder<true, T_partials_return, T_nu> nud2p1(length(nu));
 
       stan::VectorBuilder<true, T_partials_return, T_u> inv_u_dbl(length(u));
       stan::VectorBuilder<true, T_partials_return, T_v> inv_v_dbl(length(v));

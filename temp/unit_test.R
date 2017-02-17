@@ -12,8 +12,12 @@ sourceCpp("src/distribution/bicop_normal_log.cpp")
 
 cop <- BiCop(family = 1, par = .5)
 cop <- BiCop(family = 2, par = .5, par2 = 5)
+cop <- BiCop(family = 3, par = .5)
+cop <- BiCop(family = 4, par = 2)
+cop <- BiCop(family = 5, par = 2)
+cop <- BiCop(family = 6, par = 3)
 sum(log(BiCopPDF(u[,1], v0, cop)))
 
 
 data <- list(u = u[1,1], n_max = 1, n_group = 1, t_max = 1, k_max = 1, gid = 1, structfactor = 1)
-init <- list(copula_type = matrix(rep(2,n_max)), v = matrix(v0), par = matrix(par))
+init <- list(copula_type = matrix(rep(6,n_max)), v = matrix(v0), par = matrix(par))

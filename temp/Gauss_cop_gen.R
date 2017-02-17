@@ -5,7 +5,7 @@ library("VineCopula")
 
 n_max  <- 10           # Set the number of time series
 n_group <- 10           # Set the number of G groups
-t_max  <-  1         # Set the number of periods
+t_max  <-  100         # Set the number of periods
 k_max  <-  1         # Set the number of k latents
 
 gid <- sample(1:n_group, n_max, replace = T)
