@@ -54,44 +54,39 @@ namespace vifcopula {
         static const char* function = "vifcopula::logBifcop";
         stan::math::var logLLbicop = 0;
         vector_d u_temp = u.col(i);
-        switch ( copula_type(i,k-1) ) { // Note important k.
+        switch ( copula_type(i,k) ) { // Note important k.
         case 0:
             // Independence copula
                 logLLbicop = bicop_independence_log(u_temp,v);
-                Rcpp::Rcout << copula_type(i,k-1) <<  " I am here " << logLLbicop.val() << std::endl;
                 break;
         case 1:
             // Gaussian copula
                 logLLbicop = vifcopula::bicop_normal_log(u_temp,v,0.5);
-                Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
                 break;
         case 2:
             // Student copula
             logLLbicop = vifcopula::bicop_student_log(u_temp,v,0.5, 5);
-            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
             break;
         case 3:
             // Clayon copula
             logLLbicop = vifcopula::bicop_clayton_log(u_temp,v,0.5);
-            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
             break;
         case 4:
             // Gumbel copula
             logLLbicop = vifcopula::bicop_gumbel_log(u_temp,v,2);
-            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
             break;
         case 5:
             // Frank copula
             logLLbicop = vifcopula::bicop_frank_log(u_temp,v,2);
-            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
             break;
         case 6:
             // Joe copula
             logLLbicop = vifcopula::bicop_joe_log(u_temp,v,3);
-            Rcpp::Rcout << copula_type(i,k-1) << " I am here " << logLLbicop.val()  << std::endl;
+//            Rcpp::Rcout << copula_type(i,k) << " I am here " << logLLbicop.val()  << std::endl;
             break;
         default:
                 // Code to execute if <variable> does not equal the value following any of the cases
+                // Send a break message.
                     break;
         }
         return logLLbicop.val();

@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1489373574 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
+	"gtest/gtest.h"
+
+1489373543 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_independence_log_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<dist/bicop_independence_log.cpp>
+
+1489373948 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.cpp
+	<stan/math.hpp>
+

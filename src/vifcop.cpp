@@ -3,10 +3,10 @@
 
 #include <Rcpp.h>
 #include <RcppEigen.h>
-#include <stan/math.hpp>
 #include <omp.h>
 #include <ctime>
-#include <factor_model.cpp>
+#include <one_factor_cop.cpp>
+#include <rstan/rstaninc.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -27,6 +27,7 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
 typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
+typedef boost::ecuyer1988 rng_t;
 //' Variational inference for factor copula models
 //'
 //' \code{vifcop} returns variational estimations.
@@ -70,7 +71,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     Rcpp::List other(other_);
         // Set seed
         int seed  = as<int>(other["seed"]);
-        std::srand(seed);
+        rng_t base_rng(seed);
 
         int core  = as<int>(other["core"]);
         // Set parallel
@@ -99,8 +100,33 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     clock_t start = clock();
     clock_t end;
 
-    vifcopula::factor_model copula(u,v,par,copula_type, t_max, n_max, k_max);
-    Rcpp::Rcout << " copula LL :" << copula.log_prob() << std::endl;
+    // Initiate model
+    vector_d v_temp = v.col(0);
+    vector_d copula_type_temp = copula_type.col(0);
+    vifcopula::one_factor_cop copula_level_1(u,gid,copula_type_temp,t_max, n_max, k_max);
+
+    // Dummy input
+    //Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(my_model.num_params_r());
+    stan::variational::normal_meanfield cont_params(t_max + n_max);
+
+
+    // ADVI
+    stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(my_model,
+                                                                                            cont_params,
+                                                                                            base_rng,
+                                                                                            10,
+                                                                                            100,
+                                                                                            100,
+                                                                                            1);
+
+    stan::callbacks::writer writer;
+
+    //test_advi.run(0.01, false, 50, 1, 2e4,
+    //              writer, writer, writer);
+
+
+    Rcpp::Rcout << " copula LL :" << copula_level_1.log_prob() << std::endl;
+    Rcpp::Rcout << " normal_meanfield LL :" << cont_params.entropy() << std::endl;
 
 
 
