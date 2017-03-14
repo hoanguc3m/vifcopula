@@ -1,18 +1,10 @@
 #ifndef VIFCOPULA_DISTRIBUTION_BICOP_STUDENT_LOG_CPP
 #define VIFCOPULA_DISTRIBUTION_BICOP_STUDENT_LOG_CPP
 
-#include <Rcpp.h>
 #include <stan/math.hpp>
-
-// [[Rcpp::depends(StanHeaders)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 
 namespace vifcopula {
 
-using namespace Rcpp;
-using namespace Eigen;
 using namespace stan::math;
 using namespace stan;
 
@@ -44,7 +36,11 @@ using namespace stan;
 
       using std::log;
       using stan::math::lgamma;
+      using stan::math::digamma;
+      using stan::math::lbeta;
+      using stan::math::grad_reg_inc_beta;
       using boost::math::students_t;
+
 
       if (!(stan::length(u)
             && stan::length(v)
@@ -66,7 +62,7 @@ using namespace stan;
       if (!include_summand<propto, T_u, T_v, T_rho, T_nu>::value)
         return 0.0;
 
-      OperandsAndPartials<T_u, T_v, T_rho> operands_and_partials(u, v, rho, nu);
+      OperandsAndPartials<T_u, T_v, T_rho, T_nu> operands_and_partials(u, v, rho, nu);
 
       stan::VectorView<const T_u> u_vec(u);
       stan::VectorView<const T_v> v_vec(v);
@@ -106,10 +102,12 @@ using namespace stan;
         inv_u_dbl[n] = quantile(s,value_of(u_vec[n]));
         inv_v_dbl[n] = quantile(s,value_of(v_vec[n]));
 
-        const T_partials_return logM
-                    = log ( nu_value[n] * (1 - sq_rho[n]) +
+        const T_partials_return M_nu_rho
+                    = nu_value[n] * (1 - sq_rho[n]) +
                         square(inv_u_dbl[n]) + square(inv_v_dbl[n]) -
-                        2 * rho_value[n] * inv_u_dbl[n] * inv_v_dbl[n] ) ;
+                        2 * rho_value[n] * inv_u_dbl[n] * inv_v_dbl[n]  ;
+
+        const T_partials_return logM = log ( M_nu_rho ) ;
 
         // Calculate the likelihood of Student copula
         static double NEGATIVE_HALF = - 0.5;
@@ -129,18 +127,59 @@ using namespace stan;
                                     log(nu_value[n] + square(inv_v_dbl[n]))) -
                                     nud2p1[n] *   logM              ;
 
-//         // Calculate the derivative when the type is var (not double)
-//         if (!is_constant_struct<T_u>::value)
-//             operands_and_partials.d_x1[n] += - ( sq_rho[n] * inv_u_dbl[n] - rho_value[n] * inv_v_dbl[n] )/
-//                                               (1 - sq_rho[n]) / pdf(s,inv_u_dbl[n])  ;
-//         if (!is_constant_struct<T_v>::value)
-//           operands_and_partials.d_x2[n] += - ( sq_rho[n] * inv_v_dbl[n] - rho_value[n] * inv_u_dbl[n] ) /
-//                                               (1 - sq_rho[n]) / pdf(s,inv_v_dbl[n])  ;
-//         if (!is_constant_struct<T_rho>::value)
-//           operands_and_partials.d_x3[n] += rho_value[n] / (1 - sq_rho[n]) +
-//                 ((1 + sq_rho[n]) * inv_u_dbl[n] * inv_v_dbl[n] - rho_value[n] * square(inv_u_dbl[n])
-//                                                                - rho_value[n] * square(inv_v_dbl[n]) ) /
-//                 square(1 - sq_rho[n]);
+         // Calculate the derivative when the type is var (not double)
+         if (!is_constant_struct<T_u>::value)
+            operands_and_partials.d_x1[n] += ((nu_value[n] + 1) *  inv_u_dbl[n] / (  nu_value[n] + square(inv_u_dbl[n]) )
+                                                - (nu_value[n] + 2) * (inv_u_dbl[n] - rho_value[n] * inv_v_dbl[n] / M_nu_rho ) ) /
+                                                pdf(s,inv_u_dbl[n]) ;
+         if (!is_constant_struct<T_v>::value)
+            operands_and_partials.d_x2[n] += ((nu_value[n] + 1) *  inv_v_dbl[n] / (  nu_value[n] + square(inv_v_dbl[n]) )
+                                            - (nu_value[n] + 2) * (inv_v_dbl[n] - rho_value[n] * inv_u_dbl[n] ) / M_nu_rho ) /
+                                            pdf(s,inv_v_dbl[n]);
+
+         if (!is_constant_struct<T_rho>::value)
+            operands_and_partials.d_x3[n] += - (nu_value[n] + 1) * rho_value[n] / (1 - sq_rho[n]) +
+                                               (nu_value[n] + 2) * (nu_value[n] * rho_value[n] + inv_u_dbl[n] * inv_v_dbl[n] ) / M_nu_rho  ;
+
+         if (!is_constant_struct<T_nu>::value) {
+            const T_partials_return     A_arg = nud2[n];
+            const T_partials_return     B_arg = 0.5;
+
+            const T_partials_return     digammaA = digamma(A_arg);
+            const T_partials_return     digammaB = digamma(B_arg);
+            const T_partials_return     digammaSum = digamma(nud2ph[n]);
+            const T_partials_return     betaAB = exp(lbeta(A_arg,B_arg));
+            const T_partials_return     nu_p_x1_sq = nu_value[n] + square(inv_u_dbl[n]);
+            const T_partials_return     nu_p_x2_sq = nu_value[n] + square(inv_v_dbl[n]);
+
+            const T_partials_return     x_max_int1 = nu_value[n]/ nu_p_x1_sq;
+            const T_partials_return     x_max_int2 = nu_value[n]/ nu_p_x2_sq;
+            T_partials_return     grad_ibeta_1 = 1;
+            T_partials_return     grad_ibeta_2 = 1;
+
+            grad_reg_inc_beta(grad_ibeta_1, grad_ibeta_2, A_arg, B_arg, x_max_int1, digammaA, digammaB, digammaSum, betaAB);
+            const T_partials_return dev_ibeta_x1 = grad_ibeta_1;
+            grad_reg_inc_beta(grad_ibeta_1, grad_ibeta_2, A_arg, B_arg, x_max_int2, digammaA, digammaB, digammaSum, betaAB);
+            const T_partials_return dev_ibeta_x2 = grad_ibeta_1;
+
+            const T_partials_return dx1_dnu = sign(inv_u_dbl[n]) /(2 * pdf(s,inv_u_dbl[n])) * (0.5* dev_ibeta_x1 +
+                                                                        pow( nu_p_x1_sq, - nud2ph[n] ) *
+                                                                        pow( nu_value[n], nud2m1[n] ) *  inv_u_dbl[n] / betaAB );
+            const T_partials_return dx2_dnu = sign(inv_v_dbl[n]) /(2 * pdf(s,inv_v_dbl[n])) * (0.5* dev_ibeta_x2 +
+                                                                        pow( nu_p_x2_sq , - nud2ph[n] ) *
+                                                                        pow( nu_value[n], nud2m1[n] ) *  inv_v_dbl[n] / betaAB );
+
+            const T_partials_return x1_x1_dnu = 2 * inv_u_dbl[n] * dx1_dnu;
+            const T_partials_return x2_x2_dnu = 2 * inv_v_dbl[n] * dx2_dnu;
+
+            operands_and_partials.d_x4[n] += (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
+                                            nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) +
+                                            nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) +
+                                            0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) -
+                                            nud2p1[n] *(1-sq_rho[n] + (1 - rho_value[n]) * (x1_x1_dnu + x2_x2_dnu) )/ M_nu_rho -
+                                            0.5 * logM;
+         }
+
       }
       return operands_and_partials.value(logp);
     }

@@ -1,12 +1,67 @@
 # depslib dependency file v1.0
-1489373574 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
+1489442585 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
 	"gtest/gtest.h"
 
-1489373543 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_independence_log_test.cpp
+1489446067 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_independence_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_independence_log.cpp>
 
 1489373948 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.cpp
+	<stan/math.hpp>
+
+1489513421 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_normal_log_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<dist/bicop_normal_log.cpp>
+	<iostream>
+
+1489437525 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.cpp
+	<stan/math.hpp>
+
+1489439506 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/temp.cpp
+	<stan/math.hpp>
+	<dist/bicop_normal_log.cpp>
+	<ostream>
+
+1489439053 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/temp.cpp
+	<stan/math.hpp>
+	<dist/bicop_normal_log.cpp>
+	<ostream>
+
+1489513430 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<dist/bicop_student_log.cpp>
+	<iostream>
+
+1489509677 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.cpp
+	<stan/math.hpp>
+
+1489517417 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_clayton_log_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<dist/bicop_clayton_log.cpp>
+	<iostream>
+
+1489513032 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.cpp
+	<stan/math.hpp>
+
+1489517507 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<dist/bicop_frank_log.cpp>
+	<iostream>
+
+1489518640 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
+	<stan/math.hpp>
+
+1489517409 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<dist/bicop_gumbel_log.cpp>
+	<iostream>
+
+1489517549 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
 	<stan/math.hpp>
 

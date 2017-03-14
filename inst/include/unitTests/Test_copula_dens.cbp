@@ -38,7 +38,12 @@
 			<Add option="-lgtest" />
 			<Add option="-pthread" />
 		</Linker>
+		<Unit filename="bicop_clayton_log_test.cpp" />
+		<Unit filename="bicop_frank_log_test.cpp" />
+		<Unit filename="bicop_gumbel_log_test.cpp" />
 		<Unit filename="bicop_independence_log_test.cpp" />
+		<Unit filename="bicop_normal_log_test.cpp" />
+		<Unit filename="bicop_student_log_test.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

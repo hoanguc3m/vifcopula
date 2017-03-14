@@ -1,7 +1,6 @@
 #ifndef VIFCOPULA_DISTRIBUTION_BICOP_NORMAL_LOG_CPP
 #define VIFCOPULA_DISTRIBUTION_BICOP_NORMAL_LOG_CPP
 
-#include <Rcpp.h>
 #include <stan/math.hpp>
 
 

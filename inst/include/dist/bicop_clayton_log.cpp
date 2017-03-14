@@ -1,18 +1,10 @@
 #ifndef VIFCOPULA_DISTRIBUTION_BICOP_CLAYTON_LOG_CPP
 #define VIFCOPULA_DISTRIBUTION_BICOP_CLAYTON_LOG_CPP
 
-#include <Rcpp.h>
 #include <stan/math.hpp>
-
-// [[Rcpp::depends(StanHeaders)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 
 namespace vifcopula {
 
-using namespace Rcpp;
-using namespace Eigen;
 using namespace stan::math;
 using namespace stan;
 
@@ -83,9 +75,12 @@ using namespace stan;
       for (size_t n = 0; n < N; n++) {
         const T_partials_return u_dbl = value_of(u_vec[n]);
         const T_partials_return v_dbl = value_of(v_vec[n]);
-
+        const T_partials_return log_uv = log(u_dbl) + log(v_dbl);
         const T_partials_return A_u_v_theta
                     = pow(u_dbl,-theta_value[n]) + pow(v_dbl,-theta_value[n]) -1 ;
+        const T_partials_return A_u_v_theta_log
+                    = pow(u_dbl,-theta_value[n]) * log(u_dbl) + pow(v_dbl,-theta_value[n]) * log(v_dbl);
+        const T_partials_return log_A = log(A_u_v_theta);
 
         // Calculate the likelihood of clayton copula
         // if (include_summand<propto>::value)
@@ -95,21 +90,18 @@ using namespace stan;
           logp += log(theta_p1[n]);
 
         if (include_summand<propto, T_u, T_v, T_theta>::value)
-          logp -= theta_p1[n] * (log(u_dbl) + log(v_dbl)) + inv_theta_p2[n] * log(A_u_v_theta) ;
+          logp -= theta_p1[n] * log_uv + inv_theta_p2[n] * log_A ;
 
 
-//         // Calculate the derivative when the type is var (not double)
-//         if (!is_constant_struct<T_u>::value)
-//             operands_and_partials.d_x1[n] += - ( sq_theta[n] * inv_u_dbl[n] - theta_value[n] * inv_v_dbl[n] )/
-//                                               (1 - sq_theta[n]) / pdf(s,inv_u_dbl[n])  ;
-//         if (!is_constant_struct<T_v>::value)
-//           operands_and_partials.d_x2[n] += - ( sq_theta[n] * inv_v_dbl[n] - theta_value[n] * inv_u_dbl[n] ) /
-//                                               (1 - sq_theta[n]) / pdf(s,inv_v_dbl[n])  ;
-//         if (!is_constant_struct<T_theta>::value)
-//           operands_and_partials.d_x3[n] += theta_value[n] / (1 - sq_theta[n]) +
-//                 ((1 + sq_theta[n]) * inv_u_dbl[n] * inv_v_dbl[n] - theta_value[n] * square(inv_u_dbl[n])
-//                                                                - theta_value[n] * square(inv_v_dbl[n]) ) /
-//                 square(1 - sq_theta[n]);
+         // Calculate the derivative when the type is var (not double)
+         if (!is_constant_struct<T_u>::value)
+             operands_and_partials.d_x1[n] +=  - theta_p1[n] / u_dbl +  theta_value[n] * inv_theta_p2[n] * pow(u_dbl,-theta_value[n]-1)/A_u_v_theta ;
+         if (!is_constant_struct<T_v>::value)
+           operands_and_partials.d_x2[n] +=  - theta_p1[n] / v_dbl +  theta_value[n] * inv_theta_p2[n] * pow(v_dbl,-theta_value[n]-1)/A_u_v_theta ;
+
+         if (!is_constant_struct<T_theta>::value)
+           operands_and_partials.d_x3[n] += 1/theta_p1[n] - log_uv + log_A/ square(theta_value[n]) +
+                                                inv_theta_p2[n] * A_u_v_theta_log / A_u_v_theta ;
       }
       return operands_and_partials.value(logp);
     }

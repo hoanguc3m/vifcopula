@@ -26,3 +26,39 @@ r <- stanc(file = "/home/hoanguc3m/NetBeansProjects/stan-develop/src/test/test-m
 str(r)
 r$model_code
 write(r$cppcode, file = "11212121212.txt")
+
+
+library("VineCopula")
+
+# cop <- BiCop(family = 1, par = 0.5)
+# log(BiCopPDF(0.1, 0.1, cop))
+#
+# BiCopDeriv(u1, u2, cop, deriv = "u2", log = TRUE)
+# BiCopDeriv(0.1, 0.5, cop, deriv = "par", log = TRUE)
+#
+# log(BiCopPDF(0.1, 0.5, cop))
+# BiCopDeriv(0.1, 0.1, cop, deriv = "u2") / BiCopPDF(0.1, 0.1, cop)
+
+cop <- BiCop(family = 2, par = 0.5, par2 = 4)
+cop <- BiCop(family = 2, par = 0.5, par2 = 6)
+cop <- BiCop(family = 2, par = 0.6, par2 = 5)
+
+log(BiCopPDF(0.1, 0.1, cop))
+
+BiCopDeriv(0.1, 0.1, cop, deriv = "u2") / BiCopPDF(0.1, 0.1, cop)
+BiCopDeriv(0.1, 0.5, cop, deriv = "par") / BiCopPDF(0.1, 0.5, cop)
+BiCopDeriv(0.1, 0.9, cop, deriv = "par2") / BiCopPDF(0.1, 0.9, cop)
+
+cop1 <- BiCop(family = 2, par = 0.6, par2 = 5+0.0001)
+cop2 <- BiCop(family = 2, par = 0.6, par2 = 5-0.0001)
+(log(BiCopPDF(0.1, 0.9, cop1) ) - log(BiCopPDF(0.1, 0.9, cop2) ))/(0.0002)
+
+
+cop <- BiCop(family = 5, par = 0.5)
+log(BiCopPDF(0.1, 0.1, cop))
+BiCopDeriv(0.1, 0.1, cop, deriv = "u2") / BiCopPDF(0.1, 0.1, cop)
+
+cop <- BiCop(family = 5, par = 1)
+log(BiCopPDF(0.1, 0.5, cop))
+BiCopDeriv(0.1, 0.5, cop, deriv = "par") / BiCopPDF(0.1, 0.5, cop)
+

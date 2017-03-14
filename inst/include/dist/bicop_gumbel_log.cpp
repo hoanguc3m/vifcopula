@@ -1,18 +1,10 @@
 #ifndef VIFCOPULA_DISTRIBUTION_BICOP_GUMBEL_LOG_CPP
 #define VIFCOPULA_DISTRIBUTION_BICOP_GUMBEL_LOG_CPP
 
-#include <Rcpp.h>
 #include <stan/math.hpp>
-
-// [[Rcpp::depends(StanHeaders)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 
 namespace vifcopula {
 
-using namespace Rcpp;
-using namespace Eigen;
 using namespace stan::math;
 using namespace stan;
 
