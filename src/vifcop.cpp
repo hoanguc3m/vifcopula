@@ -6,7 +6,8 @@
 #include <omp.h>
 #include <ctime>
 #include <one_factor_cop.cpp>
-#include <rstan/rstaninc.hpp>
+//#include <rstan/rstaninc.hpp>
+#include <stan/math.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]

@@ -2,6 +2,7 @@
 #define VIFCOPULA_DISTRIBUTION_BICOP_STUDENT_LOG_CPP
 
 #include <stan/math.hpp>
+#include <iostream>
 
 namespace vifcopula {
 
@@ -163,21 +164,45 @@ using namespace stan;
             const T_partials_return dev_ibeta_x2 = grad_ibeta_1;
 
             const T_partials_return dx1_dnu = sign(inv_u_dbl[n]) /(2 * pdf(s,inv_u_dbl[n])) * (0.5* dev_ibeta_x1 +
-                                                                        pow( nu_p_x1_sq, - nud2ph[n] ) *
+                                                                        pow( nu_p_x1_sq , - nud2ph[n] ) * sign(inv_u_dbl[n]) *
                                                                         pow( nu_value[n], nud2m1[n] ) *  inv_u_dbl[n] / betaAB );
+
+//            std::cout << pdf(s,inv_u_dbl[n]) << " " << A_arg << std::endl;
+//            std::cout << B_arg << " " << nud2ph[n] << std::endl;
+//            std::cout << pow( nu_value[n], nud2m1[n] ) *  inv_u_dbl[n] << " " <<  pow( nu_p_x1_sq , - nud2ph[n] ) << std::endl;
+//            std::cout << betaAB << " " <<  dx1_dnu << std::endl;
+            std::cout << "inbeder_out" << dev_ibeta_x1 << " " << std::endl;
+            std::cout << "inbeder_out" << dev_ibeta_x2 << " " << std::endl;
+
+//              One problem is the imbeder, grad_reg_inc_beta
+
             const T_partials_return dx2_dnu = sign(inv_v_dbl[n]) /(2 * pdf(s,inv_v_dbl[n])) * (0.5* dev_ibeta_x2 +
-                                                                        pow( nu_p_x2_sq , - nud2ph[n] ) *
+                                                                        pow( nu_p_x2_sq , - nud2ph[n] ) * sign(inv_v_dbl[n]) *
                                                                         pow( nu_value[n], nud2m1[n] ) *  inv_v_dbl[n] / betaAB );
 
             const T_partials_return x1_x1_dnu = 2 * inv_u_dbl[n] * dx1_dnu;
+            const T_partials_return x1_x2_dnu = 2 * inv_u_dbl[n] * dx2_dnu;
             const T_partials_return x2_x2_dnu = 2 * inv_v_dbl[n] * dx2_dnu;
+            const T_partials_return x2_x1_dnu = 2 * inv_v_dbl[n] * dx1_dnu;
+
 
             operands_and_partials.d_x4[n] += (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
                                             nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) +
                                             nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) +
                                             0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) -
-                                            nud2p1[n] *(1-sq_rho[n] + (1 - rho_value[n]) * (x1_x1_dnu + x2_x2_dnu) )/ M_nu_rho -
+                                            nud2p1[n] *(1-sq_rho[n] + x1_x1_dnu + x2_x2_dnu - rho_value[n]*(x1_x2_dnu+x2_x1_dnu) )/ M_nu_rho -
                                             0.5 * logM;
+//            std::cout << dev_ibeta_x1 << " " << dev_ibeta_x2 << std::endl;
+//            std::cout << dx1_dnu << " " << dx2_dnu << std::endl;
+//            std::cout << digammaSum << " " << digammaA << std::endl;
+//            std::cout << 0.5 * log_1mrhosq[n]  << " " << nud2m1[n] / nu_value[n] << std::endl;
+//            std::cout << 0.5 * log(nu_value[n]) << " " << (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
+//                                            nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) << std::endl;
+//            std::cout << (1 + x1_x1_dnu) << " " << (1 + x2_x2_dnu) << std::endl;
+//            std::cout << nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) << " " << M_nu_rho << std::endl;
+//            std::cout << nud2p1[n] << " " << (1-sq_rho[n] + (1 - rho_value[n]) * (x1_x1_dnu + x2_x2_dnu) ) << std::endl;
+//            std::cout << 0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) << " " << 0.5 * logM << std::endl;
+
          }
 
       }

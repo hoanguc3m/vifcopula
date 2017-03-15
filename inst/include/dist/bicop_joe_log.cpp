@@ -1,18 +1,10 @@
 #ifndef VIFCOPULA_DISTRIBUTION_BICOP_JOE_LOG_CPP
 #define VIFCOPULA_DISTRIBUTION_BICOP_JOE_LOG_CPP
 
-#include <Rcpp.h>
 #include <stan/math.hpp>
-
-// [[Rcpp::depends(StanHeaders)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 
 namespace vifcopula {
 
-using namespace Rcpp;
-using namespace Eigen;
 using namespace stan::math;
 using namespace stan;
 
@@ -83,10 +75,16 @@ using namespace stan;
       for (size_t n = 0; n < N; n++) {
         const T_partials_return u_dbl = value_of(u_vec[n]);
         const T_partials_return v_dbl = value_of(v_vec[n]);
-        const T_partials_return t_u = pow(1 - u_dbl, theta_value[n]);
-        const T_partials_return t_v = pow(1 - v_dbl, theta_value[n]);
+
+        const T_partials_return om_u = 1 - u_dbl;
+        const T_partials_return om_v = 1 - v_dbl;
+        const T_partials_return t_u = pow(om_u, theta_value[n]);
+        const T_partials_return t_v = pow(om_v, theta_value[n]);
         const T_partials_return t_uv = t_u + t_v - t_u * t_v;
 
+        const T_partials_return dtu_theta = t_u * log(om_u);
+        const T_partials_return dtv_theta = t_v * log(om_v);
+        const T_partials_return dtuv_sum = dtu_theta + dtv_theta - dtu_theta * t_v - dtv_theta*t_u ;
 
         // Calculate the likelihood of Joe copula
         // if (include_summand<propto>::value)
@@ -94,21 +92,20 @@ using namespace stan;
 
         if (include_summand<propto, T_u, T_v, T_theta>::value)
           logp += log(t_uv) * (inv_theta[n]-2) +
-                    log(thetam1[n] + t_uv) + thetam1[n] * log(1 - u_dbl ) + thetam1[n] * log(1 - v_dbl );
+                    log(thetam1[n] + t_uv) + thetam1[n] * log(om_u) + thetam1[n] * log(om_v);
 
 
-//         // Calculate the derivative when the type is var (not double)
-//         if (!is_constant_struct<T_u>::value)
-//             operands_and_partials.d_x1[n] += - ( sq_theta[n] * inv_u_dbl[n] - theta_value[n] * inv_v_dbl[n] )/
-//                                               (1 - sq_theta[n]) / pdf(s,inv_u_dbl[n])  ;
-//         if (!is_constant_struct<T_v>::value)
-//           operands_and_partials.d_x2[n] += - ( sq_theta[n] * inv_v_dbl[n] - theta_value[n] * inv_u_dbl[n] ) /
-//                                               (1 - sq_theta[n]) / pdf(s,inv_v_dbl[n])  ;
-//         if (!is_constant_struct<T_theta>::value)
-//           operands_and_partials.d_x3[n] += theta_value[n] / (1 - sq_theta[n]) +
-//                 ((1 + sq_theta[n]) * inv_u_dbl[n] * inv_v_dbl[n] - theta_value[n] * square(inv_u_dbl[n])
-//                                                                - theta_value[n] * square(inv_v_dbl[n]) ) /
-//                 square(1 - sq_theta[n]);
+         // Calculate the derivative when the type is var (not double)
+         if (!is_constant_struct<T_u>::value)
+             operands_and_partials.d_x1[n] += (inv_theta[n] - 2) * (t_v-1) * theta_value[n] * t_u / (1-u_dbl)/t_uv +
+                                                (t_v-1) * theta_value[n] * t_u / (1-u_dbl)/(t_uv + thetam1[n]) - thetam1[n]/om_u;
+         if (!is_constant_struct<T_v>::value)
+           operands_and_partials.d_x2[n] +=  (inv_theta[n] - 2) * (t_u-1) * theta_value[n] * t_v / (1-v_dbl)/t_uv +
+                                                (t_u-1) * theta_value[n] * t_v / (1-v_dbl)/(t_uv + thetam1[n]) - thetam1[n]/om_v;
+         if (!is_constant_struct<T_theta>::value)
+           operands_and_partials.d_x3[n] +=  - log(t_uv)/square(theta_value[n]) +
+                                        (inv_theta[n] - 2)*dtuv_sum/t_uv +
+                                        log(om_u) + log(om_v) + (1 + dtuv_sum)/(thetam1[n] + t_uv) ;
       }
       return operands_and_partials.value(logp);
     }

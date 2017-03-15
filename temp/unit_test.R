@@ -47,18 +47,19 @@ log(BiCopPDF(0.1, 0.1, cop))
 
 BiCopDeriv(0.1, 0.1, cop, deriv = "u2") / BiCopPDF(0.1, 0.1, cop)
 BiCopDeriv(0.1, 0.5, cop, deriv = "par") / BiCopPDF(0.1, 0.5, cop)
-BiCopDeriv(0.1, 0.9, cop, deriv = "par2") / BiCopPDF(0.1, 0.9, cop)
+BiCopDeriv(0.1, 0.8, cop, deriv = "par2") / BiCopPDF(0.1, 0.8, cop)
 
 cop1 <- BiCop(family = 2, par = 0.6, par2 = 5+0.0001)
 cop2 <- BiCop(family = 2, par = 0.6, par2 = 5-0.0001)
 (log(BiCopPDF(0.1, 0.9, cop1) ) - log(BiCopPDF(0.1, 0.9, cop2) ))/(0.0002)
 
+sourceCpp("inst/include/unitTests/temp.cpp")
 
-cop <- BiCop(family = 5, par = 0.5)
-log(BiCopPDF(0.1, 0.1, cop))
-BiCopDeriv(0.1, 0.1, cop, deriv = "u2") / BiCopPDF(0.1, 0.1, cop)
+cop <- BiCop(family = 2, par = 0.8, par2 = 5)
+BiCopDeriv(0.6, 0.4, cop, deriv = "par2", log = T)
+log(BiCopPDF(0.6, 0.4, cop))
+BiCopDeriv(0.6, 0.4, cop, deriv = "par2") / BiCopPDF(0.6, 0.4, cop)
 
-cop <- BiCop(family = 5, par = 1)
-log(BiCopPDF(0.1, 0.5, cop))
-BiCopDeriv(0.1, 0.5, cop, deriv = "par") / BiCopPDF(0.1, 0.5, cop)
-
+cop1 <- BiCop(family = 2, par = 0.8, par2 = 5+0.0001)
+cop2 <- BiCop(family = 2, par = 0.8, par2 = 5-0.0001)
+(log(BiCopPDF(0.6, 0.4, cop1) ) - log(BiCopPDF(0.6, 0.4, cop2) ))/(0.0002)

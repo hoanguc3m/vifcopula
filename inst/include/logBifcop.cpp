@@ -1,9 +1,7 @@
 #ifndef VIFCOPULA_LOGBIFCOP_CPP
 #define VIFCOPULA_LOGBIFCOP_CPP
 
-#include <Rcpp.h>
 #include <stan/math.hpp>
-#include <omp.h>
 #include <dist/bicop_independence_log.cpp>
 #include <dist/bicop_normal_log.cpp>
 #include <dist/bicop_student_log.cpp>
@@ -11,11 +9,6 @@
 #include <dist/bicop_gumbel_log.cpp>
 #include <dist/bicop_frank_log.cpp>
 #include <dist/bicop_joe_log.cpp>
-
-// [[Rcpp::depends(StanHeaders)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 
 namespace vifcopula {
 /**
@@ -36,60 +29,67 @@ namespace vifcopula {
  * @tparam T_rho Type of correlation parameter.
  */
 
-    using namespace Rcpp;
-    using namespace Eigen;
     using namespace stan::math;
     using namespace vifcopula;
 
-    typedef Eigen::Matrix<int,Eigen::Dynamic,1> vector_int;
-    typedef Eigen::Matrix<int,1,Eigen::Dynamic> row_vector_int;
-    typedef Eigen::Matrix<int,Eigen::Dynamic,Eigen::Dynamic> matrix_int;
-    typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
-    typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
-    typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
+    template <bool propto, typename T_coptype, typename T_u, typename T_v, typename T_theta, typename T_theta2>
+    typename stan::return_type<T_u, T_v, T_theta, T_theta2>::type
+        logBifcop(const int& copula_type, const T_u& u, const T_v& v, const T_theta& theta = 0, const T_theta2& theta2 = 0) {
+            static const char* function("vifcopula::logBifcop");
 
-    double logBifcop(const matrix_d& u, const matrix_d& v, const matrix_d& par,
-                    const matrix_int& copula_type, const int& t_max,const int& i,
-                    const int& k) {
-        static const char* function = "vifcopula::logBifcop";
-        stan::math::var logLLbicop = 0;
-        vector_d u_temp = u.col(i);
-        switch ( copula_type(i,k) ) { // Note important k.
-        case 0:
-            // Independence copula
-                logLLbicop = bicop_independence_log(u_temp,v);
+            stan::return_type<T_u, T_v, T_theta, T_theta2> logLLbicop = 0; // Note find the return type.
+
+            switch ( copula_type ) {
+            case 0:
+                // Independence copula
+                logLLbicop = bicop_independence_log(u,v);
                 break;
-        case 1:
-            // Gaussian copula
-                logLLbicop = vifcopula::bicop_normal_log(u_temp,v,0.5);
+            case 1:
+                // Gaussian copula
+                logLLbicop = vifcopula::bicop_normal_log(u,v,theta);
                 break;
-        case 2:
-            // Student copula
-            logLLbicop = vifcopula::bicop_student_log(u_temp,v,0.5, 5);
-            break;
-        case 3:
-            // Clayon copula
-            logLLbicop = vifcopula::bicop_clayton_log(u_temp,v,0.5);
-            break;
-        case 4:
-            // Gumbel copula
-            logLLbicop = vifcopula::bicop_gumbel_log(u_temp,v,2);
-            break;
-        case 5:
-            // Frank copula
-            logLLbicop = vifcopula::bicop_frank_log(u_temp,v,2);
-            break;
-        case 6:
-            // Joe copula
-            logLLbicop = vifcopula::bicop_joe_log(u_temp,v,3);
-//            Rcpp::Rcout << copula_type(i,k) << " I am here " << logLLbicop.val()  << std::endl;
-            break;
-        default:
+            case 2:
+                // Student copula
+                logLLbicop = vifcopula::bicop_student_log(u,v,theta, theta2);
+                break;
+            case 3:
+                // Clayon copula
+                logLLbicop = vifcopula::bicop_clayton_log(u,v,theta);
+                break;
+            case 4:
+                // Gumbel copula
+                logLLbicop = vifcopula::bicop_gumbel_log(u,v,theta);
+                break;
+            case 5:
+                // Frank copula
+                logLLbicop = vifcopula::bicop_frank_log(u,v,theta);
+                break;
+            case 6:
+                // Joe copula
+                logLLbicop = vifcopula::bicop_joe_log(u,v,theta);
+                break;
+            default:
                 // Code to execute if <variable> does not equal the value following any of the cases
                 // Send a break message.
-                    break;
+                break;
+            }
+            //        Rcpp::Rcout << copula_type(i,k) << " I am here " << logLLbicop.val()  << std::endl;
+            return logLLbicop;
         }
-        return logLLbicop.val();
+
+
+    template <typename T_coptype,
+                typename T_u,
+                typename T_v,
+                typename T_theta = double,
+                typename T_theta2 = double>
+    inline
+        typename stan::return_type<T_u, T_v, T_theta, T_theta2>::type
+        logBifcop(const int& copula_type, const T_u& u, const T_v& v, const T_theta& theta = 0, const T_theta2& theta2 = 0) {
+            return logBifcop<false>(copula_type, u, v, theta,theta2);
     }
+
+
+
 }
 #endif // VIFCOPULA_LOGBIFCOP_CPP

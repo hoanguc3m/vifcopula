@@ -2,7 +2,10 @@
 #define VIFCOPULA_ONE_FACTOR_COP_CPP
 
 #include <Rcpp.h>
-#include <rstan/rstaninc.hpp>
+//#include <rstan/rstaninc.hpp>
+#include <stan/model/model_header.hpp>
+#include <stan/math.hpp>
+
 #include <omp.h>
 #include <logBifcop.cpp>
 
@@ -118,7 +121,7 @@ public:
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
-            throw std::runtime_error(\"*** IF YOU SEE THIS, PLEASE REPORT A BUG ***\");
+            throw std::runtime_error(" ");
         }
 
         lp_accum__.add(lp__);
