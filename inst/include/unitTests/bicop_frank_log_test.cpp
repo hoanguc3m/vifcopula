@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-TEST(Copula_density, Frank_copula_v) {
+TEST(Copula_density, DISABLE_Frank_copula_v) {
     using stan::math::var;
 
     double v_val = 0.1;
@@ -16,13 +16,11 @@ TEST(Copula_density, Frank_copula_v) {
         lp1.grad();
         double lp1adj = v.adj();
 
-        std::cout << lp1val << " " << lp1adj << std::endl;
-
         EXPECT_FLOAT_EQ(lp1val,0.1517319);
         EXPECT_FLOAT_EQ(lp1adj,-0.3813779);
 }
 
-TEST(Copula_density, Frank_copula_theta) {
+TEST(Copula_density, DISABLE_Frank_copula_theta) {
     using stan::math::var;
 
     double theta_val = 1;
@@ -34,8 +32,6 @@ TEST(Copula_density, Frank_copula_theta) {
         lp1.grad();
         double lp1adj = theta.adj();
 
-
-        std::cout << lp1val << " " << lp1adj << std::endl;
 
         EXPECT_FLOAT_EQ(lp1val,-0.01920139);
         EXPECT_FLOAT_EQ(lp1adj,-0.0384675);

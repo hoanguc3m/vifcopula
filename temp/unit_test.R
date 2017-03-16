@@ -63,3 +63,14 @@ BiCopDeriv(0.6, 0.4, cop, deriv = "par2") / BiCopPDF(0.6, 0.4, cop)
 cop1 <- BiCop(family = 2, par = 0.8, par2 = 5+0.0001)
 cop2 <- BiCop(family = 2, par = 0.8, par2 = 5-0.0001)
 (log(BiCopPDF(0.6, 0.4, cop1) ) - log(BiCopPDF(0.6, 0.4, cop2) ))/(0.0002)
+
+cop <- BiCop(family = 4, par = 2)
+BiCopDeriv(0.1, 0.1, cop, deriv = "par", log = T)
+log(BiCopPDF(0.1, 0.2, cop))
+BiCopDeriv(0.1, 0.1, cop, deriv = "par") / BiCopPDF(0.1, 0.1, cop)
+
+BiCopDeriv(0.1, 0.1, cop, deriv = "u1") /  BiCopPDF(0.1, 0.1, cop)
+
+log(BiCopPDF(0.1, 0.3, cop))
+BiCopDeriv(0.1, 0.3, cop, deriv = "u2") /  BiCopPDF(0.1, 0.3, cop)
+

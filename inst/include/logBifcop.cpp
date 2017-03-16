@@ -32,12 +32,12 @@ namespace vifcopula {
     using namespace stan::math;
     using namespace vifcopula;
 
-    template <bool propto, typename T_coptype, typename T_u, typename T_v, typename T_theta, typename T_theta2>
+    template <bool propto, typename T_u, typename T_v, typename T_theta, typename T_theta2>
     typename stan::return_type<T_u, T_v, T_theta, T_theta2>::type
         logBifcop(const int& copula_type, const T_u& u, const T_v& v, const T_theta& theta = 0, const T_theta2& theta2 = 0) {
             static const char* function("vifcopula::logBifcop");
 
-            stan::return_type<T_u, T_v, T_theta, T_theta2> logLLbicop = 0; // Note find the return type.
+            var logLLbicop; // Note find the return type.
 
             switch ( copula_type ) {
             case 0:
@@ -78,8 +78,7 @@ namespace vifcopula {
         }
 
 
-    template <typename T_coptype,
-                typename T_u,
+    template <  typename T_u,
                 typename T_v,
                 typename T_theta = double,
                 typename T_theta2 = double>

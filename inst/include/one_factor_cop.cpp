@@ -12,6 +12,7 @@
 
 
 // [[Rcpp::depends(StanHeaders)]]
+// [[Rcpp::depends(rstan)]]
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]

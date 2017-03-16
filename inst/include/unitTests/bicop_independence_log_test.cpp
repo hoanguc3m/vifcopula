@@ -6,7 +6,7 @@
 #include <dist/bicop_independence_log.cpp>
 
 
-TEST(Copula_density, independence_copula) {
+TEST(Copula_density, DISABLE_independence_copula) {
     using stan::math::var;
 
     double v_val = 0.1;
@@ -17,7 +17,6 @@ TEST(Copula_density, independence_copula) {
 
         lp1.grad();
         double lp1adj = v.adj();
-        std::cout << lp1val << " " << lp1adj << std::endl;
 
         EXPECT_FLOAT_EQ(lp1val,0.0);
         EXPECT_FLOAT_EQ(lp1adj,1.0);

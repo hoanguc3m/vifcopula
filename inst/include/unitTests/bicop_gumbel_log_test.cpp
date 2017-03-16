@@ -4,23 +4,21 @@
 
 #include <iostream>
 
-//TEST(Copula_density, Gumbel_copula_v) {
-//    using stan::math::var;
-//
-//    double v_val = 0.1;
-//        var v(v_val);
-//        var lp1(0.0);
-//        lp1 += vifcopula::bicop_gumbel_log<false>(0.1, v, 2);
-//        double lp1val = lp1.val();
-//
-//        lp1.grad();
-//        double lp1adj = v.adj();
-//
-//        std::cout << lp1val << " " << lp1adj << std::endl;
-//
-//        EXPECT_FLOAT_EQ(lp1val,0.6239036);
-//        EXPECT_FLOAT_EQ(lp1adj,-3.121909);
-//}
+TEST(Copula_density, Gumbel_copula_v) {
+    using stan::math::var;
+
+    double v_val = 0.3;
+        var v(v_val);
+        var lp1(0.0);
+        lp1 += vifcopula::bicop_gumbel_log(0.1, v, 2);
+        double lp1val = lp1.val();
+
+        lp1.grad();
+        double lp1adj = v.adj();
+
+        EXPECT_FLOAT_EQ(lp1val,0.3437033);
+        EXPECT_FLOAT_EQ(lp1adj,-3.203365);
+}
 //
 //TEST(Copula_density, Gumbel_copula_theta) {
 //    using stan::math::var;

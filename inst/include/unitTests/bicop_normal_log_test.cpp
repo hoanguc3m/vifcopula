@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-TEST(Copula_density, Normal_copula_v) {
+TEST(Copula_density, DISABLE_Normal_copula_v) {
     using stan::math::var;
 
     double v_val = 0.1;
@@ -16,13 +16,11 @@ TEST(Copula_density, Normal_copula_v) {
         lp1.grad();
         double lp1adj = v.adj();
 
-        std::cout << lp1val << " " << lp1adj << std::endl;
-
         EXPECT_FLOAT_EQ(lp1val,0.6912992);
         EXPECT_FLOAT_EQ(lp1adj,-2.434119);
 }
 
-TEST(Copula_density, Normal_copula_rho) {
+TEST(Copula_density, DISABLE_Normal_copula_rho) {
     using stan::math::var;
 
     double rho_val = 0.5;
@@ -34,8 +32,6 @@ TEST(Copula_density, Normal_copula_rho) {
         lp1.grad();
         double lp1adj = rho.adj();
 
-
-        std::cout << lp1val << " " << lp1adj << std::endl;
 
         EXPECT_FLOAT_EQ(lp1val,-0.129888);
         EXPECT_FLOAT_EQ(lp1adj,-0.7932217);

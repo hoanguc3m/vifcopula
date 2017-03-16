@@ -79,9 +79,15 @@ using namespace stan;
         const T_partials_return v_dbl = value_of(v_vec[n]);
         const T_partials_return t_u = pow(-log(u_dbl), theta_value[n]);
         const T_partials_return t_v = pow(-log(v_dbl), theta_value[n]);
+        const T_partials_return t_uv = t_u + t_v;
+        const T_partials_return t_u_div_t_uv = t_u / t_uv;
+        const T_partials_return t_v_div_t_uv = t_v / t_uv;
+        const T_partials_return inv_u_logu = 1/(u_dbl * log(u_dbl)) ;
+        const T_partials_return inv_v_logv = 1/(v_dbl * log(v_dbl)) ;
 
         const T_partials_return log_C_u_v_theta
-                    = - pow(t_u+t_v,inv_theta[n]);
+                    = - pow(t_uv,inv_theta[n]);
+        const T_partials_return op_theta_tuv = 1 + theta_m1[n] * pow(t_uv, - inv_theta[n] );
 
         // Calculate the likelihood of Gumbel copula
         // if (include_summand<propto>::value)
@@ -89,22 +95,39 @@ using namespace stan;
 
         if (include_summand<propto, T_u, T_v, T_theta>::value)
           logp += log_C_u_v_theta - log(u_dbl * v_dbl) +
-                    log(t_u+t_v) * inv_theta_t2m2[n] + (theta_m1[n]) * log( log(u_dbl) * log(v_dbl) ) +
-                    log(1 + theta_m1[n] * pow(t_u+t_v, - inv_theta[n] ) );
+                    log(t_uv) * inv_theta_t2m2[n] + (theta_m1[n]) * log( log(u_dbl) * log(v_dbl) ) +
+                    log( op_theta_tuv );
 
 
-//         // Calculate the derivative when the type is var (not double)
-//         if (!is_constant_struct<T_u>::value)
-//             operands_and_partials.d_x1[n] += - ( sq_theta[n] * inv_u_dbl[n] - theta_value[n] * inv_v_dbl[n] )/
-//                                               (1 - sq_theta[n]) / pdf(s,inv_u_dbl[n])  ;
-//         if (!is_constant_struct<T_v>::value)
-//           operands_and_partials.d_x2[n] += - ( sq_theta[n] * inv_v_dbl[n] - theta_value[n] * inv_u_dbl[n] ) /
-//                                               (1 - sq_theta[n]) / pdf(s,inv_v_dbl[n])  ;
-//         if (!is_constant_struct<T_theta>::value)
-//           operands_and_partials.d_x3[n] += theta_value[n] / (1 - sq_theta[n]) +
-//                 ((1 + sq_theta[n]) * inv_u_dbl[n] * inv_v_dbl[n] - theta_value[n] * square(inv_u_dbl[n])
-//                                                                - theta_value[n] * square(inv_v_dbl[n]) ) /
-//                 square(1 - sq_theta[n]);
+         // Calculate the derivative when the type is var (not double)
+         if (!is_constant_struct<T_u>::value)
+             operands_and_partials.d_x1[n] +=  log_C_u_v_theta * t_u_div_t_uv * inv_u_logu - 1/u_dbl +
+                                            inv_theta_t2m2[n] * theta_value[n] * t_u_div_t_uv * inv_u_logu +
+                                            theta_m1[n] * inv_u_logu +
+                                            theta_m1[n] * t_u_div_t_uv * inv_u_logu / log_C_u_v_theta / op_theta_tuv ;
+         if (!is_constant_struct<T_v>::value)
+           operands_and_partials.d_x2[n] +=  log_C_u_v_theta * t_v_div_t_uv * inv_v_logv - 1/v_dbl +
+                                            inv_theta_t2m2[n] * theta_value[n] * t_v_div_t_uv * inv_v_logv +
+                                            theta_m1[n] * inv_v_logv +
+                                            theta_m1[n] * t_v_div_t_uv * inv_v_logv / log_C_u_v_theta / op_theta_tuv ;
+
+//                    const T_partials_return c_uv = exp(logp);
+//                    const T_partials_return dc_uv = log_C_u_v_theta * t_v_div_t_uv * inv_v_logv - 1/v_dbl +
+//                                            theta_m1[n] * inv_v_logv +
+//                                            inv_theta_t2m2[n] * theta_value[n] * t_v_div_t_uv * inv_v_logv +
+//                                            theta_m1[n] * t_v_div_t_uv * inv_v_logv / log_C_u_v_theta / op_theta_tuv ;
+//                    std::cout << (log_C_u_v_theta * t_v_div_t_uv * inv_v_logv) * c_uv  << " " << - 1/v_dbl * c_uv << std::endl;
+//                    std::cout << inv_theta_t2m2[n] * theta_value[n] * t_v_div_t_uv * inv_v_logv * c_uv << " " << theta_m1[n] * inv_v_logv * c_uv << std::endl;
+//                    std::cout << theta_m1[n] * t_v_div_t_uv * inv_v_logv /  op_theta_tuv /log_C_u_v_theta * c_uv << " " << std::endl;
+//                    std::cout << c_uv << " " << dc_uv * c_uv << std::endl;
+//                    std::cout << theta_m1[n] << " " << log_C_u_v_theta << std::endl;
+//                    std::cout << t_v_div_t_uv << " " << inv_v_logv << std::endl;
+//                    std::cout << op_theta_tuv << " " << theta_m1[n] * log_C_u_v_theta * t_v_div_t_uv * inv_v_logv /  op_theta_tuv  << std::endl;
+
+
+
+         if (!is_constant_struct<T_theta>::value)
+           operands_and_partials.d_x3[n] += 1 ;
       }
       return operands_and_partials.value(logp);
     }
