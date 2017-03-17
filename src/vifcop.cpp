@@ -6,8 +6,9 @@
 #include <omp.h>
 #include <ctime>
 #include <one_factor_cop.cpp>
-//#include <rstan/rstaninc.hpp>
 #include <stan/math.hpp>
+#include <stan/variational/advi.hpp>
+#include <stan/callbacks/writer.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -29,6 +30,8 @@ typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 typedef boost::ecuyer1988 rng_t;
+typedef vifcopula::one_factor_cop Model_cp;
+
 //' Variational inference for factor copula models
 //'
 //' \code{vifcop} returns variational estimations.
@@ -103,8 +106,9 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
     // Initiate model
     vector_d v_temp = v.col(0);
-    vector_d copula_type_temp = copula_type.col(0);
-    vifcopula::one_factor_cop copula_level_1(u,gid,copula_type_temp,t_max, n_max, k_max);
+    vector_int copula_type_temp = copula_type.col(0);
+    k_max = 0;
+    vifcopula::one_factor_cop copula_l1(u,gid,copula_type_temp,t_max, n_max, k_max, base_rng);
 
     // Dummy input
     //Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(my_model.num_params_r());
@@ -112,13 +116,13 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
 
     // ADVI
-    stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(my_model,
-                                                                                            cont_params,
-                                                                                            base_rng,
-                                                                                            10,
-                                                                                            100,
-                                                                                            100,
-                                                                                            1);
+    // stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(copula_l1,
+    //                                                                                         cont_params,
+    //                                                                                         base_rng,
+    //                                                                                         10,
+    //                                                                                         100,
+    //                                                                                         100,
+    //                                                                                         1);
 
     stan::callbacks::writer writer;
 
@@ -126,7 +130,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     //              writer, writer, writer);
 
 
-    Rcpp::Rcout << " copula LL :" << copula_level_1.log_prob() << std::endl;
+    // Rcpp::Rcout << " copula LL :" << copula_l1.log_prob(cont_params) << std::endl;
     Rcpp::Rcout << " normal_meanfield LL :" << cont_params.entropy() << std::endl;
 
 

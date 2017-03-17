@@ -12,21 +12,23 @@
 
 namespace vifcopula {
 /**
- * The log of the bivariate normal copula density for the specified vector(s) u
- * and the specified vector(s) v given correlation(s) rho. u, v, or rho can
+ * The log of the bivariate copula density for the specified type copula_type, specified vector(s) u
+ * and the specified vector(s) v given parameter(s) theta, theta2. u, v, or theta, theta2 can
  * each be either a scalar or a vector. Any vector inputs
  * must be the same length.
  *
  * <p>The result log probability is defined to be the sum of the
- * log probabilities for each observation/observation/correlation triple.
+ * log probabilities for each observation/observation/theta/theta2.
  * @param u (Sequence of) scalar(s) in [0,1].
  * @param v (Sequence of) scalar(s) in [0,1].
- * @param rho (Sequence of) correlation parameters for the normal copula
+ * @param theta (Sequence of) first parameters for the bivariate copula
+ * @param theta2 (Sequence of) second parameters for the bivariate copula
  * @return The log of the product of the densities.
  * @throw std::domain_error if the scale is not positive.
  * @tparam T_u Underlying type of scalar in sequence.
  * @tparam T_v Underlying type of scalar in sequence.
- * @tparam T_rho Type of correlation parameter.
+ * @tparam T_theta Type of first parameter.
+ * @tparam T_theta2 Type of second parameter.
  */
 
     using namespace stan::math;

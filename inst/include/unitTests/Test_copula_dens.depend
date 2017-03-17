@@ -54,13 +54,13 @@
 1489518640 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
 	<stan/math.hpp>
 
-1489694599 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
+1489767756 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_gumbel_log.cpp>
 	<iostream>
 
-1489697341 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
+1489704792 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
 	<stan/math.hpp>
 
 1489615782 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
@@ -72,7 +72,7 @@
 1489535969 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.cpp
 	<stan/math.hpp>
 
-1489615100 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
+1489747910 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
 	<stan/math.hpp>
 	<dist/bicop_independence_log.cpp>
 	<dist/bicop_normal_log.cpp>
@@ -82,13 +82,13 @@
 	<dist/bicop_frank_log.cpp>
 	<dist/bicop_joe_log.cpp>
 
-1489616349 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/logBifcop_test.cpp
+1489767739 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/logBifcop_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<logBifcop.cpp>
 	<iostream>
 
-1489615100 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
+1489747910 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
 	<stan/math.hpp>
 	<dist/bicop_independence_log.cpp>
 	<dist/bicop_normal_log.cpp>
@@ -97,4 +97,17 @@
 	<dist/bicop_gumbel_log.cpp>
 	<dist/bicop_frank_log.cpp>
 	<dist/bicop_joe_log.cpp>
+
+1489778125 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/one_factor_cop.cpp
+	<stan/model/model_header.hpp>
+	<stan/math.hpp>
+	<omp.h>
+	<logBifcop.cpp>
+
+1489770660 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/one_factor_cop_test.cpp
+
+1489770248 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/one_factor_cop.cpp
+	<stan/model/model_header.hpp>
+	<omp.h>
+	<logBifcop.cpp>
 

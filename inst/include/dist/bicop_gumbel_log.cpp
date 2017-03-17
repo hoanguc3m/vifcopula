@@ -111,23 +111,33 @@ using namespace stan;
                                             theta_m1[n] * inv_v_logv +
                                             theta_m1[n] * t_v_div_t_uv * inv_v_logv / log_C_u_v_theta / op_theta_tuv ;
 
-//                    const T_partials_return c_uv = exp(logp);
-//                    const T_partials_return dc_uv = log_C_u_v_theta * t_v_div_t_uv * inv_v_logv - 1/v_dbl +
-//                                            theta_m1[n] * inv_v_logv +
-//                                            inv_theta_t2m2[n] * theta_value[n] * t_v_div_t_uv * inv_v_logv +
-//                                            theta_m1[n] * t_v_div_t_uv * inv_v_logv / log_C_u_v_theta / op_theta_tuv ;
-//                    std::cout << (log_C_u_v_theta * t_v_div_t_uv * inv_v_logv) * c_uv  << " " << - 1/v_dbl * c_uv << std::endl;
-//                    std::cout << inv_theta_t2m2[n] * theta_value[n] * t_v_div_t_uv * inv_v_logv * c_uv << " " << theta_m1[n] * inv_v_logv * c_uv << std::endl;
-//                    std::cout << theta_m1[n] * t_v_div_t_uv * inv_v_logv /  op_theta_tuv /log_C_u_v_theta * c_uv << " " << std::endl;
-//                    std::cout << c_uv << " " << dc_uv * c_uv << std::endl;
-//                    std::cout << theta_m1[n] << " " << log_C_u_v_theta << std::endl;
-//                    std::cout << t_v_div_t_uv << " " << inv_v_logv << std::endl;
-//                    std::cout << op_theta_tuv << " " << theta_m1[n] * log_C_u_v_theta * t_v_div_t_uv * inv_v_logv /  op_theta_tuv  << std::endl;
+         if (!is_constant_struct<T_theta>::value){
+            const T_partials_return log_u           = log(u_dbl);
+			const T_partials_return log_v           = log(v_dbl);
+			const T_partials_return C_u_v_theta     = exp(log_C_u_v_theta);
+			const T_partials_return logtuv_div_theta_sq = log(t_uv)/(theta_value[n]*theta_value[n]);
+            const T_partials_return t_u_log_t_v_log = t_u*log(-log_u)+t_v*log(-log_v);
 
+			const T_partials_return log_tuv_tuv     = -logtuv_div_theta_sq+inv_theta[n]*t_u_log_t_v_log/t_uv;
 
+			const T_partials_return t_uv_pow_thetat2m2 = pow(t_uv,inv_theta_t2m2[n]);
 
-         if (!is_constant_struct<T_theta>::value)
-           operands_and_partials.d_x3[n] += 1 ;
+			const T_partials_return C_u_v_t_uv      = C_u_v_theta*t_uv_pow_thetat2m2;
+			const T_partials_return log_u_log_v     = log(u_dbl)*log(v_dbl);
+
+			const T_partials_return log_umv_thetam1 = pow(log_u_log_v,theta_m1[n]);
+			const T_partials_return t_uv_pow_minv_theta = pow(t_uv,-inv_theta[n]);
+			const T_partials_return o_div_uv        = 1/(u_dbl*v_dbl);
+			const T_partials_return log_umv_opo = log_umv_thetam1*op_theta_tuv*o_div_uv;
+
+			const T_partials_return C_uvt_log_umv   = C_u_v_t_uv*log_umv_thetam1;
+
+           operands_and_partials.d_x3[n] += (log_C_u_v_theta*log_tuv_tuv*C_u_v_t_uv*log_umv_opo
+                                                + C_u_v_t_uv*(-2.0*logtuv_div_theta_sq +inv_theta_t2m2[n]*t_u_log_t_v_log/t_uv)*log_umv_opo
+                                                +C_uvt_log_umv*log(log_u_log_v)*op_theta_tuv*o_div_uv
+                                                +C_uvt_log_umv*(t_uv_pow_minv_theta-(op_theta_tuv-1)*log_tuv_tuv)*o_div_uv) /
+                                                C_u_v_theta/t_uv_pow_thetat2m2/log_umv_thetam1/op_theta_tuv*u_dbl*v_dbl;
+         }
       }
       return operands_and_partials.value(logp);
     }

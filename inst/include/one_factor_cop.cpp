@@ -1,7 +1,6 @@
 #ifndef VIFCOPULA_ONE_FACTOR_COP_CPP
 #define VIFCOPULA_ONE_FACTOR_COP_CPP
 
-#include <Rcpp.h>
 //#include <rstan/rstaninc.hpp>
 #include <stan/model/model_header.hpp>
 #include <stan/math.hpp>
@@ -20,7 +19,6 @@
 
 namespace vifcopula {
 
-using namespace Rcpp;
 using namespace Eigen;
 using namespace stan::math;
 using namespace vifcopula;
@@ -32,29 +30,43 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
 typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
+using std::vector;
+using stan::model::prob_grad;
+
+static int current_statement_begin__;
+
+matrix_d get_col(const matrix_d& u,size_t m) {
+      return u.block(0, m, u.rows(), 1);
+    }
 
 class one_factor_cop : public prob_grad {
 private:
-    int t_max;
-    int n_max;
-    int k;
-    matrix_d u;
-    vector_int gid;
-    vector_int copula_type;
+    int t_max;                  // Number of periods
+    int n_max;                  // Number of series
+    int k;                      // Latent index
+    matrix_d u;                 // Input matrix copula[t*n]
+    vector_int gid;             // Group of copula
+    vector_int copula_type;     // copula type
 
 public:
+    template <class RNG>
     one_factor_cop(const matrix_d& u_, const vector_int& gid_,
-                   const matrix_int& copula_type_
-                   const int& t_max_,const int& n_max_,const int& k_)
-        : u(u_), gid(gid_),copula_type(copula_type_),
+                   const vector_int& copula_type_,
+                   const int& t_max_,const int& n_max_,const int& k_,
+                   RNG& base_rng__,std::ostream* pstream__ = 0)
+        : prob_grad(0), u(u_), gid(gid_),copula_type(copula_type_),
           t_max(t_max_), n_max(n_max_),k(k_) {
         static const char* function = "vifcopula::one_factor_cop";
 
+        // Inherit from prob_grad
+        //      size_t num_params_r__;
+        //      std::vector<std::pair<int, int> > param_ranges_i__;
         // set parameter ranges
         num_params_r__ = 0U;
         param_ranges_i__.clear();
         num_params_r__ += t_max;
         num_params_r__ += n_max;
+
 
     }
 
@@ -76,11 +88,15 @@ public:
         copula_type = copula_type_;
     }
 
+
     template <bool propto__, bool jacobian__, typename T__>
     T__ log_prob(vector<T__>& params_r__,
                  vector<int>& params_i__,
                  std::ostream* pstream__ = 0) const {
         static const char* function = "vifcopula::one_factor_cop::log_prob";
+
+        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
 
         vector_d log_bifcop;
         log_bifcop.setZero(n_max);
@@ -98,26 +114,119 @@ public:
         else
             v = in__.vector_lub_constrain(-(1),1,t_max);
 
-        Eigen::Matrix<T__,Eigen::Dynamic,1>  par;
-        (void) par;  // dummy to suppress unused var warning
-        if (jacobian__)
-            par = in__.vector_lub_constrain(-(1),1,n_max,lp__);
-        else
-            par = in__.vector_lub_constrain(-(1),1,n_max);
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  theta;
+        (void) theta;  // dummy to suppress unused var warning
+
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  theta2;
+        (void) theta2;  // dummy to suppress unused var warning
 
         // model body
         try {
 
             current_statement_begin__ = 12;
-            lp_accum__.add(uniform_log<propto__>(v, -(1), 1));
+            lp_accum__.add(uniform_lpdf<propto__>(v, -(1), 1));
             current_statement_begin__ = 13;
-            lp_accum__.add(uniform_log<propto__>(par, -(1), 1));
-            current_statement_begin__ = 14;
+            int ibase = 0;
 
-            int k_temp = k-1;
             for (int i = 0; i < n_max; i++){
-                current_statement_begin__ = 15;
-                lp_accum__.add(logBifcop(u,v,par,copula_type,t_max,i,k_temp));
+                current_statement_begin__ = 14;
+
+                ibase = i+1;
+
+                switch ( get_base1(copula_type,ibase,"copula_type",1) ) {
+                    case 0:
+                        // Independence copula
+                        current_statement_begin__ = 15;
+                        lp_accum__.add(bicop_independence_log<propto__>(get_col(u,i),v));
+                        break;
+                    case 1:
+                        // Gaussian copula
+                        current_statement_begin__ = 15;
+                        if (jacobian__)
+                            theta[i] = in__.scalar_lub_constrain(-(1),1,lp__);
+                        else
+                            theta[i] = in__.scalar_lub_constrain(-(1),1);
+
+                        lp_accum__.add(uniform_lpdf(theta[i], -(1), 1));
+
+                        lp_accum__.add(bicop_normal_log<propto__>(get_col(u,i),
+                                                        v,
+                                                        get_based1(theta,ibase,"theta",1)));
+                        break;
+                    case 2:
+                        // Student copula
+                        current_statement_begin__ = 15;
+                        if (jacobian__)
+                            theta[i] = in__.scalar_lub_constrain(-(1),1,lp__);
+                        else
+                            theta[i] = in__.scalar_lub_constrain(-(1),1);
+
+                        lp_accum__.add(uniform_lpdf(theta[i], -(1), 1));
+
+                        lp_accum__.add(bicop_student_log<propto__>(get_col(u,i),
+                                                                    v,
+                                                                    get_based1(theta,ibase,"theta",1),
+                                                                    5));
+                        break;
+                    case 3:
+                        // Clayon copula
+                        if (jacobian__)
+                            theta[i] = in__.scalar_lb_constrain(0,lp__);
+                        else
+                            theta[i] = in__.scalar_lb_constrain(0);
+
+                        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
+                        lp_accum__.add(bicop_clayton_log<propto__>(get_col(u,i),
+                                                        v,
+                                                        get_based1(theta,ibase,"theta",1)));
+                        break;
+                    case 4:
+                        // Gumbel copula
+                        if (jacobian__)
+                            theta[i] = in__.scalar_lb_constrain(1,lp__);
+                        else
+                            theta[i] = in__.scalar_lb_constrain(1);
+
+                        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 1, Inf)); //Improper priors
+                        lp_accum__.add(bicop_gumbel_log<propto__>(get_col(u,i),
+                                                        v,
+                                                        get_based1(theta,ibase,"theta",1)));
+                        break;
+                    case 5:
+                        // Frank copula
+                       if (jacobian__)
+                            theta[i] = in__.scalar_lb_constrain(0,lp__);
+                        else
+                            theta[i] = in__.scalar_lb_constrain(0);
+
+                        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
+                        lp_accum__.add(bicop_frank_log<propto__>(get_col(u,i),
+                                                        v,
+                                                        get_based1(theta,ibase,"theta",1)));
+
+                        break;
+                    case 6:
+                        // Joe copula
+                       if (jacobian__)
+                            theta[i] = in__.scalar_lb_constrain(1,lp__);
+                        else
+                            theta[i] = in__.scalar_lb_constrain(1);
+
+                        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
+                        lp_accum__.add(bicop_joe_log<propto__>(get_col(u,i),
+                                                        v,
+                                                        get_based1(theta,ibase,"theta",1)));
+
+                        break;
+                    default:
+                        // Code to execute if <variable> does not equal the value following any of the cases
+                        // Send a break message.
+                        break;
+                }
+
+
+
+
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
@@ -143,7 +252,11 @@ public:
     ~ one_factor_cop(){}
 
 
+
 }; // model
 
 } // namespace
+
+typedef vifcopula::one_factor_cop stan_model;
+
 #endif // VIFCOPULA_ONE_FACTOR_COP_CPP

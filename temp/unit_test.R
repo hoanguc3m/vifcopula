@@ -74,3 +74,7 @@ BiCopDeriv(0.1, 0.1, cop, deriv = "u1") /  BiCopPDF(0.1, 0.1, cop)
 log(BiCopPDF(0.1, 0.3, cop))
 BiCopDeriv(0.1, 0.3, cop, deriv = "u2") /  BiCopPDF(0.1, 0.3, cop)
 
+cop <- BiCop(family = 4, par = 10)
+BiCopDeriv(0.1, 0.5, cop, deriv = "par") /  BiCopPDF(0.1, 0.5, cop)
+BiCopDeriv(0.1, 0.5, cop, deriv = "par", log =T)
+log(BiCopPDF(0.1, 0.5, cop))

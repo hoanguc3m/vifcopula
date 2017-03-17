@@ -19,23 +19,21 @@ TEST(Copula_density, Gumbel_copula_v) {
         EXPECT_FLOAT_EQ(lp1val,0.3437033);
         EXPECT_FLOAT_EQ(lp1adj,-3.203365);
 }
-//
-//TEST(Copula_density, Gumbel_copula_theta) {
-//    using stan::math::var;
-//
-//    double theta_val = 10;
-//        var theta(theta_val);
-//        var lp1(0.0);
-//        lp1 += vifcopula::bicop_gumbel_log<false>(0.1, 0.5, theta);
-//        double lp1val = lp1.val();
-//
-//        lp1.grad();
-//        double lp1adj = theta.adj();
-//
-//
-//        std::cout << lp1val << " " << lp1adj << std::endl;
-//
-//        EXPECT_FLOAT_EQ(lp1val,-0.5090741);
-//        EXPECT_FLOAT_EQ(lp1adj,-0.7642303);
-//}
+
+TEST(Copula_density, Gumbel_copula_theta) {
+    using stan::math::var;
+
+    double theta_val = 10;
+        var theta(theta_val);
+        var lp1(0.0);
+        lp1 += vifcopula::bicop_gumbel_log<false>(0.1, 0.5, theta);
+        double lp1val = lp1.val();
+
+        lp1.grad();
+        double lp1adj = theta.adj();
+
+
+        EXPECT_FLOAT_EQ(lp1val,-8.520775);
+        EXPECT_FLOAT_EQ(lp1adj,-1.112054);
+}
 
