@@ -3,10 +3,16 @@
 
 //#include <rstan/rstaninc.hpp>
 #include <stan/model/model_header.hpp>
-#include <stan/math.hpp>
+//#include <stan/math.hpp>
 
 #include <omp.h>
-#include <logBifcop.cpp>
+#include <dist/bicop_independence_log.cpp>
+#include <dist/bicop_normal_log.cpp>
+#include <dist/bicop_student_log.cpp>
+#include <dist/bicop_clayton_log.cpp>
+#include <dist/bicop_gumbel_log.cpp>
+#include <dist/bicop_frank_log.cpp>
+#include <dist/bicop_joe_log.cpp>
 
 
 
@@ -33,11 +39,7 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 using std::vector;
 using stan::model::prob_grad;
 
-static int current_statement_begin__;
 
-matrix_d get_col(const matrix_d& u,size_t m) {
-      return u.block(0, m, u.rows(), 1);
-    }
 
 class one_factor_cop : public prob_grad {
 private:
@@ -98,6 +100,8 @@ public:
         T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
         (void) DUMMY_VAR__;  // suppress unused var warning
 
+        static int current_statement_begin__;
+
         vector_d log_bifcop;
         log_bifcop.setZero(n_max);
 
@@ -120,6 +124,8 @@ public:
         Eigen::Matrix<T__,Eigen::Dynamic,1>  theta2;
         (void) theta2;  // dummy to suppress unused var warning
 
+        vector_d u_col;
+
         // model body
         try {
 
@@ -130,14 +136,14 @@ public:
 
             for (int i = 0; i < n_max; i++){
                 current_statement_begin__ = 14;
-
+                u_col = u.col(i);
                 ibase = i+1;
 
                 switch ( get_base1(copula_type,ibase,"copula_type",1) ) {
                     case 0:
                         // Independence copula
                         current_statement_begin__ = 15;
-                        lp_accum__.add(bicop_independence_log<propto__>(get_col(u,i),v));
+                        lp_accum__.add(bicop_independence_log<propto__>(u_col,v));
                         break;
                     case 1:
                         // Gaussian copula
@@ -149,7 +155,7 @@ public:
 
                         lp_accum__.add(uniform_lpdf(theta[i], -(1), 1));
 
-                        lp_accum__.add(bicop_normal_log<propto__>(get_col(u,i),
+                        lp_accum__.add(bicop_normal_log<propto__>(u_col,
                                                         v,
                                                         get_based1(theta,ibase,"theta",1)));
                         break;
@@ -163,7 +169,7 @@ public:
 
                         lp_accum__.add(uniform_lpdf(theta[i], -(1), 1));
 
-                        lp_accum__.add(bicop_student_log<propto__>(get_col(u,i),
+                        lp_accum__.add(bicop_student_log<propto__>(u_col,
                                                                     v,
                                                                     get_based1(theta,ibase,"theta",1),
                                                                     5));
@@ -176,7 +182,7 @@ public:
                             theta[i] = in__.scalar_lb_constrain(0);
 
                         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
-                        lp_accum__.add(bicop_clayton_log<propto__>(get_col(u,i),
+                        lp_accum__.add(bicop_clayton_log<propto__>(u_col,
                                                         v,
                                                         get_based1(theta,ibase,"theta",1)));
                         break;
@@ -188,7 +194,7 @@ public:
                             theta[i] = in__.scalar_lb_constrain(1);
 
                         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 1, Inf)); //Improper priors
-                        lp_accum__.add(bicop_gumbel_log<propto__>(get_col(u,i),
+                        lp_accum__.add(bicop_gumbel_log<propto__>(u_col,
                                                         v,
                                                         get_based1(theta,ibase,"theta",1)));
                         break;
@@ -200,7 +206,7 @@ public:
                             theta[i] = in__.scalar_lb_constrain(0);
 
                         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
-                        lp_accum__.add(bicop_frank_log<propto__>(get_col(u,i),
+                        lp_accum__.add(bicop_frank_log<propto__>(u_col,
                                                         v,
                                                         get_based1(theta,ibase,"theta",1)));
 
@@ -213,7 +219,7 @@ public:
                             theta[i] = in__.scalar_lb_constrain(1);
 
                         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
-                        lp_accum__.add(bicop_joe_log<propto__>(get_col(u,i),
+                        lp_accum__.add(bicop_joe_log<propto__>(u_col,
                                                         v,
                                                         get_based1(theta,ibase,"theta",1)));
 

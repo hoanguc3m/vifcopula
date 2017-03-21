@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1489442585 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
+1489791038 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
 	"gtest/gtest.h"
 
 1489615774 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_independence_log_test.cpp
@@ -7,7 +7,7 @@
 	<gtest/gtest.h>
 	<dist/bicop_independence_log.cpp>
 
-1489373948 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.cpp
 	<stan/math.hpp>
 
 1489615745 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_normal_log_test.cpp
@@ -16,7 +16,7 @@
 	<dist/bicop_normal_log.cpp>
 	<iostream>
 
-1489437525 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.cpp
 	<stan/math.hpp>
 
 1489575009 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/temp.cpp
@@ -32,7 +32,7 @@
 	<dist/bicop_student_log.cpp>
 	<iostream>
 
-1489586008 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.cpp
 	<stan/math.hpp>
 	<iostream>
 
@@ -42,7 +42,7 @@
 	<dist/bicop_clayton_log.cpp>
 	<iostream>
 
-1489513032 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.cpp
 	<stan/math.hpp>
 
 1489615767 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
@@ -51,7 +51,7 @@
 	<dist/bicop_frank_log.cpp>
 	<iostream>
 
-1489518640 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
 	<stan/math.hpp>
 
 1489767756 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
@@ -60,7 +60,7 @@
 	<dist/bicop_gumbel_log.cpp>
 	<iostream>
 
-1489704792 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
 	<stan/math.hpp>
 
 1489615782 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
@@ -69,10 +69,10 @@
 	<dist/bicop_joe_log.cpp>
 	<iostream>
 
-1489535969 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.cpp
 	<stan/math.hpp>
 
-1489747910 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
+1489793880 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
 	<stan/math.hpp>
 	<dist/bicop_independence_log.cpp>
 	<dist/bicop_normal_log.cpp>
@@ -82,13 +82,13 @@
 	<dist/bicop_frank_log.cpp>
 	<dist/bicop_joe_log.cpp>
 
-1489767739 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/logBifcop_test.cpp
+1489786661 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/logBifcop_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<logBifcop.cpp>
 	<iostream>
 
-1489747910 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
+1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/logBifcop.cpp
 	<stan/math.hpp>
 	<dist/bicop_independence_log.cpp>
 	<dist/bicop_normal_log.cpp>
@@ -98,16 +98,169 @@
 	<dist/bicop_frank_log.cpp>
 	<dist/bicop_joe_log.cpp>
 
-1489778125 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/one_factor_cop.cpp
+1489836158 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/one_factor_cop.cpp
 	<stan/model/model_header.hpp>
+	<omp.h>
+	<dist/bicop_independence_log.cpp>
+	<dist/bicop_normal_log.cpp>
+	<dist/bicop_student_log.cpp>
+	<dist/bicop_clayton_log.cpp>
+	<dist/bicop_gumbel_log.cpp>
+	<dist/bicop_frank_log.cpp>
+	<dist/bicop_joe_log.cpp>
+
+1489802267 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/one_factor_cop_test.cpp
+	<gtest/gtest.h>
+	<one_factor_cop.cpp>
+	<iostream>
 	<stan/math.hpp>
-	<omp.h>
-	<logBifcop.cpp>
+	<boost/exception/all.hpp>
+	<boost/random/additive_combine.hpp>
+	<boost/random/linear_congruential.hpp>
+	<stan/variational/advi.hpp>
+	<stan/interface_callbacks/writer/stream_writer.hpp>
 
-1489770660 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/one_factor_cop_test.cpp
-
-1489770248 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/one_factor_cop.cpp
+1489836100 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/one_factor_cop.cpp
 	<stan/model/model_header.hpp>
 	<omp.h>
 	<logBifcop.cpp>
+
+1489789957 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/extend.cpp
+
+1489882732 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/outfile.cpp
+	<stan/model/model_header.hpp>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/model_header.hpp
+	<stan/math.hpp>
+	<stan/io/cmd_line.hpp>
+	<stan/io/dump.hpp>
+	<stan/io/reader.hpp>
+	<stan/io/writer.hpp>
+	<stan/lang/rethrow_located.hpp>
+	<stan/model/prob_grad.hpp>
+	<stan/model/indexing.hpp>
+	<boost/exception/all.hpp>
+	<boost/random/additive_combine.hpp>
+	<boost/random/linear_congruential.hpp>
+	<cmath>
+	<cstddef>
+	<fstream>
+	<iostream>
+	<sstream>
+	<stdexcept>
+	<utility>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/io/cmd_line.hpp
+	<map>
+	<ostream>
+	<set>
+	<string>
+	<sstream>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/io/dump.hpp
+	<stan/io/validate_zero_buf.hpp>
+	<stan/io/var_context.hpp>
+	<stan/math/prim/mat.hpp>
+	<boost/lexical_cast.hpp>
+	<boost/throw_exception.hpp>
+	<boost/type_traits/is_floating_point.hpp>
+	<boost/type_traits/is_integral.hpp>
+	<boost/type_traits/is_arithmetic.hpp>
+	<boost/utility/enable_if.hpp>
+	<iostream>
+	<limits>
+	<map>
+	<sstream>
+	<stdexcept>
+	<string>
+	<utility>
+	<vector>
+	<cctype>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/io/validate_zero_buf.hpp
+	<boost/lexical_cast/bad_lexical_cast.hpp>
+	<string>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/io/var_context.hpp
+	<sstream>
+	<stdexcept>
+	<string>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/io/reader.hpp
+	<boost/throw_exception.hpp>
+	<stan/math/prim/mat.hpp>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/io/writer.hpp
+	<stan/math/prim/mat.hpp>
+	<stdexcept>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/lang/rethrow_located.hpp
+	<exception>
+	<ios>
+	<new>
+	<sstream>
+	<stdexcept>
+	<string>
+	<typeinfo>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/prob_grad.hpp
+	<cstddef>
+	<utility>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing.hpp
+	<stan/model/indexing/deep_copy.hpp>
+	<stan/model/indexing/index.hpp>
+	<stan/model/indexing/index_list.hpp>
+	<stan/model/indexing/lvalue.hpp>
+	<stan/model/indexing/rvalue.hpp>
+	<stan/model/indexing/rvalue_return.hpp>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/deep_copy.hpp
+	<Eigen/Dense>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/index.hpp
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/index_list.hpp
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/lvalue.hpp
+	<boost/utility/enable_if.hpp>
+	<boost/type_traits/is_same.hpp>
+	<Eigen/Dense>
+	<stan/math/prim/mat.hpp>
+	<stan/model/indexing/index.hpp>
+	<stan/model/indexing/index_list.hpp>
+	<stan/model/indexing/rvalue_at.hpp>
+	<stan/model/indexing/rvalue_index_size.hpp>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/rvalue_at.hpp
+	<stan/model/indexing/index.hpp>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/rvalue_index_size.hpp
+	<stan/model/indexing/index.hpp>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/rvalue.hpp
+	<boost/utility/enable_if.hpp>
+	<boost/type_traits/is_same.hpp>
+	<stan/math/prim/mat.hpp>
+	<stan/model/indexing/index.hpp>
+	<stan/model/indexing/index_list.hpp>
+	<stan/model/indexing/rvalue_at.hpp>
+	<stan/model/indexing/rvalue_index_size.hpp>
+	<stan/model/indexing/rvalue_return.hpp>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/indexing/rvalue_return.hpp
+	<Eigen/Dense>
+	<stan/model/indexing/index.hpp>
+	<stan/model/indexing/index_list.hpp>
+	<vector>
 
