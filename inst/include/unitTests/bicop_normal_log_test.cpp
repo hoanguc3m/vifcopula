@@ -1,6 +1,6 @@
 #include <stan/math.hpp>
 #include <gtest/gtest.h>
-#include <dist/bicop_normal_log.cpp>
+#include <dist/bicop_normal_log.hpp>
 
 #include <iostream>
 

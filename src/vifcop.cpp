@@ -5,10 +5,10 @@
 #include <RcppEigen.h>
 #include <omp.h>
 #include <ctime>
-#include <one_factor_cop.cpp>
+#include <one_factor_cop.hpp>
 #include <stan/math.hpp>
-#include <stan/variational/advi.hpp>
-#include <stan/callbacks/writer.hpp>
+#include <advi_mod.hpp>
+#include <stan/interface_callbacks/writer/stream_writer.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -58,7 +58,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
         int n_max  = as<int>(data["n_max"]);
         int k_max  = as<int>(data["k_max"]);
         matrix_d u = Rcpp::as<matrix_d>(data["u"]);
-        vector_int gid = Rcpp::as<vector_int>(data["gid"]);
+        std::vector<int> gid = Rcpp::as<std::vector<int> >(data["gid"]);
         int structfactor = as<int>(data["structfactor"]);
 
         stan::math::check_positive_finite(function, "Period", t_max);
@@ -106,35 +106,47 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
     // Initiate model
     vector_d v_temp = v.col(0);
-    vector_int copula_type_temp = copula_type.col(0);
+    std::vector<int> copula_type_vec(n_max);
+    for (int i = 0; i < n_max; i++)
+        copula_type_vec[i]= copula_type(i,0);
     k_max = 0;
-    vifcopula::one_factor_cop copula_l1(u,gid,copula_type_temp,t_max, n_max, k_max, base_rng);
+    Model_cp copula_l1(u,gid,copula_type_vec,t_max, n_max, k_max, base_rng);
+
 
     // Dummy input
-    //Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(my_model.num_params_r());
-    stan::variational::normal_meanfield cont_params(t_max + n_max);
+    Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(copula_l1.num_params_r());
+    //stan::variational::normal_meanfield cont_params(t_max + n_max);
 
 
     // ADVI
-    // stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(copula_l1,
-    //                                                                                         cont_params,
-    //                                                                                         base_rng,
-    //                                                                                         10,
-    //                                                                                         100,
-    //                                                                                         100,
-    //                                                                                         1);
+    stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(copula_l1,
+                                                                                            cont_params,
+                                                                                            base_rng,
+                                                                                            10,
+                                                                                            100,
+                                                                                            10,
+                                                                                            1000);
 
-    stan::callbacks::writer writer;
+    std::stringstream out_message_writer;
+    stan::interface_callbacks::writer::stream_writer message_writer(out_message_writer);
 
-    //test_advi.run(0.01, false, 50, 1, 2e4,
-    //              writer, writer, writer);
+    std::stringstream out_parameter_writer;
+    stan::interface_callbacks::writer::stream_writer parameter_writer(out_parameter_writer);
+
+    std::stringstream out_diagnostic_writer;
+    stan::interface_callbacks::writer::stream_writer diagnostic_writer(out_diagnostic_writer);
+
+
+    test_advi.run(0.01, true, 50, 1, 2e4,
+                  message_writer, parameter_writer, diagnostic_writer);
 
 
     // Rcpp::Rcout << " copula LL :" << copula_l1.log_prob(cont_params) << std::endl;
-    Rcpp::Rcout << " normal_meanfield LL :" << cont_params.entropy() << std::endl;
+    //Rcpp::Rcout << " normal_meanfield LL :" << cont_params.entropy() << std::endl;
 
 
 
+    std::cout << " out_stream " << out_message_writer.str() << std::endl;
 
 
     end = clock();

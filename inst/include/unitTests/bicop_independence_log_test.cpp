@@ -3,7 +3,7 @@
 
 #include <stan/math.hpp>
 #include <gtest/gtest.h>
-#include <dist/bicop_independence_log.cpp>
+#include <dist/bicop_independence_log.hpp>
 
 
 TEST(Copula_density, DISABLE_independence_copula) {

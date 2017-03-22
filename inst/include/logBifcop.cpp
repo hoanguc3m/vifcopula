@@ -2,13 +2,13 @@
 #define VIFCOPULA_LOGBIFCOP_CPP
 
 #include <stan/math.hpp>
-#include <dist/bicop_independence_log.cpp>
-#include <dist/bicop_normal_log.cpp>
-#include <dist/bicop_student_log.cpp>
-#include <dist/bicop_clayton_log.cpp>
-#include <dist/bicop_gumbel_log.cpp>
-#include <dist/bicop_frank_log.cpp>
-#include <dist/bicop_joe_log.cpp>
+#include <dist/bicop_independence_log.hpp>
+#include <dist/bicop_normal_log.hpp>
+#include <dist/bicop_student_log.hpp>
+#include <dist/bicop_clayton_log.hpp>
+#include <dist/bicop_gumbel_log.hpp>
+#include <dist/bicop_frank_log.hpp>
+#include <dist/bicop_joe_log.hpp>
 
 namespace vifcopula {
 /**

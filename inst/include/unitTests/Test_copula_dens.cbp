@@ -39,8 +39,15 @@
 			<Add option="-lgtest" />
 			<Add option="-pthread" />
 		</Linker>
+		<Unit filename="../dist/bicop_clayton_log.hpp" />
+		<Unit filename="../dist/bicop_frank_log.hpp" />
+		<Unit filename="../dist/bicop_gumbel_log.hpp" />
+		<Unit filename="../dist/bicop_independence_log.hpp" />
+		<Unit filename="../dist/bicop_joe_log.hpp" />
+		<Unit filename="../dist/bicop_normal_log.hpp" />
+		<Unit filename="../dist/bicop_student_log.hpp" />
 		<Unit filename="../logBifcop.cpp" />
-		<Unit filename="../one_factor_cop.cpp" />
+		<Unit filename="../one_factor_cop.hpp" />
 		<Unit filename="bicop_clayton_log_test.cpp" />
 		<Unit filename="bicop_frank_log_test.cpp" />
 		<Unit filename="bicop_gumbel_log_test.cpp" />

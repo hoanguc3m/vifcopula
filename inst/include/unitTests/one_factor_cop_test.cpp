@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <one_factor_cop.cpp>
+#include <one_factor_cop.hpp>
 #include <iostream>
 #include <stan/math.hpp>
 #include <boost/exception/all.hpp>

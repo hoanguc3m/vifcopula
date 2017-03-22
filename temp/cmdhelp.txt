@@ -1,0 +1,33 @@
+How to translate a stan to hpp
+
+1. Goto cmdstan directory
+make examples/bernoulli/bernoulli
+
+2. 
+
+--- Translating Stan model to C++ code ---
+bin/stanc  examples/bernoulli/bernoulli.stan --o=examples/bernoulli/bernoulli.hpp
+Model name=bernoulli_model
+Input file=examples/bernoulli/bernoulli.stan
+Output file=examples/bernoulli/bernoulli.hpp
+
+--- Linking C++ model ---
+g++ -I src -I stan_2.14.0/src -isystem stan_2.14.0/lib/stan_math_2.14.0/ -isystem stan_2.14.0/lib/stan_math_2.14.0/lib/eigen_3.2.9 -isystem stan_2.14.0/lib/stan_math_2.14.0/lib/boost_1.62.0 -isystem stan_2.14.0/lib/stan_math_2.14.0/lib/cvodes_2.9.0/include -Wall -DEIGEN_NO_DEBUG  -DBOOST_RESULT_OF_USE_TR1 -DBOOST_NO_DECLTYPE -DBOOST_DISABLE_ASSERTS -DFUSION_MAX_VECTOR_SIZE=12 -DNO_FPRINTF_OUTPUT -pipe   -lpthread  -O3 -o examples/bernoulli/bernoulli src/cmdstan/main.cpp -include examples/bernoulli/bernoulli.hpp stan_2.14.0/lib/stan_math_2.14.0/lib/cvodes_2.9.0/lib/libsundials_nvecserial.a stan_2.14.0/lib/stan_math_2.14.0/lib/cvodes_2.9.0/lib/libsundials_cvodes.a 
+
+3. Other ways
+bin/stanc	--name=hier_logistic_cp \
+		--o=examples/variational/hier_logistic_cp.hpp \
+		examples/variational/hier_logistic_cp.stan
+
+g++ -I src -I stan_2.14.0/src -isystem stan_2.14.0/lib/stan_math_2.14.0/ -isystem stan_2.14.0/lib/stan_math_2.14.0/lib/eigen_3.2.9 -isystem stan_2.14.0/lib/stan_math_2.14.0/lib/boost_1.62.0 -isystem stan_2.14.0/lib/stan_math_2.14.0/lib/cvodes_2.9.0/include -Wall -DEIGEN_NO_DEBUG  -DBOOST_RESULT_OF_USE_TR1 -DBOOST_NO_DECLTYPE -DBOOST_DISABLE_ASSERTS -DFUSION_MAX_VECTOR_SIZE=12 -DNO_FPRINTF_OUTPUT -pipe   -lpthread  -O3 -o examples/variational/hier_logistic_cp src/cmdstan/main.cpp -include examples/variational/hier_logistic_cp.hpp stan_2.14.0/lib/stan_math_2.14.0/lib/cvodes_2.9.0/lib/libsundials_nvecserial.a stan_2.14.0/lib/stan_math_2.14.0/lib/cvodes_2.9.0/lib/libsundials_cvodes.a 
+
+4 Run 
+./hier_logistic_cp variational algorithm=meanfield data file=hier_logistic.data.R
+
+
+bin/stanc	--name=hier_logistic		--o=examples/variational/hier_logistic.hpp examples/variational/hier_logistic.stan
+
+A.13 Templates 1121
+Vector, Templates, and Exceptions Chapter 19 667
+	
+
