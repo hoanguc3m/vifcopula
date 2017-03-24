@@ -1,5 +1,5 @@
-#ifndef STAN_VARIATIONAL_ADVI_HPP
-#define STAN_VARIATIONAL_ADVI_HPP
+#ifndef STAN_VARIATIONAL_ADVI_MOD_HPP
+#define STAN_VARIATIONAL_ADVI_MOD_HPP
 
 #include <stan/math.hpp>
 #include <stan/interface_callbacks/writer/base_writer.hpp>
@@ -36,7 +36,7 @@ namespace stan {
      * @tparam BaseRNG               class of random number generator
      */
     template <class Model, class Q, class BaseRNG>
-    class advi {
+    class advi_mod {
     public:
       /**
        * Constructor
@@ -53,7 +53,7 @@ namespace stan {
        * @throw  std::runtime_error   if eval_elbo is not positive
        * @throw  std::runtime_error   if n_posterior_samples is not positive
        */
-      advi(Model& m,
+      advi_mod(Model& m,
            Eigen::VectorXd& cont_params,
            BaseRNG& rng,
            int n_monte_carlo_grad,
@@ -67,7 +67,7 @@ namespace stan {
           n_monte_carlo_elbo_(n_monte_carlo_elbo),
           eval_elbo_(eval_elbo),
           n_posterior_samples_(n_posterior_samples) {
-        static const char* function = "stan::variational::advi";
+        static const char* function = "stan::variational::advi_mod";
         math::check_positive(function,
                              "Number of Monte Carlo samples for gradients",
                              n_monte_carlo_grad_);
@@ -100,7 +100,7 @@ namespace stan {
                        interface_callbacks::writer::base_writer& message_writer)
         const {
         static const char* function =
-          "stan::variational::advi::calc_ELBO";
+          "stan::variational::advi_mod::calc_ELBO";
 
         double elbo = 0.0;
         int dim = variational.dimension();
@@ -150,7 +150,7 @@ namespace stan {
                           message_writer)
         const {
         static const char* function =
-          "stan::variational::advi::calc_ELBO_grad";
+          "stan::variational::advi_mod::calc_ELBO_grad";
 
         stan::math::check_size_match(function,
                                      "Dimension of elbo_grad",
@@ -184,7 +184,7 @@ namespace stan {
                        int adapt_iterations,
                        interface_callbacks::writer::base_writer& message_writer)
         const {
-        static const char* function = "stan::variational::advi::adapt_eta";
+        static const char* function = "stan::variational::advi_mod::adapt_eta";
 
         stan::math::check_positive(function,
                                    "Number of adaptation iterations",
@@ -334,7 +334,7 @@ namespace stan {
                     interface_callbacks::writer::base_writer& diagnostic_writer)
         const {
         static const char* function =
-          "stan::variational::advi::stochastic_gradient_ascent";
+          "stan::variational::advi_mod::stochastic_gradient_ascent";
 
         stan::math::check_positive(function, "Eta stepsize", eta);
         stan::math::check_positive(function,
@@ -510,7 +510,6 @@ namespace stan {
 
         // Write mean of posterior approximation on first output line
         cont_params_ = variational.mean();
-        std::cout << "cont_params_ " << cont_params_ << std::endl;
 
 
         std::vector<double> cont_vector(cont_params_.size());

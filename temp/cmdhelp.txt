@@ -29,5 +29,5 @@ bin/stanc	--name=hier_logistic		--o=examples/variational/hier_logistic.hpp examp
 
 A.13 Templates 1121
 Vector, Templates, and Exceptions Chapter 19 667
-	
+
 

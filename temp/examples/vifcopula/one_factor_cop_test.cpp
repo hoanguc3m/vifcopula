@@ -1,5 +1,5 @@
 #include <one_factor_cop.hpp>
-#include <stan/variational/advi_mod.hpp>
+#include <advi_mod.hpp>
 #include <stan/interface_callbacks/writer/stream_writer.hpp>
 #include <gtest/gtest.h>
 #include <test/unit/util.hpp>
@@ -9,7 +9,8 @@
 #include <boost/random/additive_combine.hpp> // L'Ecuyer RNG
 #include <stan/model/log_prob_propto.hpp>
 #include <stan/model/grad_hess_log_prob.hpp>
-
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 
 using stan::math::uniform_rng;
 using std::vector;
@@ -92,21 +93,21 @@ TEST(advi_test, one_factor_cop_constraint_meanfield) {
 
 
   // ADVI
-  stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(my_model,
+  stan::variational::advi_mod<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(my_model,
                                                      cont_params,
                                                      base_rng,
                                                      10,
                                                      100,
                                                      10,
-                                                     1000);
+                                                     2);
   std::stringstream out_message_writer;
-  stan::interface_callbacks::writer::stream_writer message_writer(out_message_writer);
+  stan::interface_callbacks::writer::stream_writer message_writer(std::cout);
 
   std::stringstream out_parameter_writer;
   stan::interface_callbacks::writer::stream_writer parameter_writer(out_parameter_writer);
 
   std::stringstream out_diagnostic_writer;
-  stan::interface_callbacks::writer::stream_writer diagnostic_writer(out_diagnostic_writer);
+  stan::interface_callbacks::writer::stream_writer diagnostic_writer(std::cout);
 
 
   std::cout << " copula LL :" << stan::model::log_prob_propto<true, stan_model>(my_model,cont_params,0) << std::endl;
@@ -123,5 +124,58 @@ TEST(advi_test, one_factor_cop_constraint_meanfield) {
   test_advi.run(0.01, true, 50, 1, 2e4,
                 message_writer, parameter_writer, diagnostic_writer);
 
-    std::cout << " out_stream " << out_parameter_writer.str() << std::endl;
+   std::cout << " out_stream " << out_parameter_writer.str() << std::endl;
+
+
+    int iter = 2;
+
+
+
+    int max_param = my_model.num_params_r();
+    matrix_d sample_iv(iter,max_param);
+    vector_d mean_iv(max_param);
+
+    std::string token;
+    std::getline(out_parameter_writer, token);
+    std::getline(out_parameter_writer, token);
+
+    int j;
+    try{
+        std::getline(out_parameter_writer, token, ',');
+        for (j = 0; j < max_param-1;j++){
+            std::getline(out_parameter_writer, token, ',');
+            boost::trim(token);
+            mean_iv(j) = boost::lexical_cast<double>(token);
+        }
+        std::getline(out_parameter_writer, token);
+            boost::trim(token);
+            mean_iv(max_param-1) = boost::lexical_cast<double>(token);
+
+        for (int i = 0; i < iter;i++){
+            std::getline(out_parameter_writer, token, ',');
+                for (int j = 0; j < max_param-1;j++){
+                    std::getline(out_parameter_writer, token, ',');
+                    boost::trim(token);
+                    sample_iv(i,j) = boost::lexical_cast<double>(token);
+                }
+            std::getline(out_parameter_writer, token);
+                boost::trim(token);
+                sample_iv(i,max_param-1) = boost::lexical_cast<double>(token);
+        }
+
+    } catch (...){
+        std::cout << " j " << j << std::endl;
+        std::cout << " token " << token << std::endl;
+    }
+
+
+
+
+
+
+
+   std::cout << " sample_iv " << sample_iv << std::endl;
+
 }
+
+

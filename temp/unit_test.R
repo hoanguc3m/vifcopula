@@ -1,9 +1,10 @@
 library("Rcpp")
 data <- list(u = u, n_max = n_max, n_group = n_group, t_max = t_max, k_max = k_max, gid = gid, structfactor = 1)
 init <- list(copula_type = matrix(copula_type), v = matrix(v0), par = matrix(par))
-other <- list(seed = 126, core = 8, iter = 1000, n_monte_carlo_grad = 5, n_monte_carlo_elbo = 5)
+other <- list(seed = 126, core = 8, iter = 1000, n_monte_carlo_grad = 10, n_monte_carlo_elbo = 100, eval_elbo = 100,
+              adapt_bool = F, adapt_val = 1, adapt_iterations = 50, tol_rel_obj = 0.1)
 
-vifcopula::vifcop(data,init,other)
+out <- vifcopula::vifcop(data,init,other)
 vifcop(data,init,other)
 sourceCpp("src/vifcop.cpp")
 sourceCpp("src/logBifcop.cpp")
@@ -17,6 +18,7 @@ cop <- BiCop(family = 4, par = 2)
 cop <- BiCop(family = 5, par = 2)
 cop <- BiCop(family = 6, par = 3)
 sum(log(BiCopPDF(u[,1], v0, cop)))
+
 
 
 data <- list(u = u[1,1], n_max = 1, n_group = 1, t_max = 1, k_max = 1, gid = 1, structfactor = 1)
@@ -78,3 +80,24 @@ cop <- BiCop(family = 4, par = 10)
 BiCopDeriv(0.1, 0.5, cop, deriv = "par") /  BiCopPDF(0.1, 0.5, cop)
 BiCopDeriv(0.1, 0.5, cop, deriv = "par", log =T)
 log(BiCopPDF(0.1, 0.5, cop))
+
+
+#######################################################
+
+datagen <- fcopsim(t_max = 1000, n_max = 100, family = 3)
+data <- list(u = datagen$u, n_max = datagen$n_max, n_group = n_group, t_max = datagen$t_max, k_max = datagen$k_max, gid = datagen$gid, structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, v = datagen$v, par = datagen$theta, par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, eval_elbo = 100,
+              adapt_bool = F, adapt_val = 1, adapt_iterations = 50, tol_rel_obj = 0.1)
+out <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, out$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, out$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+hist(out$sample_iv[,100])
+hist(out$sample_iv[,1050])
+
+
+
+

@@ -1,0 +1,13 @@
+fit <- BiCopCompare(daxreturns[, 1], daxreturns[, 2])
+cop2 <- BiCopSelect(dat2[, 1], dat2[, 2], familyset = 0:10,
+                    indeptest = TRUE, level = 0.05)
+
+1.     # perform independence test
+    p.value.indeptest <- BiCopIndTest(u1, u2)$p.value
+
+    if (indeptest & (p.value.indeptest >= level)) {
+        ## select independence copula, if not rejected
+        obj <- BiCop(0)
+
+
+

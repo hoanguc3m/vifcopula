@@ -280,10 +280,10 @@
 1490048076 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/main.cpp
 	"gtest/gtest.h"
 
-1490111880 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop_test.cpp
+1490180323 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop_test.cpp
 	<one_factor_cop.hpp>
-	<stan/variational/advi_mod.hpp>
-	<stan/interface_callbacks/writer/noop_writer.hpp>
+	<advi_mod.hpp>
+	<stan/interface_callbacks/writer/stream_writer.hpp>
 	<gtest/gtest.h>
 	<test/unit/util.hpp>
 	<vector>
@@ -293,16 +293,16 @@
 	<stan/model/log_prob_propto.hpp>
 	<stan/model/grad_hess_log_prob.hpp>
 
-1490113483 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop.hpp
+1490185271 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop.hpp
 	<omp.h>
 	<stan/model/model_header.hpp>
-	<dist/bicop_independence_log.cpp>
-	<dist/bicop_normal_log.cpp>
-	<dist/bicop_student_log.cpp>
-	<dist/bicop_clayton_log.cpp>
-	<dist/bicop_gumbel_log.cpp>
-	<dist/bicop_frank_log.cpp>
-	<dist/bicop_joe_log.cpp>
+	<dist/bicop_independence_log.hpp>
+	<dist/bicop_normal_log.hpp>
+	<dist/bicop_student_log.hpp>
+	<dist/bicop_clayton_log.hpp>
+	<dist/bicop_gumbel_log.hpp>
+	<dist/bicop_frank_log.hpp>
+	<dist/bicop_joe_log.hpp>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_independence_log.cpp
 	<stan/math.hpp>
@@ -337,6 +337,48 @@
 	<vector>
 
 1490113623 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/variational/advi_mod.hpp
+	<stan/math.hpp>
+	<stan/interface_callbacks/writer/base_writer.hpp>
+	<stan/interface_callbacks/writer/stream_writer.hpp>
+	<stan/io/dump.hpp>
+	<stan/services/io/write_iteration.hpp>
+	<stan/services/error_codes.hpp>
+	<stan/services/variational/print_progress.hpp>
+	<stan/variational/families/normal_fullrank.hpp>
+	<stan/variational/families/normal_meanfield.hpp>
+	<boost/circular_buffer.hpp>
+	<boost/lexical_cast.hpp>
+	<algorithm>
+	<limits>
+	<numeric>
+	<ostream>
+	<vector>
+	<queue>
+	<string>
+
+1490140440 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_independence_log.hpp
+	<stan/math.hpp>
+
+1490140464 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_normal_log.hpp
+	<stan/math.hpp>
+
+1490140474 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_student_log.hpp
+	<stan/math.hpp>
+	<iostream>
+
+1490140395 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_clayton_log.hpp
+	<stan/math.hpp>
+
+1490140426 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_gumbel_log.hpp
+	<stan/math.hpp>
+
+1490140415 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_frank_log.hpp
+	<stan/math.hpp>
+
+1490140451 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_joe_log.hpp
+	<stan/math.hpp>
+
+1490178437 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/advi_mod.hpp
 	<stan/math.hpp>
 	<stan/interface_callbacks/writer/base_writer.hpp>
 	<stan/interface_callbacks/writer/stream_writer.hpp>

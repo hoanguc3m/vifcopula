@@ -9,6 +9,9 @@
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
 #include <stan/interface_callbacks/writer/stream_writer.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -87,6 +90,13 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
         int iter  = as<int>(other["iter"]); // Number of iterations after converge
         int n_monte_carlo_grad  = as<int>(other["n_monte_carlo_grad"]); //number of samples for gradient computation
         int n_monte_carlo_elbo  = as<int>(other["n_monte_carlo_elbo"]); //number of samples for ELBO computation
+        int eval_elbo  = as<int>(other["eval_elbo"]);      //evaluate ELBO at every "eval_elbo" iters
+        bool adapt_bool  = as<bool>(other["adapt_bool"]);      // Using adaptation
+        double adapt_val  = as<double>(other["adapt_val"]);      // Using adaptation
+        int adapt_iterations  = as<int>(other["adapt_iterations"]);      // number of iterations for eta adaptation
+        double tol_rel_obj = as<double>(other["tol_rel_obj"]);      // relative tolerance parameter for convergence
+        int max_iterations = 2e4;      // max number of iterations to run algorithm
+
         Rcpp::Rcout << " Core : " << core << std::endl;
         Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
 
@@ -119,16 +129,16 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
 
     // ADVI
-    stan::variational::advi<Model_cp, stan::variational::normal_meanfield, rng_t> test_advi(copula_l1,
+    stan::variational::advi_mod<Model_cp, stan::variational::normal_meanfield, rng_t> advi_cop(copula_l1,
                                                                                             cont_params,
                                                                                             base_rng,
-                                                                                            10,
-                                                                                            100,
-                                                                                            10,
-                                                                                            1000);
-
+                                                                                            n_monte_carlo_grad,
+                                                                                            n_monte_carlo_elbo,
+                                                                                            eval_elbo,
+                                                                                            iter);
+    //Could be change to Rcout in rstan
     std::stringstream out_message_writer;
-    stan::interface_callbacks::writer::stream_writer message_writer(out_message_writer);
+    stan::interface_callbacks::writer::stream_writer message_writer(std::cout);
 
     std::stringstream out_parameter_writer;
     stan::interface_callbacks::writer::stream_writer parameter_writer(out_parameter_writer);
@@ -137,26 +147,61 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     stan::interface_callbacks::writer::stream_writer diagnostic_writer(out_diagnostic_writer);
 
 
-    test_advi.run(0.01, true, 50, 1, 2e4,
+    advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                   message_writer, parameter_writer, diagnostic_writer);
 
+    int max_param = copula_l1.num_params_r();
+    matrix_d sample_iv(iter,max_param);
+    vector_d mean_iv(max_param);
 
-    // Rcpp::Rcout << " copula LL :" << copula_l1.log_prob(cont_params) << std::endl;
-    //Rcpp::Rcout << " normal_meanfield LL :" << cont_params.entropy() << std::endl;
+    std::string token;
+    //std::getline(out_parameter_writer, token);
+    //std::getline(out_parameter_writer, token);
+
+    int i,j;
+    try{
+        std::getline(out_parameter_writer, token, ',');
+        for (j = 0; j < max_param-1;j++){
+            std::getline(out_parameter_writer, token, ',');
+            boost::trim(token);
+            mean_iv(j) = boost::lexical_cast<double>(token);
+        }
+        std::getline(out_parameter_writer, token);
+        boost::trim(token);
+        mean_iv(max_param-1) = boost::lexical_cast<double>(token);
+
+        for (i = 0; i < iter;i++){
+            std::getline(out_parameter_writer, token, ',');
+            for (j = 0; j < max_param-1;j++){
+                std::getline(out_parameter_writer, token, ',');
+                boost::trim(token);
+                sample_iv(i,j) = boost::lexical_cast<double>(token);
+            }
+            std::getline(out_parameter_writer, token);
+            boost::trim(token);
+            sample_iv(i,max_param-1) = boost::lexical_cast<double>(token);
+        }
+
+    } catch (...){
+        std::cout << "Error at i = " << i << " j = " << j << std::endl;
+        std::cout << " token " << token << std::endl;
+    }
 
 
 
-    std::cout << " out_stream " << out_message_writer.str() << std::endl;
-
+    Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv,
+                                     Rcpp::Named("sample_iv") = sample_iv
+    );
 
     end = clock();
     double delta_t = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 
     std::cout << "It took " << delta_t << " seconds.\n"  <<  std::endl;
 
-    List MCMCout            = List::create(Rcpp::Named("delta_t") = 0
-                                               );
-    return MCMCout;
+    // List MCMCout            = List::create(Rcpp::Named("posterior") = out_parameter_writer
+    //                                            );
+
+    return holder;
     PutRNGstate();
 
     END_RCPP
