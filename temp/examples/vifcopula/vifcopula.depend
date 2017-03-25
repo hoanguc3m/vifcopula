@@ -272,7 +272,7 @@
 1482787431 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/test/unit/util.hpp
 	<string>
 
-1490099977 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/log_prob_propto.hpp
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/model/log_prob_propto.hpp
 	<stan/math/rev/mat.hpp>
 	<iostream>
 	<vector>
@@ -280,7 +280,7 @@
 1490048076 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/main.cpp
 	"gtest/gtest.h"
 
-1490180323 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop_test.cpp
+1490205033 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop_test.cpp
 	<one_factor_cop.hpp>
 	<advi_mod.hpp>
 	<stan/interface_callbacks/writer/stream_writer.hpp>
@@ -292,8 +292,10 @@
 	<boost/random/additive_combine.hpp>
 	<stan/model/log_prob_propto.hpp>
 	<stan/model/grad_hess_log_prob.hpp>
+	<boost/algorithm/string.hpp>
+	<boost/lexical_cast.hpp>
 
-1490185271 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop.hpp
+1490401649 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop.hpp
 	<omp.h>
 	<stan/model/model_header.hpp>
 	<dist/bicop_independence_log.hpp>
@@ -362,7 +364,7 @@
 1490140464 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_normal_log.hpp
 	<stan/math.hpp>
 
-1490140474 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_student_log.hpp
+1490403264 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_student_log.hpp
 	<stan/math.hpp>
 	<iostream>
 
@@ -378,7 +380,7 @@
 1490140451 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/dist/bicop_joe_log.hpp
 	<stan/math.hpp>
 
-1490178437 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/advi_mod.hpp
+1490404766 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/advi_mod.hpp
 	<stan/math.hpp>
 	<stan/interface_callbacks/writer/base_writer.hpp>
 	<stan/interface_callbacks/writer/stream_writer.hpp>
@@ -397,4 +399,18 @@
 	<vector>
 	<queue>
 	<string>
+
+1490464125 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/fastkendall.hpp
+	<algorithm>
+	<vector>
+	<stdint.h>
+	"goodman_kruskal_gamma.hpp"
+
+1490461315 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/goodman_kruskal_gamma.hpp
+	<stdexcept>
+	<iterator>
+	<set>
+	<vector>
+	<algorithm>
+	<stdint.h>
 

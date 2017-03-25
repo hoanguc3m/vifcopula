@@ -2,8 +2,8 @@
 % Please edit documentation in R/vifcopula-package.R
 \docType{package}
 \name{vifcopula-package}
-\alias{vifcopula}
 \alias{vifcopula-package}
+\alias{vifcopula}
 \title{Variational Inference of factor copulas}
 \details{
 \tabular{ll}{
@@ -20,4 +20,3 @@ LazyLoad: \tab yes }
 \author{
 Hoang Nguyen
 }
-

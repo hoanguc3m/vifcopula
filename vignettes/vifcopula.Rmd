@@ -1,0 +1,271 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+
+- Never uses retina figures
+- Has a smaller default figure size
+- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+## Vignette Info
+
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
+
+
+```{r, eval=FALSE}
+library(vifcopula)
+datagen_gauss <- fcopsim(t_max = 1000, n_max = 100, family = 1)
+
+datagen <- datagen_gauss
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_gauss <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_gauss$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_gauss$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+```
+
+```{rcpp}
+ Data input : Checked
+ Core : 8
+ General setting : Checked
+ Init hyperparams : Checked
+Begin eta adaptation.
+Iteration:   1 / 250 [  0%]  (Adaptation)
+Iteration:  50 / 250 [ 20%]  (Adaptation)
+Iteration: 100 / 250 [ 40%]  (Adaptation)
+Iteration: 150 / 250 [ 60%]  (Adaptation)
+Iteration: 200 / 250 [ 80%]  (Adaptation)
+Success! Found best value [eta = 1] earlier than expected.
+
+Begin stochastic gradient ascent.
+  iter       ELBO   delta_ELBO_mean   delta_ELBO_med   notes 
+   100      3e+04             1.000            1.000
+   200      3e+04             0.510            1.000
+   300      3e+04             0.340            0.019   MEDIAN ELBO CONVERGED
+
+Drawing a sample of size 1000 from the approximate posterior... 
+COMPLETED.
+It took 9.9482 seconds.
+```
+
+```{r, eval=FALSE}
+datagen_student <- fcopsim(t_max = 1000, n_max = 100, family = 2)
+datagen <- datagen_student
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_student <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_student$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_student$mean_iv[seq(from = t_max+1, to = t_max+2*n_max, by = 2 )])
+plot(datagen$theta2, vi_student$mean_iv[seq(from = t_max+2, to = t_max+n_max, by = 2 )])
+abline(a= 0, b=1, col="red")
+```
+
+```{r, eval=FALSE}
+datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, family = 3)
+datagen <- datagen_clayton
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_clayton <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_clayton$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_clayton$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+```
+
+```{r, eval=FALSE}
+datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, family = 4)
+datagen <- datagen_gumbel
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_gumbel <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_gumbel$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_gumbel$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+```
+
+
+```{r, eval=FALSE}
+datagen_frank <- fcopsim(t_max = 1000, n_max = 100, family = 5)
+datagen <- datagen_frank
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_frank <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_frank$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_frank$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+```
+
+```{r, eval=FALSE}
+datagen_joe <- fcopsim(t_max = 1000, n_max = 100, family = 6)
+datagen <- datagen_joe
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_joe <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_joe$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_joe$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+```
+
+
+```{r, eval=FALSE}
+copfamily = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
+datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily)
+datagen <- datagen_mix
+data <- list(u = datagen$u, 
+             n_max = datagen$n_max, 
+             n_group = n_group, 
+             t_max = datagen$t_max, 
+             k_max = datagen$k_max, 
+             gid = datagen$gid, 
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family, 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000, 
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1)
+vi_mix <- vifcopula::vifcop(data,init,other)
+
+plot(datagen$v, vi_mix$mean_iv[1:t_max])
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_mix$mean_iv[(t_max+1):(t_max+n_max)])
+abline(a= 0, b=1, col="red")
+```

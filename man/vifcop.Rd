@@ -16,4 +16,3 @@ vifcop(data, init, other)
 vifcop(data, init, other)
 }
 }
-

@@ -354,7 +354,7 @@ public:
                         lp_accum__.add(bicop_student_log<propto__>(u_col,
                                                                     v,
                                                                     get_base1(theta,ibase,"theta",1),
-                                                                    5));
+                                                                    get_base1(theta2,ibase,"theta",1)));
                         //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
                         break;
                     case 3:

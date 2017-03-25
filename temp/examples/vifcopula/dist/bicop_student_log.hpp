@@ -171,8 +171,8 @@ using namespace stan;
 //            std::cout << B_arg << " " << nud2ph[n] << std::endl;
 //            std::cout << pow( nu_value[n], nud2m1[n] ) *  inv_u_dbl[n] << " " <<  pow( nu_p_x1_sq , - nud2ph[n] ) << std::endl;
 //            std::cout << betaAB << " " <<  dx1_dnu << std::endl;
-            std::cout << "inbeder_out" << dev_ibeta_x1 << " " << std::endl;
-            std::cout << "inbeder_out" << dev_ibeta_x2 << " " << std::endl;
+            // std::cout << "inbeder_out" << dev_ibeta_x1 << " " << std::endl;
+            // std::cout << "inbeder_out" << dev_ibeta_x2 << " " << std::endl;
 
 //              One problem is the imbeder, grad_reg_inc_beta
 
