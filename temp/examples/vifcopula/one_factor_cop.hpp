@@ -273,9 +273,6 @@ public:
 
         static int current_statement_begin__;
 
-        vector_d log_bifcop;
-        log_bifcop.setZero(n_max);
-
         T__ lp__(0.0);
         stan::math::accumulator<T__> lp_accum__;
 
@@ -562,13 +559,6 @@ public:
         (void) DUMMY_VAR__;  // suppress unused var warning
 
 
-
-        try {
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
 
         // validate transformed parameters
 

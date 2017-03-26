@@ -295,7 +295,7 @@
 	<boost/algorithm/string.hpp>
 	<boost/lexical_cast.hpp>
 
-1490401649 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop.hpp
+1490524123 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/one_factor_cop.hpp
 	<omp.h>
 	<stan/model/model_header.hpp>
 	<dist/bicop_independence_log.hpp>
@@ -413,4 +413,75 @@
 	<vector>
 	<algorithm>
 	<stdint.h>
+
+1490543436 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicopula_test.cpp
+	<bicopula.hpp>
+	<advi_mod.hpp>
+	<stan/services/optimize/do_bfgs_optimize.hpp>
+	<stan/optimization/bfgs.hpp>
+	<stan/interface_callbacks/writer/stream_writer.hpp>
+	<gtest/gtest.h>
+	<test/unit/util.hpp>
+	<vector>
+	<string>
+	<iostream>
+	<boost/random/additive_combine.hpp>
+	<stan/model/log_prob_propto.hpp>
+	<stan/model/grad_hess_log_prob.hpp>
+	<boost/algorithm/string.hpp>
+	<boost/lexical_cast.hpp>
+
+1490543672 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicopula.hpp
+	<stan/model/model_header.hpp>
+	<dist/bicop_independence_log.hpp>
+	<dist/bicop_normal_log.hpp>
+	<dist/bicop_student_log.hpp>
+	<dist/bicop_clayton_log.hpp>
+	<dist/bicop_gumbel_log.hpp>
+	<dist/bicop_frank_log.hpp>
+	<dist/bicop_joe_log.hpp>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/services/optimize/do_bfgs_optimize.hpp
+	<stan/interface_callbacks/writer/base_writer.hpp>
+	<stan/optimization/bfgs.hpp>
+	<stan/services/error_codes.hpp>
+	<stan/services/io/do_print.hpp>
+	<stan/services/io/write_iteration.hpp>
+	<fstream>
+	<iostream>
+	<iomanip>
+	<string>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/optimization/bfgs.hpp
+	<stan/math/prim/mat.hpp>
+	<stan/model/log_prob_propto.hpp>
+	<stan/model/log_prob_grad.hpp>
+	<stan/optimization/bfgs_linesearch.hpp>
+	<stan/optimization/bfgs_update.hpp>
+	<stan/optimization/lbfgs_update.hpp>
+	<boost/math/special_functions/fpclassify.hpp>
+	<algorithm>
+	<cmath>
+	<cstdlib>
+	<limits>
+	<string>
+	<vector>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/optimization/bfgs_linesearch.hpp
+	<boost/math/special_functions/fpclassify.hpp>
+	<algorithm>
+	<cmath>
+	<cstdlib>
+	<string>
+	<limits>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/optimization/bfgs_update.hpp
+	<Eigen/Dense>
+
+1482787430 /home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src/stan/optimization/lbfgs_update.hpp
+	<Eigen/Dense>
+	<boost/tuple/tuple.hpp>
+	<boost/circular_buffer.hpp>
+	<vector>
 
