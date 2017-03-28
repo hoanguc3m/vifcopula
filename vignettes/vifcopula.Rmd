@@ -89,7 +89,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_student$mean_iv[1:t_max])
@@ -122,6 +122,7 @@ plot(datagen$v, vi_clayton$mean_iv[1:t_max])
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_clayton$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
+vi_clayton$cop_vec_new
 ```
 
 ```{r, eval=FALSE}
@@ -140,18 +141,20 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_gumbel$mean_iv[1:t_max])
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_gumbel$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
+vi_gumbel$cop_vec_new
+
 ```
 
 
 ```{r, eval=FALSE}
-datagen_frank <- fcopsim(t_max = 1000, n_max = 10, family = 5)
+datagen_frank <- fcopsim(t_max = 1000, n_max = 100, family = 5)
 datagen <- datagen_frank
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
@@ -165,14 +168,16 @@ init <- list(copula_type = datagen$family,
              par2 = datagen$theta2)
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
+              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_frank <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_frank$mean_iv[1:t_max])
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_frank$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
+vi_frank$cop_vec_new
+
 ```
 
 ```{r, eval=FALSE}
@@ -191,13 +196,15 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_joe <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_joe$mean_iv[1:t_max])
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_joe$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
+vi_joe$cop_vec_new
+
 ```
 
 
@@ -225,4 +232,13 @@ plot(datagen$v, vi_mix$mean_iv[1:t_max])
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_mix$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
+sum(vi_mix$cop_vec_new == datagen$family)
+
+init <- list(copula_type = matrix(1,nrow = n_max,ncol=1), 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+vi_mix <- vifcopula::vifcop(data,init,other)
+sum(vi_mix$cop_vec_new == datagen_mix$family)
+
 ```

@@ -230,12 +230,10 @@ public:
                 // Frank copula
                 current_statement_begin__ = 20;
                 if (jacobian__)
-                    theta = in__.scalar_lub_constrain(0,60,lp__);
+                    theta = in__.scalar_lub_constrain(0,100,lp__);
                 else
-                    theta = in__.scalar_lub_constrain(0,60);
+                    theta = in__.scalar_lub_constrain(0,100);
 
-                std::cout << " theta " << theta << std::endl;
-                std::cout << " bicop_frank_log " << bicop_frank_log<propto__>(u,v,theta).val() << std::endl;
                 //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
                 lp_accum__.add(bicop_frank_log<propto__>(u,v,theta));
                 break;
@@ -359,7 +357,7 @@ public:
             break;
         case 5:
             // Frank copula
-            theta = in__.scalar_lub_constrain(0,60);
+            theta = in__.scalar_lub_constrain(0,100);
             vars__.push_back(theta);
             break;
         case 6:

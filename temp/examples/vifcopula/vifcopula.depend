@@ -513,7 +513,7 @@
 1490140426 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
 	<stan/math.hpp>
 
-1490726443 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
+1490743010 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
 	<stan/math.hpp>
 
 1490140451 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
@@ -10539,7 +10539,7 @@
 	<ostream>
 	<vector>
 
-1490726164 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
+1490743349 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_frank_log.hpp>

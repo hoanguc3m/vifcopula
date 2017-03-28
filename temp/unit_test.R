@@ -101,6 +101,7 @@ abline(a= 0, b=1, col="red")
 hist(out$sample_iv[,100])
 hist(out$sample_iv[,1050])
 
-
-
-
+BiCopPar2Tau(family = c(3), par = c(50,75,100))
+BiCopPar2Tau(family = c(4), par = c(30,50,100))
+BiCopPar2Tau(family = c(5), par = c(50,60,100))
+BiCopPar2Tau(family = c(6), par = c(25,30,50))
