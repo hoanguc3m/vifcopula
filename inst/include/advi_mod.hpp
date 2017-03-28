@@ -193,8 +193,8 @@ namespace stan {
         message_writer("Begin eta adaptation.");
 
         // Sequence of eta values to try during adaptation
-        const int eta_sequence_size = 4;
-        double eta_sequence[eta_sequence_size] = {10, 1, 0.1, 0.01};
+        const int eta_sequence_size = 5;
+        double eta_sequence[eta_sequence_size] = {100, 10, 1, 0.1, 0.01};
 
         // Initialize ELBO tracking variables
         double elbo      = -std::numeric_limits<double>::max();

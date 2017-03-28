@@ -76,12 +76,15 @@ BiCopDeriv(0.1, 0.1, cop, deriv = "u1") /  BiCopPDF(0.1, 0.1, cop)
 log(BiCopPDF(0.1, 0.3, cop))
 BiCopDeriv(0.1, 0.3, cop, deriv = "u2") /  BiCopPDF(0.1, 0.3, cop)
 
-cop <- BiCop(family = 4, par = 10)
+cop <- BiCop(family = 5, par = 50)
 BiCopDeriv(0.1, 0.5, cop, deriv = "par") /  BiCopPDF(0.1, 0.5, cop)
 BiCopDeriv(0.1, 0.5, cop, deriv = "par", log =T)
 log(BiCopPDF(0.1, 0.5, cop))
-
-
+BiCopDeriv(0.1, 0.5, cop, deriv = "u2") /  BiCopPDF(0.1, 0.5, cop)
+u1 = runif(1000)
+u2 = runif(1000)
+sum(BiCopDeriv(u1, u2, cop, deriv = "par") /  BiCopPDF(u1, u2, cop))
+sum(log(BiCopPDF(u1, u2, cop)))
 #######################################################
 
 datagen <- fcopsim(t_max = 1000, n_max = 100, family = 3)

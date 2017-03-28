@@ -46,8 +46,6 @@
 		<Unit filename="../dist/bicop_joe_log.hpp" />
 		<Unit filename="../dist/bicop_normal_log.hpp" />
 		<Unit filename="../dist/bicop_student_log.hpp" />
-		<Unit filename="../logBifcop.cpp" />
-		<Unit filename="../one_factor_cop.hpp" />
 		<Unit filename="bicop_clayton_log_test.cpp" />
 		<Unit filename="bicop_frank_log_test.cpp" />
 		<Unit filename="bicop_gumbel_log_test.cpp" />
@@ -55,9 +53,9 @@
 		<Unit filename="bicop_joe_log_test.cpp" />
 		<Unit filename="bicop_normal_log_test.cpp" />
 		<Unit filename="bicop_student_log_test.cpp" />
+		<Unit filename="imbeder_test.cpp" />
 		<Unit filename="logBifcop_test.cpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="one_factor_cop_test.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

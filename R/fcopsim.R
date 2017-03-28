@@ -32,12 +32,12 @@
 #' @export
 rtheta <-  function(family, theta = TRUE) {
     if (theta){
-        if (family == 1) theta_gen = runif(1, min = 0, max = 1)
-        if (family == 2) theta_gen = runif(1, min = 0, max = 1)
-        if (family == 3) theta_gen = runif(1, min = 0.1, max = 2)
-        if (family == 4) theta_gen = runif(1, min = 1.1, max = 3)
-        if (family == 5) theta_gen = runif(1, min = 1, max = 4)
-        if (family == 6) theta_gen = runif(1, min = 1.3, max = 2.5)
+        if (family == 1) theta_gen = runif(1, min = 0.2, max = 0.9)
+        if (family == 2) theta_gen = runif(1, min = 0.2, max = 0.9)
+        if (family == 3) theta_gen = runif(1, min = 0.2, max = 8)
+        if (family == 4) theta_gen = runif(1, min = 1.1, max = 5)
+        if (family == 5) theta_gen = runif(1, min = 1, max = 7)
+        if (family == 6) theta_gen = runif(1, min = 1.2, max = 7)
 
     } else {
         if (family == 1) theta_gen = 0

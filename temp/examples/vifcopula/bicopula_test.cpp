@@ -54,7 +54,7 @@ TEST(advi_test, bicopula)
     int seed  = 10;
     rng_t base_rng(seed);
 
-    int t_max  = 100;
+    int t_max  = 1000;
     int k_max  = 1;
     vector<double> u(t_max);
     for (int i = 0; i < t_max; i++ )
@@ -67,9 +67,11 @@ TEST(advi_test, bicopula)
     vector<double> v(t_max);
     for (int i = 0; i < t_max; i++ )
     {
+        //v[i] = (u[i] + uniform_rng(0.0,1.0,base_rng))/2;
         v[i] = uniform_rng(0.0,1.0,base_rng);
+
     }
-    int copula_type = 6;
+    int copula_type = 5;
     k_max = 0;
 
     std::vector<double> params_r(1);

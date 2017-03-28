@@ -5,12 +5,14 @@
 #include <RcppEigen.h>
 #include <omp.h>
 #include <ctime>
-#include <one_factor_cop.hpp>
+#include <onefcopula.hpp>
+#include <bicopula.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
 #include <stan/interface_callbacks/writer/stream_writer.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
+#include <service/write_vb.hpp>
+#include <stan/services/optimize/do_bfgs_optimize.hpp>
+#include <stan/optimization/bfgs.hpp>
 
 
 // [[Rcpp::depends(RcppEigen)]]
@@ -33,7 +35,20 @@ typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 typedef boost::ecuyer1988 rng_t;
-typedef vifcopula::one_factor_cop Model_cp;
+typedef vifcopula::onefcopula onefcopula;
+typedef vifcopula::bicopula bicopula;
+typedef stan::optimization::BFGSLineSearch<bicopula,stan::optimization::BFGSUpdate_HInv<> > Optimizer_BFGS;
+
+struct mock_callback
+{
+    int n;
+    mock_callback() : n(0) { }
+
+    void operator()()
+    {
+        n++;
+    }
+};
 
 //' Variational inference for factor copula models
 //'
@@ -96,6 +111,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
         int adapt_iterations  = as<int>(other["adapt_iterations"]);      // number of iterations for eta adaptation
         double tol_rel_obj = as<double>(other["tol_rel_obj"]);      // relative tolerance parameter for convergence
         int max_iterations = 2e4;      // max number of iterations to run algorithm
+        bool copselect  = as<bool>(other["copselect"]);      // Using adaptation
 
         Rcpp::Rcout << " Core : " << core << std::endl;
         Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
@@ -115,21 +131,29 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     clock_t end;
 
     // Initiate model
-    vector_d v_temp = v.col(0);
+    vector<double> v_temp(t_max);
+    vector<double> u_temp(t_max);
+
+    bicopula biuv(0,u_temp,v_temp,t_max,base_rng);
+    vector_d par_temp = par.col(0);
+
     std::vector<int> copula_type_vec(n_max);
+    std::vector<int> cop_vec_new(n_max);
     for (int i = 0; i < n_max; i++)
         copula_type_vec[i]= copula_type(i,0);
     k_max = 0;
-    Model_cp copula_l1(u,gid,copula_type_vec,t_max, n_max, k_max, base_rng);
+    onefcopula layer_n1(u,gid,copula_type_vec,t_max, n_max, k_max, base_rng);
 
 
     // Dummy input
-    Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(copula_l1.num_params_r());
-    //stan::variational::normal_meanfield cont_params(t_max + n_max);
+    Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(layer_n1.num_params_r());
+    // Eigen::VectorXd cont_params(t_max + par_temp.rows());
+    // vector_d v_init = v.col(0);
+    // cont_params << v_init, par_temp;
 
 
     // ADVI
-    stan::variational::advi_mod<Model_cp, stan::variational::normal_meanfield, rng_t> advi_cop(copula_l1,
+    stan::variational::advi_mod<onefcopula, stan::variational::normal_meanfield, rng_t> advi_cop(layer_n1,
                                                                                             cont_params,
                                                                                             base_rng,
                                                                                             n_monte_carlo_grad,
@@ -150,47 +174,94 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                   message_writer, parameter_writer, diagnostic_writer);
 
-    int max_param = copula_l1.num_params_r();
+    int max_param = layer_n1.num_params_r();
     matrix_d sample_iv(iter,max_param);
     vector_d mean_iv(max_param);
+    write_vb(out_parameter_writer, mean_iv, sample_iv);
+    out_parameter_writer.clear(); // Clear state flags.
 
-    std::string token;
-    //std::getline(out_parameter_writer, token);
-    //std::getline(out_parameter_writer, token);
 
-    int i,j;
-    try{
-        std::getline(out_parameter_writer, token, ',');
-        for (j = 0; j < max_param-1;j++){
-            std::getline(out_parameter_writer, token, ',');
-            boost::trim(token);
-            mean_iv(j) = boost::lexical_cast<double>(token);
-        }
-        std::getline(out_parameter_writer, token);
-        boost::trim(token);
-        mean_iv(max_param-1) = boost::lexical_cast<double>(token);
+    if (copselect){
+        bool keepfindcop = true;
 
-        for (i = 0; i < iter;i++){
-            std::getline(out_parameter_writer, token, ',');
-            for (j = 0; j < max_param-1;j++){
-                std::getline(out_parameter_writer, token, ',');
-                boost::trim(token);
-                sample_iv(i,j) = boost::lexical_cast<double>(token);
+        while (keepfindcop){
+            std::cout << " Copula selection " << std::endl;
+            //v_temp = mean_iv.head(t_max);
+            VectorXd::Map(&v_temp[0], t_max) = mean_iv.head(t_max);
+
+            std::vector<double> params_r(1);
+            params_r[0] = 1;
+            std::vector<int> params_i(0);
+            bool save_iterations = false;
+            int refresh = 0;
+            int return_code;
+            mock_callback callback;
+
+            for (int j = 0; j < n_max; j++){
+                //u_temp = u.col(j);
+                VectorXd::Map(&u_temp[0], t_max) = u.col(j);
+
+                biuv.reset(copula_type_vec[j], u_temp,v_temp);
+                if (biuv.check_Ind()){
+                    biuv.set_copula_type(0);
+                    cop_vec_new[j]  = 0;
+
+                } else {
+                    const int cop_seq_size = 5;
+                    int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};
+                    double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
+                    double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
+                    double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
+                    double lpmax = std::numeric_limits<double>::min();
+                    int imax=0;
+                    for (int i = 0; i < cop_seq_size; i++) {
+                        biuv.set_copula_type(cop_seq[i]);
+                        std::stringstream out;
+                        Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
+                        double lp = 0;
+                        int ret = 0;
+                        while (ret == 0) {
+                            ret = bfgs.step();
+                        }
+                        lp = bfgs.logp();
+                        log_cop[i] = lp;
+                        AIC[i] = -2 * lp + 2 * 1;
+                        BIC[i] = -2 * lp + log(t_max) * 1;
+                        if (lp > lpmax){
+                            lpmax = lp;
+                            imax = i;
+                            // std::vector<double> get_param;
+                            // bfgs.params_r(get_param);
+                            //cont_params[t_max+i] = get_param[0];
+                        }
+                    }
+                    cop_vec_new[j] = cop_seq[imax];
+                    cont_params[t_max+j] = 0;
+                }
+
+
             }
-            std::getline(out_parameter_writer, token);
-            boost::trim(token);
-            sample_iv(i,max_param-1) = boost::lexical_cast<double>(token);
+            if (cop_vec_new != copula_type_vec){
+                copula_type_vec = cop_vec_new;
+                layer_n1.set_copula_type(copula_type_vec);
+                advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
+                             message_writer, parameter_writer, diagnostic_writer);
+            } else {
+                keepfindcop = false;
+            }
+
         }
 
-    } catch (...){
-        std::cout << "Error at i = " << i << " j = " << j << std::endl;
-        std::cout << " token " << token << std::endl;
     }
 
 
 
+
+
+
     Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv,
-                                     Rcpp::Named("sample_iv") = sample_iv
+                                     Rcpp::Named("sample_iv") = sample_iv,
+                                     Rcpp::Named("cop_vec_new") = cop_vec_new
     );
 
     end = clock();

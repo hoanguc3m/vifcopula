@@ -9,63 +9,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
-
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
-
 
 ```{r, eval=FALSE}
 library(vifcopula)
-datagen_gauss <- fcopsim(t_max = 1000, n_max = 100, family = 1)
-
+t_max = 1000
+n_max = 100
+datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1)
 datagen <- datagen_gauss
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -76,14 +28,25 @@ init <- list(copula_type = datagen$family,
              par2 = datagen$theta2)
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
-              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              eval_elbo = 50, adapt_bool = T, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_gauss$mean_iv[1:t_max])
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_gauss$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
+vi_gauss$cop_vec_new
+rho_vi = vi_gauss$mean_iv[(t_max+1):(t_max+n_max)]
+selec <- as.logical(vi_gauss$cop_vec_new)
+pos = seq(1,n_max)
+rho_vi[pos[!selec]]
+
+init <- list(copula_type = matrix(vi_gauss$cop_vec_new, ncol=1), 
+             v = datagen$v, 
+             par = datagen$theta, 
+             par2 = datagen$theta2)
+vi_gauss <- vifcopula::vifcop(data,init,other)
 ```
 
 ```{rcpp}
@@ -115,7 +78,6 @@ datagen_student <- fcopsim(t_max = 1000, n_max = 100, family = 2)
 datagen <- datagen_student
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -127,7 +89,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_student <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_student$mean_iv[1:t_max])
@@ -142,7 +104,6 @@ datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, family = 3)
 datagen <- datagen_clayton
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -154,7 +115,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_clayton <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_clayton$mean_iv[1:t_max])
@@ -168,7 +129,6 @@ datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, family = 4)
 datagen <- datagen_gumbel
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -180,7 +140,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_gumbel$mean_iv[1:t_max])
@@ -191,11 +151,10 @@ abline(a= 0, b=1, col="red")
 
 
 ```{r, eval=FALSE}
-datagen_frank <- fcopsim(t_max = 1000, n_max = 100, family = 5)
+datagen_frank <- fcopsim(t_max = 1000, n_max = 10, family = 5)
 datagen <- datagen_frank
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -206,8 +165,8 @@ init <- list(copula_type = datagen$family,
              par2 = datagen$theta2)
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
-              eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              eval_elbo = 100, adapt_bool = F, adapt_val = 1, 
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_frank$mean_iv[1:t_max])
@@ -221,7 +180,6 @@ datagen_joe <- fcopsim(t_max = 1000, n_max = 100, family = 6)
 datagen <- datagen_joe
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -233,7 +191,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_joe <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_joe$mean_iv[1:t_max])
@@ -249,7 +207,6 @@ datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily)
 datagen <- datagen_mix
 data <- list(u = datagen$u, 
              n_max = datagen$n_max, 
-             n_group = n_group, 
              t_max = datagen$t_max, 
              k_max = datagen$k_max, 
              gid = datagen$gid, 
@@ -261,7 +218,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000, 
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10, 
               eval_elbo = 100, adapt_bool = T, adapt_val = 1, 
-              adapt_iterations = 50, tol_rel_obj = 0.1)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_mix <- vifcopula::vifcop(data,init,other)
 
 plot(datagen$v, vi_mix$mean_iv[1:t_max])

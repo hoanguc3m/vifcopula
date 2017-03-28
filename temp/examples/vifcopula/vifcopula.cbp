@@ -14,7 +14,8 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="/home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/src" />
-					<Add directory="/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula" />
+					<Add directory="/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include" />
+					<Add directory="/home/hoanguc3m/NetBeansProjects/cmdstan/stan_2.14.0/lib/stan_math_2.14.0" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -34,10 +35,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="advi_mod.hpp" />
+		<Unit filename="../../../inst/include/unitTests/bicop_frank_log_test.cpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="one_factor_cop.hpp" />
-		<Unit filename="one_factor_cop_test.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

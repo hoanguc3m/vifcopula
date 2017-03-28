@@ -1,19 +1,19 @@
 # depslib dependency file v1.0
-1489791038 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
+1490140640 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/main.cpp
 	"gtest/gtest.h"
 
-1489615774 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_independence_log_test.cpp
+1490140570 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_independence_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_independence_log.cpp>
+	<dist/bicop_independence_log.hpp>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.cpp
 	<stan/math.hpp>
 
-1489615745 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_normal_log_test.cpp
+1490140583 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_normal_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_normal_log.cpp>
+	<dist/bicop_normal_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.cpp
@@ -26,47 +26,47 @@
 	<dist/bicop_normal_log.cpp>
 	<ostream>
 
-1489615823 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
+1490140589 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_student_log.cpp>
+	<dist/bicop_student_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.cpp
 	<stan/math.hpp>
 	<iostream>
 
-1489615761 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_clayton_log_test.cpp
+1490140544 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_clayton_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_clayton_log.cpp>
+	<dist/bicop_clayton_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.cpp
 	<stan/math.hpp>
 
-1489615767 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
+1490140555 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_frank_log.cpp>
+	<dist/bicop_frank_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
 	<stan/math.hpp>
 
-1489767756 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
+1490140561 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_gumbel_log.cpp>
+	<dist/bicop_gumbel_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
 	<stan/math.hpp>
 
-1489615782 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
+1490140578 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
-	<dist/bicop_joe_log.cpp>
+	<dist/bicop_joe_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.cpp
@@ -82,7 +82,7 @@
 	<dist/bicop_frank_log.cpp>
 	<dist/bicop_joe_log.cpp>
 
-1489786661 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/logBifcop_test.cpp
+1489793880 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/logBifcop_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<logBifcop.cpp>
@@ -263,4 +263,26 @@
 	<stan/model/indexing/index.hpp>
 	<stan/model/indexing/index_list.hpp>
 	<vector>
+
+1490140395 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
+	<stan/math.hpp>
+
+1490140415 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
+	<stan/math.hpp>
+
+1490140426 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
+	<stan/math.hpp>
+
+1490140440 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.hpp
+	<stan/math.hpp>
+
+1490140451 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
+	<stan/math.hpp>
+
+1490140464 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
+	<stan/math.hpp>
+
+1490403264 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
+	<stan/math.hpp>
+	<iostream>
 

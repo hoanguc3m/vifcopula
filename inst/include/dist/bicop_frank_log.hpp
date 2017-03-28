@@ -91,10 +91,17 @@ using namespace stan;
 
 
         if (include_summand<propto, T_u, T_v, T_theta>::value)
-          logp -= theta_value[n] * (u_dbl + v_dbl) +
+          logp += theta_value[n] * (u_dbl + v_dbl+1) -
                     2 * log(om_exp_neg_theta[n] - t_uv ) ;
 
+        std::cout << "[n] " << n << " log+" << log_theta[n] + log(om_exp_neg_theta[n]) - (theta_value[n] * (u_dbl + v_dbl) + 2 * log(om_exp_neg_theta[n] - t_uv ))  << std::endl;
+        if (n==7){
+            std::cout << "[n] " << n << " log+" << log_theta[n]  << std::endl;
+            std::cout << "[n] " << n << " log+" << log(om_exp_neg_theta[n])  << std::endl;
+            std::cout << "[n] " << n << " log+" << theta_value[n] * (u_dbl + v_dbl)  << std::endl;
+            std::cout << "[n] " << n << " log+" << log(om_exp_neg_theta[n] - t_uv)  << std::endl;
 
+        }
          // Calculate the derivative when the type is var (not double)
          if (!is_constant_struct<T_u>::value)
             operands_and_partials.d_x1[n] += - theta_value[n] + 2 * t_v * theta_value[n] * exp_neg_theta_u / (om_exp_neg_theta[n] - t_uv) ;
