@@ -204,6 +204,7 @@ abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_joe$mean_iv[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
 vi_joe$cop_vec_new
+sum(vi_joe$cop_vec_new == datagen_joe$family)
 
 ```
 

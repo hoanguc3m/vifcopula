@@ -36,6 +36,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="../../../inst/include/unitTests/bicop_frank_log_test.cpp" />
+		<Unit filename="bicopula_test.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -254,7 +254,11 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
 
     }
 
-
+    max_param = layer_n1.num_params_r();
+    sample_iv(iter,max_param);
+    mean_iv(max_param);
+    write_vb(out_parameter_writer, mean_iv, sample_iv);
+    out_parameter_writer.clear(); // Clear state flags.
 
 
 
