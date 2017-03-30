@@ -1,4 +1,6 @@
-setwd("/home/hoanguc3m/Dropbox/WP2/")
+library(devtools)
+install_github("hoanguc3m/vifcopula")
+#setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
 t_max = 1000
 n_max = 100
