@@ -2,6 +2,6 @@
 
 export(fcopsim)
 export(rtheta)
-export(vifcop)
+export(viofcop)
 import(Rcpp)
 useDynLib(vifcopula)

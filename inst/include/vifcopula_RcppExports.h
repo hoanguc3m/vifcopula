@@ -44,6 +44,25 @@ namespace vifcopula {
         return Rcpp::as<List >(rcpp_result_gen);
     }
 
+    inline List viofcop(SEXP data_, SEXP init_, SEXP other_) {
+        typedef SEXP(*Ptr_viofcop)(SEXP,SEXP,SEXP);
+        static Ptr_viofcop p_viofcop = NULL;
+        if (p_viofcop == NULL) {
+            validateSignature("List(*viofcop)(SEXP,SEXP,SEXP)");
+            p_viofcop = (Ptr_viofcop)R_GetCCallable("vifcopula", "vifcopula_viofcop");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_viofcop(Rcpp::wrap(data_), Rcpp::wrap(init_), Rcpp::wrap(other_));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<List >(rcpp_result_gen);
+    }
+
 }
 
 #endif // RCPP_vifcopula_RCPPEXPORTS_H_GEN_

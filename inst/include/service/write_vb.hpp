@@ -33,8 +33,8 @@ inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
 void write_vb (std::stringstream& out_parameter_writer, vector_d& mean_iv, matrix_d& sample_iv){
 
     std::string token;
-    //std::getline(out_parameter_writer, token);
-    //std::getline(out_parameter_writer, token);
+    // std::getline(out_parameter_writer, token);
+    // std::getline(out_parameter_writer, token);
     int iter = sample_iv.rows();
     int max_param = sample_iv.cols();
     int i,j;

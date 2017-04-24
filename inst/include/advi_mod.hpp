@@ -498,10 +498,10 @@ namespace stan {
 
         if (adapt_engaged) {
           eta = adapt_eta(variational, adapt_iterations, message_writer);
-          parameter_writer("Stepsize adaptation complete.");
-          std::stringstream ss;
-          ss << "eta = " << eta;
-          parameter_writer(ss.str());
+          // parameter_writer("Stepsize adaptation complete.");
+          // std::stringstream ss;
+          // ss << "eta = " << eta;
+          //parameter_writer(ss.str());
         }
 
         stochastic_gradient_ascent(variational, eta,
