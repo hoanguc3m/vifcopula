@@ -117,12 +117,11 @@ List viofcop(SEXP data_, SEXP init_, SEXP other_){
     matrix_d sample_iv(iter,n_max);
     vector_d mean_iv(n_max);
 
-    ofcop(u, copula_type_vec, t_max, n_max, base_rng,
+    ofcop Objfcop(u, copula_type_vec, t_max, n_max, base_rng,
           iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-          copselect, core,
-          mean_iv, sample_iv, cop_vec_new);
-
+          copselect, core);
+    Objfcop.runvi(mean_iv, sample_iv, cop_vec_new);
 
 
     Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv,

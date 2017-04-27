@@ -10546,3 +10546,16 @@
 	<boost/random/additive_combine.hpp>
 	<iostream>
 
+1493309622 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/hfunc_test.cpp
+	<stan/math.hpp>
+	<gtest/gtest.h>
+	<transform/hfunc_independence.hpp>
+	<transform/hfunc_normal.hpp>
+	<iostream>
+
+1493305651 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_independence.hpp
+	<stan/math.hpp>
+
+1493310473 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_normal.hpp
+	<stan/math.hpp>
+

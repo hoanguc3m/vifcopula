@@ -3,25 +3,6 @@
 
 #' Variational inference for factor copula models
 #'
-#' \code{vifcop} returns variational estimations.
-#'
-#'
-#' @param
-#' @param
-#' @return
-#' @examples
-#' vifcop(data, init, other)
-#'
-#' \dontrun{
-#' vifcop(data, init, other)
-#' }
-#' @export
-vifcop <- function(data_, init_, other_) {
-    .Call('vifcopula_vifcop', PACKAGE = 'vifcopula', data_, init_, other_)
-}
-
-#' Variational inference for factor copula models
-#'
 #' \code{viofcop} returns variational estimations.
 #'
 #'
