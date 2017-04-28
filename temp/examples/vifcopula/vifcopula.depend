@@ -10546,16 +10546,32 @@
 	<boost/random/additive_combine.hpp>
 	<iostream>
 
-1493309622 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/hfunc_test.cpp
+1493372671 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/hfunc_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<transform/hfunc_independence.hpp>
 	<transform/hfunc_normal.hpp>
+	<transform/hfunc_student.hpp>
+	<transform/hfunc_clayton.hpp>
+	<transform/hfunc_gumbel.hpp>
+	<transform/hfunc_frank.hpp>
 	<iostream>
 
 1493305651 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_independence.hpp
 	<stan/math.hpp>
 
-1493310473 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_normal.hpp
+1493311111 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_normal.hpp
+	<stan/math.hpp>
+
+1493316192 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_student.hpp
+	<stan/math.hpp>
+
+1493370223 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_clayton.hpp
+	<stan/math.hpp>
+
+1493370984 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_gumbel.hpp
+	<stan/math.hpp>
+
+1493371904 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_frank.hpp
 	<stan/math.hpp>
 
