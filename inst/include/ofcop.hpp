@@ -39,6 +39,7 @@ private:
     std::vector<int> copula_type_vec;
     int t_max;
     int n_max;
+    int k;
     rng_t base_rng;
     int iter;
     int n_monte_carlo_grad;
@@ -68,6 +69,7 @@ public:
             std::vector<int>& copula_type_vec_,
             int t_max_,
             int n_max_,
+            int k_,
             rng_t& base_rng_,
             int iter_,
             int n_monte_carlo_grad_,
@@ -80,7 +82,7 @@ public:
             int max_iterations_,
             bool copselect_,
             int core_) :
-    u(u_), copula_type_vec(copula_type_vec_),t_max(t_max_), n_max(n_max_),
+    u(u_), copula_type_vec(copula_type_vec_),t_max(t_max_), n_max(n_max_), k(k_),
     base_rng(base_rng_), iter(iter_), n_monte_carlo_grad(n_monte_carlo_grad_),
     n_monte_carlo_elbo(n_monte_carlo_elbo_), eval_elbo(eval_elbo_),
     adapt_bool(adapt_bool_), adapt_val(adapt_val_), adapt_iterations(adapt_iterations_),
@@ -101,10 +103,9 @@ public:
         bicopula biuv(0,u_temp,v_temp,t_max,base_rng);
 
 
-        int k_max = 0;
         std::vector<int> gid(n_max);
         std::fill(gid.begin(), gid.end(), 0);
-        onefcopula layer_n1(u,gid,copula_type_vec,t_max, n_max, k_max, base_rng);
+        onefcopula layer_n1(u,gid,copula_type_vec,t_max, n_max, k, base_rng);
 
 
         // Dummy input
@@ -118,6 +119,10 @@ public:
                                                                                                      n_monte_carlo_elbo,
                                                                                                      eval_elbo,
                                                                                                      iter);
+        int max_param = layer_n1.num_params_r();
+        sample_iv.resize(iter,max_param);
+        mean_iv.resize(max_param);
+
         //Could be change to Rcout in rstan
         std::stringstream out_message_writer;
         stan::interface_callbacks::writer::stream_writer message_writer(std::cout);
@@ -128,20 +133,16 @@ public:
         std::stringstream out_diagnostic_writer;
         stan::interface_callbacks::writer::stream_writer diagnostic_writer(out_diagnostic_writer);
 
+        stan::variational::normal_meanfield vi_save(max_param);
 
         advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
-                     message_writer, parameter_writer, diagnostic_writer);
-
-        int max_param = layer_n1.num_params_r();
-        sample_iv.resize(iter,max_param);
-        mean_iv.resize(max_param);
-
-        write_vb(out_parameter_writer, mean_iv, sample_iv);
+                     message_writer, parameter_writer, diagnostic_writer, vi_save);
         out_parameter_writer.clear(); // Clear state flags.
 
 
         if (copselect){
             bool keepfindcop = true;
+            advi_cop.get_mean(vi_save, mean_iv);
 
             while (keepfindcop){
                 std::cout << " Copula selection " << std::endl;
@@ -165,8 +166,8 @@ public:
                         cop_vec_new[j]  = 0;
 
                     } else {
-                        const int cop_seq_size = 5;
-                        int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};
+                        const int cop_seq_size = 5;                     // Change the number
+                        int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
                         double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
                         double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
                         double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
@@ -203,7 +204,8 @@ public:
                     copula_type_vec = cop_vec_new;
                     layer_n1.set_copula_type(copula_type_vec);
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
-                                 message_writer, parameter_writer, diagnostic_writer);
+                                 message_writer, parameter_writer, diagnostic_writer, vi_save);
+
                 } else {
                     keepfindcop = false;
                 }
@@ -215,7 +217,7 @@ public:
         max_param = layer_n1.num_params_r();
         sample_iv(iter,max_param);
         mean_iv(max_param);
-        write_vb(out_parameter_writer, mean_iv, sample_iv);
+        advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
         out_parameter_writer.clear(); // Clear state flags.
 
 

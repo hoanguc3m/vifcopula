@@ -489,7 +489,8 @@ namespace stan {
               double tol_rel_obj, int max_iterations,
               interface_callbacks::writer::base_writer& message_writer,
               interface_callbacks::writer::base_writer& parameter_writer,
-              interface_callbacks::writer::base_writer& diagnostic_writer)
+              interface_callbacks::writer::base_writer& diagnostic_writer,
+                  Q& vi_save)
         const {
         diagnostic_writer("iter,time_in_seconds,ELBO");
 
@@ -508,41 +509,80 @@ namespace stan {
                                    tol_rel_obj, max_iterations,
                                    message_writer, diagnostic_writer);
 
-        // Write mean of posterior approximation on first output line
-        cont_params_ = variational.mean();
+        vi_save = Q(variational.mu(), variational.omega());
 
-
-        std::vector<double> cont_vector(cont_params_.size());
-        for (int i = 0; i < cont_params_.size(); ++i)
-          cont_vector.at(i) = cont_params_(i);
-        std::vector<int> disc_vector;
-
-        services::io::write_iteration(model_, rng_,
-                                      0, cont_vector, disc_vector,
-                                      message_writer,
-                                      parameter_writer);
-        // Draw more samples from posterior and write on subsequent lines
-        message_writer();
-        std::stringstream ss;
-        ss << "Drawing a sample of size "
-           << n_posterior_samples_
-           << " from the approximate posterior... ";
-        message_writer(ss.str());
-
-        for (int n = 0; n < n_posterior_samples_; ++n) {
-          variational.sample(rng_, cont_params_);
-          for (int i = 0; i < cont_params_.size(); ++i) {
-            cont_vector.at(i) = cont_params_(i);
-          }
-          services::io::write_iteration(model_, rng_,
-                                        0, cont_vector, disc_vector,
-                                        message_writer,
-                                        parameter_writer);
-        }
-        message_writer("COMPLETED.");
+        // // Write mean of posterior approximation on first output line
+        // cont_params_ = variational.mean();
+        //
+        //
+        // std::vector<double> cont_vector(cont_params_.size());
+        // for (int i = 0; i < cont_params_.size(); ++i)
+        //   cont_vector.at(i) = cont_params_(i);
+        // std::vector<int> disc_vector;
+        //
+        // services::io::write_iteration(model_, rng_,
+        //                               0, cont_vector, disc_vector,
+        //                               message_writer,
+        //                               parameter_writer);
+        // // Draw more samples from posterior and write on subsequent lines
+        // message_writer();
+        // std::stringstream ss;
+        // ss << "Drawing a sample of size "
+        //    << n_posterior_samples_
+        //    << " from the approximate posterior... ";
+        // message_writer(ss.str());
+        //
+        // for (int n = 0; n < n_posterior_samples_; ++n) {
+        //   variational.sample(rng_, cont_params_);
+        //   for (int i = 0; i < cont_params_.size(); ++i) {
+        //     cont_vector.at(i) = cont_params_(i);
+        //   }
+        //   services::io::write_iteration(model_, rng_,
+        //                                 0, cont_vector, disc_vector,
+        //                                 message_writer,
+        //                                 parameter_writer);
+        // }
+        // message_writer("COMPLETED.");
 
         return stan::services::error_codes::OK;
       }
+
+
+        int write(Q vi_save,
+                  Eigen::Matrix<double,Eigen::Dynamic,1>& mean_iv,
+                  Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_iv,
+                  interface_callbacks::writer::base_writer& message_writer)
+        const {
+
+            // Draw more samples from posterior and write on subsequent lines
+            message_writer();
+            std::stringstream ss;
+            ss << "Drawing a sample of size "
+               << n_posterior_samples_
+               << " from the approximate posterior... ";
+            message_writer(ss.str());
+
+            for (int n = 0; n < n_posterior_samples_; ++n) {
+                vi_save.sample(rng_, cont_params_);
+                model_.write_array(rng_, cont_params_, mean_iv);
+                sample_iv.row(n) = mean_iv;
+            }
+            // Write mean of posterior approximation on first output line
+            cont_params_ = vi_save.mean();
+            model_.write_array(rng_, cont_params_, mean_iv);
+            message_writer("COMPLETED.");
+
+            return stan::services::error_codes::OK;
+
+        }
+
+        int get_mean(Q vi_save,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& mean_iv)
+        const {
+            cont_params_ = vi_save.mean();
+            model_.write_array(rng_, cont_params_, mean_iv);
+            return stan::services::error_codes::OK;
+        }
 
       // TODO(akucukelbir): move these things to stan math and test there
 

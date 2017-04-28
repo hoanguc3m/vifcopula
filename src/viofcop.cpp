@@ -116,8 +116,8 @@ List viofcop(SEXP data_, SEXP init_, SEXP other_){
         copula_type_vec[i]= copula_type(i,0);
     matrix_d sample_iv(iter,n_max);
     vector_d mean_iv(n_max);
-
-    ofcop Objfcop(u, copula_type_vec, t_max, n_max, base_rng,
+    int k = 0;
+    ofcop Objfcop(u, copula_type_vec, t_max, n_max, k, base_rng,
           iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
           copselect, core);
