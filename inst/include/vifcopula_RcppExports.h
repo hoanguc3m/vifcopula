@@ -25,17 +25,17 @@ namespace vifcopula {
         }
     }
 
-    inline List viofcop(SEXP data_, SEXP init_, SEXP other_) {
-        typedef SEXP(*Ptr_viofcop)(SEXP,SEXP,SEXP);
-        static Ptr_viofcop p_viofcop = NULL;
-        if (p_viofcop == NULL) {
-            validateSignature("List(*viofcop)(SEXP,SEXP,SEXP)");
-            p_viofcop = (Ptr_viofcop)R_GetCCallable("vifcopula", "vifcopula_viofcop");
+    inline List vifcop(SEXP data_, SEXP init_, SEXP other_) {
+        typedef SEXP(*Ptr_vifcop)(SEXP,SEXP,SEXP);
+        static Ptr_vifcop p_vifcop = NULL;
+        if (p_vifcop == NULL) {
+            validateSignature("List(*vifcop)(SEXP,SEXP,SEXP)");
+            p_vifcop = (Ptr_vifcop)R_GetCCallable("vifcopula", "vifcopula_vifcop");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_viofcop(Rcpp::wrap(data_), Rcpp::wrap(init_), Rcpp::wrap(other_));
+            rcpp_result_gen = p_vifcop(Rcpp::wrap(data_), Rcpp::wrap(init_), Rcpp::wrap(other_));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

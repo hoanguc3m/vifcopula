@@ -485,6 +485,9 @@ namespace stan {
        * @param  parameter_writer   writer for parameters (typically to file)
        * @param  diagnostic_writer writer for diagnostic information
        */
+      /*
+        Add vi_save as output
+        */
       int run(double eta, bool adapt_engaged, int adapt_iterations,
               double tol_rel_obj, int max_iterations,
               interface_callbacks::writer::base_writer& message_writer,

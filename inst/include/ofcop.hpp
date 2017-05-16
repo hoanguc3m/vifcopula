@@ -7,7 +7,6 @@
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
 #include <stan/interface_callbacks/writer/stream_writer.hpp>
-#include <service/write_vb.hpp>
 #include <stan/services/optimize/do_bfgs_optimize.hpp>
 #include <stan/optimization/bfgs.hpp>
 

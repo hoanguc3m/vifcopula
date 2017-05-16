@@ -38,8 +38,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 50, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
-vi_gauss$cop_vec_new
-sum(vi_gauss$cop_vec_new == datagen_gauss$family)
+vi_gauss$cop_type
+sum(vi_gauss$cop_type == datagen_gauss$family)
 
 
 ################################################################################
@@ -111,8 +111,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_clayton <- vifcopula::vifcop(data,init,other)
-vi_clayton$cop_vec_new
-sum(vi_clayton$cop_vec_new == datagen_clayton$family)
+vi_clayton$cop_type
+sum(vi_clayton$cop_type == datagen_clayton$family)
 
 ################################################################################
 datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, family = 4)
@@ -151,8 +151,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
-vi_gumbel$cop_vec_new
-sum(vi_gumbel$cop_vec_new == datagen_gumbel$family)
+vi_gumbel$cop_type
+sum(vi_gumbel$cop_type == datagen_gumbel$family)
 ################################################################################
 
 datagen_frank <- fcopsim(t_max = 1000, n_max = 100, family = 5)
@@ -191,8 +191,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_frank <- vifcopula::vifcop(data,init,other)
-vi_frank$cop_vec_new
-sum(vi_frank$cop_vec_new == datagen_frank$family)
+vi_frank$cop_type
+sum(vi_frank$cop_type == datagen_frank$family)
 
 ###############################################################################
 
@@ -232,8 +232,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_joe <- vifcopula::vifcop(data,init,other)
-vi_joe$cop_vec_new
-sum(vi_joe$cop_vec_new == datagen_joe$family)
+vi_joe$cop_type
+sum(vi_joe$cop_type == datagen_joe$family)
 
 init <- list(copula_type = matrix(1,n_max,1),
              v = datagen$v,
@@ -244,8 +244,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_joe <- vifcopula::vifcop(data,init,other)
-vi_joe$cop_vec_new
-sum(vi_joe$cop_vec_new == datagen_joe$family)
+vi_joe$cop_type
+sum(vi_joe$cop_type == datagen_joe$family)
 
 
 ###############################################################################
@@ -269,7 +269,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_mix <- vifcopula::vifcop(data,init,other)
 
-sum(vi_mix$cop_vec_new == datagen_mix$family)
+sum(vi_mix$cop_type == datagen_mix$family)
 
 pdf(file='img/Mix1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))

@@ -30,9 +30,9 @@ T_u hfunc_independence(const T_u& u, const T_v& v)
 {
     static const char* function("vifcopula::hfunc_independence");
 
-    if (!(stan::length(u)
-            && stan::length(v)))
-        return 0.0;
+    // if (!(stan::length(u)
+    //         && stan::length(v)))
+    //     return 0.0;
 
 //      check_bounded(function, "Random variable u", u,0,1);
 //      check_bounded(function, "Random variable v", v,0,1);
