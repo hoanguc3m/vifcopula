@@ -2,12 +2,11 @@
 #define STAN_VARIATIONAL_ADVI_MOD_HPP
 
 #include <stan/math.hpp>
-#include <stan/interface_callbacks/writer/base_writer.hpp>
-#include <stan/interface_callbacks/writer/stream_writer.hpp>
+#include <stan/callbacks/writer.hpp>
+#include <stan/callbacks/stream_writer.hpp>
 #include <stan/io/dump.hpp>
-#include <stan/services/io/write_iteration.hpp>
 #include <stan/services/error_codes.hpp>
-#include <stan/services/variational/print_progress.hpp>
+#include <stan/variational/print_progress.hpp>
 #include <stan/variational/families/normal_fullrank.hpp>
 #include <stan/variational/families/normal_meanfield.hpp>
 #include <boost/circular_buffer.hpp>
@@ -97,7 +96,7 @@ namespace stan {
        * that the variational distribution has somehow collapsed.
        */
       double calc_ELBO(const Q& variational,
-                       interface_callbacks::writer::base_writer& message_writer)
+                       callbacks::writer& message_writer)
         const {
         static const char* function =
           "stan::variational::advi_mod::calc_ELBO";
@@ -146,8 +145,8 @@ namespace stan {
        * @param message_writer writer for messages
        */
       void calc_ELBO_grad(const Q& variational, Q& elbo_grad,
-                          interface_callbacks::writer::base_writer&
-                          message_writer)
+                          callbacks::writer&
+                              message_writer)
         const {
         static const char* function =
           "stan::variational::advi_mod::calc_ELBO_grad";
@@ -182,7 +181,7 @@ namespace stan {
        */
       double adapt_eta(Q& variational,
                        int adapt_iterations,
-                       interface_callbacks::writer::base_writer& message_writer)
+                       callbacks::writer& message_writer)
         const {
         static const char* function = "stan::variational::advi_mod::adapt_eta";
 
@@ -233,7 +232,7 @@ namespace stan {
           for (int iter_tune = 1; iter_tune <= adapt_iterations; ++iter_tune) {
             print_progress_m = eta_sequence_index
               * adapt_iterations + iter_tune;
-            services::variational
+            variational
               ::print_progress(print_progress_m, 0,
                                adapt_iterations * eta_sequence_size,
                                adapt_iterations, true, "", "", message_writer);
@@ -330,8 +329,8 @@ namespace stan {
                                       double eta,
                                       double tol_rel_obj,
                                       int max_iterations,
-                    interface_callbacks::writer::base_writer& message_writer,
-                    interface_callbacks::writer::base_writer& diagnostic_writer)
+                                      callbacks::writer& message_writer,
+                                      callbacks::writer& diagnostic_writer)
         const {
         static const char* function =
           "stan::variational::advi_mod::stochastic_gradient_ascent";
@@ -490,9 +489,9 @@ namespace stan {
         */
       int run(double eta, bool adapt_engaged, int adapt_iterations,
               double tol_rel_obj, int max_iterations,
-              interface_callbacks::writer::base_writer& message_writer,
-              interface_callbacks::writer::base_writer& parameter_writer,
-              interface_callbacks::writer::base_writer& diagnostic_writer,
+              callbacks::writer& message_writer,
+              callbacks::writer& parameter_writer,
+              callbacks::writer& diagnostic_writer,
                   Q& vi_save)
         const {
         diagnostic_writer("iter,time_in_seconds,ELBO");
@@ -554,7 +553,7 @@ namespace stan {
         int write(Q vi_save,
                   Eigen::Matrix<double,Eigen::Dynamic,1>& mean_iv,
                   Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_iv,
-                  interface_callbacks::writer::base_writer& message_writer)
+                  callbacks::writer& message_writer)
         const {
 
             // Draw more samples from posterior and write on subsequent lines

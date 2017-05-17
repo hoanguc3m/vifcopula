@@ -41,6 +41,19 @@ vi_gauss <- vifcopula::vifcop(data,init,other)
 vi_gauss$cop_type
 sum(vi_gauss$cop_type == datagen_gauss$family)
 
+################################################################################
+data <- list(u = datagen$u,
+             n_max = datagen$n_max,
+             t_max = datagen$t_max,
+             k_max = 2,
+             gid = datagen$gid,
+             structfactor = datagen$structfactor)
+init <- list(copula_type = cbind(datagen$family,datagen$family),
+             v = datagen$v,
+             par = datagen$theta,
+             par2 = datagen$theta2)
+vi_gauss <- vifcopula::vifcop(data,init,other)
+vi_gauss$cop_type
 
 ################################################################################
 

@@ -6,8 +6,8 @@
 #include <bicopula.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
-#include <stan/interface_callbacks/writer/stream_writer.hpp>
-#include <stan/services/optimize/do_bfgs_optimize.hpp>
+#include <stan/callbacks/stream_writer.hpp>
+#include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
 
 namespace vifcopula
@@ -124,13 +124,13 @@ public:
 
         //Could be change to Rcout in rstan
         std::stringstream out_message_writer;
-        stan::interface_callbacks::writer::stream_writer message_writer(std::cout);
+        stan::callbacks::stream_writer message_writer(std::cout);
 
         std::stringstream out_parameter_writer;
-        stan::interface_callbacks::writer::stream_writer parameter_writer(out_parameter_writer);
+        stan::callbacks::stream_writer parameter_writer(out_parameter_writer);
 
         std::stringstream out_diagnostic_writer;
-        stan::interface_callbacks::writer::stream_writer diagnostic_writer(out_diagnostic_writer);
+        stan::callbacks::stream_writer diagnostic_writer(out_diagnostic_writer);
 
         stan::variational::normal_meanfield vi_save(max_param);
 

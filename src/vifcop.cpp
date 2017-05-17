@@ -160,7 +160,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_){
     Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
                                      Rcpp::Named("sample_iv") = sample_iv_save,
                                      Rcpp::Named("cop_type") = copula_type,
-                                     Rcpp::Named("model_pars") = model_pars
+                                     Rcpp::Named("model_pars") = model_pars,
+                                     Rcpp::Named("u") = u
     );
 
     end = clock();
