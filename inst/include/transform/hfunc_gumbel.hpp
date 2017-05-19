@@ -62,8 +62,8 @@ T_u hfunc_gumbel(const T_u& u, const T_v& v, const T_theta& theta)
         double t_v = pow(-log(v_val), theta_value);
         double t_uv = t_u + t_v;
 
-        u_cond[n] = - exp( - pow(t_uv, inv_theta ) ) * pow(t_uv, inv_theta-1) * t_u /
-                    u_val / log(u_val);
+        u_cond[n] = - exp( - pow(t_uv, inv_theta ) ) * pow(t_uv, inv_theta-1) * t_v /
+                    v_val / log(v_val);
 
     }
     return u_cond;

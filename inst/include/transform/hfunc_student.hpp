@@ -65,9 +65,9 @@ T_u hfunc_student(const T_u& u, const T_v& v, const T_rho& rho, const T_nu& nu)
         double inv_v_dbl = quantile(s,value_of(v_vec[n]));
         double rho_value = value_of(rho_vec[n]);
 
-        double div_sigma = sqrt(  (nu_value+square(inv_u_dbl)) * (1 - square(rho_value)) / (nu_value+1)  );
+        double div_sigma = sqrt(  (nu_value+square(inv_v_dbl)) * (1 - square(rho_value)) / (nu_value+1)  );
 
-        u_cond[n] = cdf(sp1, (inv_v_dbl - rho_value * inv_u_dbl )/div_sigma );
+        u_cond[n] = cdf(sp1, (inv_u_dbl - rho_value * inv_v_dbl )/div_sigma );
 
     }
     return u_cond;

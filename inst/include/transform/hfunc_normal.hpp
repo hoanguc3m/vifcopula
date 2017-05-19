@@ -59,7 +59,7 @@ T_u hfunc_normal(const T_u& u, const T_v& v, const T_rho& rho)
         double rho_value = value_of(rho_vec[n]);
         double div_sigma = sqrt(1 - square(rho_value));
 
-        u_cond[n] = cdf(s, (inv_v_dbl - rho_value * inv_u_dbl )/div_sigma );
+        u_cond[n] = cdf(s, (inv_u_dbl - rho_value * inv_v_dbl )/div_sigma );
 
     }
     return u_cond;

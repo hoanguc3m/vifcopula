@@ -63,7 +63,7 @@ T_u hfunc_frank(const T_u& u, const T_v& v, const T_theta& theta)
         double exp_theta_up1 = exp_theta_u * exp_theta;
         double exp_theta_vp1 = exp_theta_v * exp_theta;
 
-        u_cond[n] = - exp_theta * (exp_theta_v -1) / (exp_theta_uv - exp_theta_up1 - exp_theta_vp1 + exp_theta);
+        u_cond[n] = - exp_theta * (exp_theta_u -1) / (exp_theta_uv - exp_theta_vp1 - exp_theta_up1 + exp_theta);
 
     }
     return u_cond;

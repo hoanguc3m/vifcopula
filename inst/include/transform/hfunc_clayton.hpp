@@ -55,7 +55,7 @@ T_u hfunc_clayton(const T_u& u, const T_v& v, const T_theta& theta)
         double v_val = value_of(v_vec[n]);
         double theta_value = value_of(theta_vec[n]);
 
-        u_cond[n] = pow(u_val, - theta_value-1) * pow( pow(u_val, - theta_value) + pow(v_val, - theta_value) - 1, -1 - 1/theta_value);
+        u_cond[n] = pow(v_val, - theta_value-1) * pow( pow(v_val, - theta_value) + pow(u_val, - theta_value) - 1, -1 - 1/theta_value);
 
     }
     return u_cond;

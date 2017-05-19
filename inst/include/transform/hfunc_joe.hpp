@@ -64,7 +64,7 @@ T_u hfunc_joe(const T_u& u, const T_v& v, const T_theta& theta)
         double t_v = pow(om_v, theta_value);
         double t_uv = t_u + t_v - t_u * t_v;
 
-        u_cond[n] = pow(t_uv, 1/theta_value-1) * pow( om_u, theta_value -1 ) * (1 - t_v) ;
+        u_cond[n] = pow(t_uv, 1/theta_value-1) * pow( om_v, theta_value -1 ) * (1 - t_u) ;
 
     }
     return u_cond;
