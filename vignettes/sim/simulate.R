@@ -4,7 +4,7 @@ install_github("hoanguc3m/vifcopula")
 library(vifcopula)
 t_max = 1000
 n_max = 100
-datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1)
+datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1, seed_num = 100)
 datagen <- datagen_gauss
 data <- list(u = datagen$u,
              n_max = datagen$n_max,

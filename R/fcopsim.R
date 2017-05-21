@@ -104,22 +104,44 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, gid = 0, structfactor = 1, 
         family = matrix(family, nrow = n_max, ncol = k_max)
         }
 
-    u <- matrix(0,nrow=t_max, ncol = n_max)
+    u <- matrix(runif(t_max*n_max),nrow=t_max, ncol = n_max)
     theta <- matrix(0,nrow=n_max, ncol = k_max)
     theta2 <- matrix(0,nrow=n_max, ncol = k_max)
 
     if (structfactor == 1)
     {
         v <- matrix(runif(t_max*k_max), nrow = t_max, ncol = k_max)
-        if (k_max == 1)
-        {
+        for (k in k_max:1){
             for (i in 1:n_max){
+                theta[i,k] <- rtheta(family[i,k], TRUE)
+                theta2[i,k] <- rtheta(family[i,k], FALSE)
+
+                obj <- BiCop(family = family[i,k], par = theta[i,k], par2 = theta2[i,k])
+                u[,i] <- BiCopHinv2(u[,i], v[,k], obj)
+            }
+        }
+
+
+    }
+
+    if (structfactor == 2)
+    {
+        if (! all.equal(k_max, max(gid)+1))
+            stop("'k_max' has to be max(gid)+1")
+
+        v <- matrix(runif(t_max*k_max), nrow = t_max, ncol = k_max)
+        for (i in 1:n_max){
+                # group factor
+                theta[i,2] <- rtheta(family[i,gid[i]+1], TRUE)
+                theta2[i,2] <- rtheta(family[i,gid[i]+1], FALSE)
+                obj <- BiCop(family = family[i,gid[i]+1], par = theta[i,2], par2 = theta2[i,2])
+                u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
+                # common factor
                 theta[i,1] <- rtheta(family[i,1], TRUE)
                 theta2[i,1] <- rtheta(family[i,1], FALSE)
+                obj <- BiCop(family = family[i,1], par = theta[i,1], par2 = theta2[i,1])
+                u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
 
-                obj <- BiCop(family = family[i,1], par = theta[i], par2 = theta2[i])
-                u[,i] <- BiCopCondSim(t_max, cond.val = v[,1], cond.var = 1, obj)
-            }
         }
 
     }
