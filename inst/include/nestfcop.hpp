@@ -1,9 +1,9 @@
-#ifndef VIFCOPULA_OFCOP_HPP
-#define VIFCOPULA_OFCOP_HPP
+#ifndef VIFCOPULA_NESTOFCOP_HPP
+#define VIFCOPULA_NESTOFCOP_HPP
 
 #include <omp.h>
-#include <onefcopula_stanc.hpp>
-#include <bicopula_stanc.hpp>
+#include <nefcopula.hpp>
+#include <bicopula.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
 #include <stan/callbacks/stream_writer.hpp>
@@ -228,4 +228,4 @@ public:
 }; // class
 
 }// namespace
-#endif // VIFCOPULA_OFCOP_HPP
+#endif // VIFCOPULA_NESTOFCOP_HPP
