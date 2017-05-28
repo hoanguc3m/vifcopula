@@ -238,26 +238,26 @@ public:
     ~nefcopula() { }
 
     nefcopula(const matrix_d& u_, const vector<int>& gid_,
-               const vector<int>& copula_type_,
-               const vector<int>& latent_copula_type_,
-               const int& t_max_,const int& n_max_,const int& k_,
-               std::ostream* pstream__ = 0)
+              const vector<int>& copula_type_,
+              const vector<int>& latent_copula_type_,
+              const int& t_max_,const int& n_max_,const int& k_,
+              std::ostream* pstream__ = 0)
         : prob_grad(0)
     {
         typedef boost::ecuyer1988 rng_t;
         rng_t base_rng(0);  // 0 seed default
         nefcopula(u_, gid_, copula_type_,
                   latent_copula_type_,
-                   t_max_, n_max_, k_,
-                   base_rng, pstream__);
+                  t_max_, n_max_, k_,
+                  base_rng, pstream__);
     }
 
     template <class RNG>
     nefcopula(const matrix_d& u_, const vector<int>& gid_,
-               const vector<int>& copula_type_,
-               const vector<int>& latent_copula_type_,
-               const int& t_max_,const int& n_max_,const int& k_,
-               RNG& base_rng__,std::ostream* pstream__ = 0)
+              const vector<int>& copula_type_,
+              const vector<int>& latent_copula_type_,
+              const int& t_max_,const int& n_max_,const int& k_,
+              RNG& base_rng__,std::ostream* pstream__ = 0)
         : prob_grad(0), u(u_), gid(gid_),copula_type(copula_type_),
           latent_copula_type(latent_copula_type_),
           t_max(t_max_), n_max(n_max_),k(k_)
@@ -273,20 +273,27 @@ public:
         num_params_r__ += t_max*k;
 
         num_params_r__ += (k-1);
-        for (int i = 0; i < (k-1); i++){
-            if (latent_copula_type[i] == 0){
+        for (int i = 0; i < (k-1); i++)
+        {
+            if (latent_copula_type[i] == 0)
+            {
                 num_params_r__ --;
-            } else if (latent_copula_type[i] == 2){
+            }
+            else if (latent_copula_type[i] == 2)
+            {
                 num_params_r__ ++;
             }
         }
 
         num_params_r__ += n_max;
-        for (int i = 0; i < n_max; i++){
-            if (copula_type[i] == 0){
+        for (int i = 0; i < n_max; i++)
+        {
+            if (copula_type[i] == 0)
+            {
                 num_params_r__ --;
             }
-            else if (copula_type[i] == 2){
+            else if (copula_type[i] == 2)
+            {
                 num_params_r__ ++;
             }
         }
@@ -348,7 +355,7 @@ public:
         (void) theta2;  // dummy to suppress unused var warning
 
         vector_d u_col;
-        vector_d vg_col;
+        Eigen::Matrix<T__,Eigen::Dynamic,1> vg_col;
 
         // model body
         try
@@ -359,7 +366,10 @@ public:
 
             for (int i = 0; i < (k-1); i++)
             {
+
                 vg_col = v2g.col(i);
+                // VectorXd::Map(&vg_col[0], t_max) = v2g.col(i);
+
                 ibase = i+1;
 
                 switch ( latent_copula_type[i] )
@@ -384,8 +394,8 @@ public:
                     //     lp_accum__.add(uniform_lpdf(theta_latent[i], -(1), 1));
 
                     lp_accum__.add(bicop_normal_log<propto__>(vg_col,
-                                                              v1,
-                                                              get_base1(theta_latent,ibase,"theta_latent",1)));
+                                   v1,
+                                   get_base1(theta_latent,ibase,"theta_latent",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta_latent,ibase,"theta_latent",1) << std::endl;
                     break;
                 case 2:
@@ -398,7 +408,7 @@ public:
 
 
                     if (jacobian__)
-                        theta_latent2[i] = in__.scalar_lub_constrain(2,30,lp__);
+                        theta2_latent[i] = in__.scalar_lub_constrain(2,30,lp__);
                     else
                         theta2_latent[i] = in__.scalar_lub_constrain(2,30);
                     // if (include_summand<propto__>::value){
@@ -408,9 +418,9 @@ public:
 
 
                     lp_accum__.add(bicop_student_log<propto__>(vg_col,
-                                                               v1,
-                                                               get_base1(theta_latent,ibase,"theta_latent",1),
-                                                               get_base1(theta2_latent,ibase,"theta_latent",1)));
+                                   v1,
+                                   get_base1(theta_latent,ibase,"theta_latent",1),
+                                   get_base1(theta2_latent,ibase,"theta_latent",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta_latent,ibase,"theta_latent",1) << std::endl;
                     break;
                 case 3:
@@ -423,8 +433,8 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta_latent[i], 0, Inf)); //Improper priors
                     lp_accum__.add(bicop_clayton_log<propto__>(vg_col,
-                                                               v1,
-                                                               get_base1(theta_latent,ibase,"theta_latent",1)));
+                                   v1,
+                                   get_base1(theta_latent,ibase,"theta_latent",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta_latent,ibase,"theta_latent",1) << std::endl;
                     break;
                 case 4:
@@ -437,8 +447,8 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta_latent[i], 1, Inf)); //Improper priors
                     lp_accum__.add(bicop_gumbel_log<propto__>(vg_col,
-                                                              v1,
-                                                              get_base1(theta_latent,ibase,"theta_latent",1)));
+                                   v1,
+                                   get_base1(theta_latent,ibase,"theta_latent",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta_latent,ibase,"theta_latent",1) << std::endl;
                     break;
                 case 5:
@@ -451,8 +461,8 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta_latent[i], 0, Inf)); //Improper priors
                     lp_accum__.add(bicop_frank_log<propto__>(vg_col,
-                                                             v1,
-                                                             get_base1(theta_latent,ibase,"theta_latent",1)));
+                                   v1,
+                                   get_base1(theta_latent,ibase,"theta_latent",1)));
 
                     //std::cout << " copula number " << i << " " << get_base1(theta_latent,ibase,"theta_latent",1) << std::endl;
                     break;
@@ -476,7 +486,7 @@ public:
                     // Send a break message.
                     break;
                 }
-
+            }
             current_statement_begin__ = 13;
 
             ibase = 0;
@@ -484,8 +494,12 @@ public:
             for (int i = 0; i < n_max; i++)
             {
                 current_statement_begin__ = 14;
-                u_col = u.col(i);
+                // u_col = u.col(i);
+                VectorXd::Map(&u_col[0], t_max) = u.col(i);
+
                 vg_col = v2g.col(gid[i]);
+                //VectorXd::Map(&vg_col[0], t_max) = v2g.col(gid[i]);
+
                 ibase = i+1;
 
                 switch ( copula_type[i] )
@@ -495,7 +509,7 @@ public:
                     current_statement_begin__ = 15;
                     //theta[i] = in__.scalar_constrain();
                     theta[i] = 0;
-                    lp_accum__.add(bicop_independence_log<propto__>(u_col,v));
+                    lp_accum__.add(bicop_independence_log<propto__>(u_col,vg_col));
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
 
                     break;
@@ -510,7 +524,7 @@ public:
                     //     lp_accum__.add(uniform_lpdf(theta[i], -(1), 1));
 
                     lp_accum__.add(bicop_normal_log<propto__>(u_col,
-                                   v,
+                                   vg_col,
                                    get_base1(theta,ibase,"theta",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
                     break;
@@ -534,7 +548,7 @@ public:
 
 
                     lp_accum__.add(bicop_student_log<propto__>(u_col,
-                                   v,
+                                   vg_col,
                                    get_base1(theta,ibase,"theta",1),
                                    get_base1(theta2,ibase,"theta",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
@@ -549,7 +563,7 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
                     lp_accum__.add(bicop_clayton_log<propto__>(u_col,
-                                   v,
+                                   vg_col,
                                    get_base1(theta,ibase,"theta",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
                     break;
@@ -563,7 +577,7 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 1, Inf)); //Improper priors
                     lp_accum__.add(bicop_gumbel_log<propto__>(u_col,
-                                   v,
+                                   vg_col,
                                    get_base1(theta,ibase,"theta",1)));
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
                     break;
@@ -577,7 +591,7 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
                     lp_accum__.add(bicop_frank_log<propto__>(u_col,
-                                   v,
+                                   vg_col,
                                    get_base1(theta,ibase,"theta",1)));
 
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
@@ -592,7 +606,7 @@ public:
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
                     lp_accum__.add(bicop_joe_log<propto__>(u_col,
-                                                           v,
+                                                           vg_col,
                                                            get_base1(theta,ibase,"theta",1)));
 
                     //std::cout << " copula number " << i << " " << get_base1(theta,ibase,"theta",1) << std::endl;
@@ -737,6 +751,7 @@ public:
                 // Send a break message.
                 break;
             }
+        }
 
         vector_d theta(n_max);
         vector_d theta2(n_max);

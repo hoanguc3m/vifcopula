@@ -321,7 +321,8 @@ public:
             for (int i = 0; i < n_max; i++)
             {
                 current_statement_begin__ = 14;
-                u_col = u.col(i);
+                // u_col = u.col(i);
+                Eigen::VectorXd::Map(&u_col[0], t_max) = u.col(i);
                 ibase = i+1;
 
                 switch ( copula_type[i] )
