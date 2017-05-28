@@ -218,6 +218,7 @@ public:
         mean_iv(max_param);
         advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
         out_parameter_writer.clear(); // Clear state flags.
+        std::cout << " Done ! " << std::endl;
 
 
 

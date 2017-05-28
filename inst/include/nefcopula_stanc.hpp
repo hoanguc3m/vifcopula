@@ -387,9 +387,9 @@ public:
                     // Gaussian copula
                     current_statement_begin__ = 16;
                     if (jacobian__)
-                        theta_latent[i] = in__.scalar_lub_constrain(-(1),1,lp__);
+                        theta_latent[i] = in__.scalar_lub_constrain(0,1,lp__);
                     else
-                        theta_latent[i] = in__.scalar_lub_constrain(-(1),1);
+                        theta_latent[i] = in__.scalar_lub_constrain(0,1);
                     // if (include_summand<propto__>::value)
                     //     lp_accum__.add(uniform_lpdf(theta_latent[i], -(1), 1));
 
@@ -494,8 +494,8 @@ public:
             for (int i = 0; i < n_max; i++)
             {
                 current_statement_begin__ = 14;
-                // u_col = u.col(i);
-                VectorXd::Map(&u_col[0], t_max) = u.col(i);
+                u_col = u.col(i);
+                //VectorXd::Map(&u_col[0], t_max) = u.col(i);
 
                 vg_col = v2g.col(gid[i]);
                 //VectorXd::Map(&vg_col[0], t_max) = v2g.col(gid[i]);
@@ -517,9 +517,9 @@ public:
                     // Gaussian copula
                     current_statement_begin__ = 16;
                     if (jacobian__)
-                        theta[i] = in__.scalar_lub_constrain(-(1),1,lp__);
+                        theta[i] = in__.scalar_lub_constrain(0,1,lp__);
                     else
-                        theta[i] = in__.scalar_lub_constrain(-(1),1);
+                        theta[i] = in__.scalar_lub_constrain(0,1);
                     // if (include_summand<propto__>::value)
                     //     lp_accum__.add(uniform_lpdf(theta[i], -(1), 1));
 
@@ -709,7 +709,7 @@ public:
                 break;
             case 1:
                 // Gaussian copula
-                theta_latent[i] = in__.scalar_lub_constrain(-(1),1);
+                theta_latent[i] = in__.scalar_lub_constrain(0,1);
                 vars__.push_back(theta_latent[i]);
                 k_0__++;
                 break;
@@ -765,7 +765,7 @@ public:
                 break;
             case 1:
                 // Gaussian copula
-                theta[i] = in__.scalar_lub_constrain(-(1),1);
+                theta[i] = in__.scalar_lub_constrain(0,1);
                 vars__.push_back(theta[i]);
                 k_0__++;
                 break;

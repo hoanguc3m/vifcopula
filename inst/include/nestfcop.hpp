@@ -159,7 +159,7 @@ public:
                 matrix_d v2g = mean_iv.head(t_max*k);
                 VectorXd::Map(&v1_temp[0], t_max) = mean_iv.head(t_max);
 
-                v2g.resize(t_max,k-1);
+                v2g.resize(t_max,k);
                 std::vector<double> params_r(1);
                 params_r[0] = 1;
                 std::vector<int> params_i(0);
@@ -216,8 +216,9 @@ public:
                 for (int j = 0; j < n_max; j++){
                     //u_temp = u.col(j);
                     VectorXd::Map(&u_temp[0], t_max) = u.col(j);
+                    VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(gid[j]+1);
 
-                    biuv.reset(copula_type[j], u_temp,v1_temp);
+                    biuv.reset(copula_type[j], u_temp,v2g_temp);
                     if (biuv.check_Ind()){
                         biuv.set_copula_type(0);
                         cop_new[j]  = 0;
@@ -252,7 +253,7 @@ public:
                             }
                         }
                         cop_new[j] = cop_seq[imax];
-                        cont_params[t_max*k+k+j] = 0;
+                        cont_params[t_max*k+k-1+j] = 0;
                     }
 
 
@@ -280,6 +281,7 @@ public:
         mean_iv(max_param);
         advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
         out_parameter_writer.clear(); // Clear state flags.
+        std::cout << " Done ! " << std::endl;
 
 
 

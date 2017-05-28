@@ -101,11 +101,14 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, gid = rep(1,n_max), structf
 
     if (length(family) == 1){
         family = matrix(family, nrow = n_max, ncol = k_max)
+        family_latent = matrix(family, nrow = k_max-1, ncol = 1)
         }
 
     u <- matrix(runif(t_max*n_max),nrow=t_max, ncol = n_max)
     theta <- matrix(0,nrow=n_max, ncol = k_max)
     theta2 <- matrix(0,nrow=n_max, ncol = k_max)
+    theta_latent <- rep(0, k_max - 1)
+    theta2_latent <- rep(0, k_max - 1)
     tau_mat <- matrix(0,nrow=n_max, ncol = k_max)
 
     if (structfactor == 1)
@@ -170,11 +173,14 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, gid = rep(1,n_max), structf
         if (! all.equal(k_max, max(gid)+1))
             stop("'k_max' has to be max(gid)+1")
 
+
         v <- matrix(runif(t_max*k_max), nrow = t_max, ncol = k_max)
         for (k in 2:k_max){
-            obj <- BiCop(family = 1, par = 0.7)
+            theta_latent[k-1] <- BiCopTau2Par(family = family_latent[k-1], 0.6, check.taus = TRUE)
+            theta2_latent[k-1] <- 0
+            obj <- BiCop(family = family_latent[k-1], par = theta_latent[k-1], par2 = theta2_latent[k-1])
             # common factor is v[,1]
-            # group factor are v[,i]
+            # group factor are v[,k]
             v[,k] <- BiCopHinv2(v[,k], v[,1], obj)
         }
 
@@ -203,6 +209,9 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, gid = rep(1,n_max), structf
           family = family,
           theta = theta,
           theta2 = theta2,
+          family_latent = family_latent,
+          theta_latent = theta_latent,
+          theta2_latent = theta2_latent,
           gid = gid,
           structfactor = structfactor)
 }

@@ -57,3 +57,14 @@ RcppExport SEXP vifcopula_RcppExport_registerCCallable() {
     R_RegisterCCallable("vifcopula", "vifcopula_RcppExport_validate", (DL_FUNC)vifcopula_RcppExport_validate);
     return R_NilValue;
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"vifcopula_vifcop", (DL_FUNC) &vifcopula_vifcop, 3},
+    {"vifcopula_RcppExport_registerCCallable", (DL_FUNC) &vifcopula_RcppExport_registerCCallable, 0},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_vifcopula(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}
