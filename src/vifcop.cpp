@@ -77,7 +77,10 @@ void save_vi( std::vector<string>& model_pars,
     if (copselect)
     {
         copula_type.col(0) = VectorXi::Map(&cop_vec_new[0], n_max);
-        latent_copula_type.col(0) = VectorXi::Map(&latent_cop_vec_new[0], k-1);
+        if (structfactor == 3){
+            latent_copula_type.col(0) = VectorXi::Map(&latent_cop_vec_new[0], k-1);
+        }
+
     }
     else
     {
@@ -180,9 +183,12 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     matrix_int latent_copula_type(k_max-1,1);
     matrix_d par = Rcpp::as<matrix_d>(init["par"]);
     Rcpp::Rcout << " Init hyperparams :" << " Checked" << std::endl;
-    if (structfactor == 3)
-    {
+    if (structfactor == 3) {
         latent_copula_type = Rcpp::as<matrix_int>(init["latent_copula_type"]);
+    }
+
+    if (structfactor == 1) {
+        latent_copula_type = matrix_int::Zero(1,1);
     }
 
     // Timing variables

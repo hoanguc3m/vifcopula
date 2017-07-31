@@ -6,7 +6,8 @@
 #include <bicopula_stanc.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
-#include <stan/callbacks/stream_writer.hpp>
+#include <stan/callbacks/writer.hpp>
+#include <stan/callbacks/stream_logger.hpp>
 #include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
 
@@ -124,7 +125,8 @@ public:
 
         //Could be change to Rcout in rstan
         std::stringstream out_message_writer;
-        stan::callbacks::stream_writer message_writer(std::cout);
+        // stan::callbacks::stream_logger logger(debug, info, warn, error, fatal);
+        stan::callbacks::stream_logger message_writer(std::cout,std::cout,std::cout,std::cout,std::cout);
 
         std::stringstream out_parameter_writer;
         stan::callbacks::stream_writer parameter_writer(out_parameter_writer);
@@ -214,8 +216,8 @@ public:
         }
 
         max_param = layer_n1.num_params_r();
-        sample_iv(iter,max_param);
-        mean_iv(max_param);
+        sample_iv.resize(iter,max_param);
+        mean_iv.resize(max_param);
         advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;
