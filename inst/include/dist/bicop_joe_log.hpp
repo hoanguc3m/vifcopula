@@ -53,11 +53,11 @@ using namespace stan;
       if (!include_summand<propto, T_u, T_v, T_theta>::value)
         return 0.0;
 
-      OperandsAndPartials<T_u, T_v, T_theta> operands_and_partials(u, v, theta);
+      operands_and_partials<T_u, T_v, T_theta> ops_partials(u, v, theta);
 
-      stan::VectorView<const T_u> u_vec(u);
-      stan::VectorView<const T_v> v_vec(v);
-      stan::VectorView<const T_theta> theta_vec(theta);
+      scalar_seq_view<T_u> u_vec(u);
+      scalar_seq_view<T_v> v_vec(v);
+      scalar_seq_view<T_theta> theta_vec(theta);
 
       size_t N = stan::max_size(u, v, theta);
 
@@ -97,17 +97,17 @@ using namespace stan;
 
          // Calculate the derivative when the type is var (not double)
          if (!is_constant_struct<T_u>::value)
-             operands_and_partials.d_x1[n] += (inv_theta[n] - 2) * (t_v-1) * theta_value[n] * t_u / (1-u_dbl)/t_uv +
+             ops_partials.edge1_.partials_[n] += (inv_theta[n] - 2) * (t_v-1) * theta_value[n] * t_u / (1-u_dbl)/t_uv +
                                                 (t_v-1) * theta_value[n] * t_u / (1-u_dbl)/(t_uv + thetam1[n]) - thetam1[n]/om_u;
          if (!is_constant_struct<T_v>::value)
-           operands_and_partials.d_x2[n] +=  (inv_theta[n] - 2) * (t_u-1) * theta_value[n] * t_v / (1-v_dbl)/t_uv +
+           ops_partials.edge2_.partials_[n] +=  (inv_theta[n] - 2) * (t_u-1) * theta_value[n] * t_v / (1-v_dbl)/t_uv +
                                                 (t_u-1) * theta_value[n] * t_v / (1-v_dbl)/(t_uv + thetam1[n]) - thetam1[n]/om_v;
          if (!is_constant_struct<T_theta>::value)
-           operands_and_partials.d_x3[n] +=  - log(t_uv)/square(theta_value[n]) +
+           ops_partials.edge3_.partials_[n] +=  - log(t_uv)/square(theta_value[n]) +
                                         (inv_theta[n] - 2)*dtuv_sum/t_uv +
                                         log(om_u) + log(om_v) + (1 + dtuv_sum)/(thetam1[n] + t_uv) ;
       }
-      return operands_and_partials.value(logp);
+      return ops_partials.build(logp);
     }
 
     template <typename T_u, typename T_v, typename T_theta>

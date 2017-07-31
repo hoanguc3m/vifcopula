@@ -47,10 +47,10 @@ T_u hfunc_student(const T_u& u, const T_v& v, const T_rho& rho, const T_nu& nu)
                            "Random variable v", v,
                            "Scale parameter", rho);
 
-    stan::VectorView<const T_u> u_vec(u);
-    stan::VectorView<const T_v> v_vec(v);
-    stan::VectorView<const T_rho> rho_vec(rho);
-    stan::VectorView<const T_rho> nu_vec(nu);
+    scalar_seq_view<T_u> u_vec(u);
+    scalar_seq_view<T_v> v_vec(v);
+    scalar_seq_view<T_rho> rho_vec(rho);
+    scalar_seq_view<T_rho> nu_vec(nu);
     size_t N = stan::max_size(u, v, rho);
 
     T_u u_cond(u);

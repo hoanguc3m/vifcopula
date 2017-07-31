@@ -48,10 +48,10 @@ using namespace stan;
       if (!include_summand<propto, T_u, T_v>::value)
         return 0.0;
 
-      OperandsAndPartials<T_u, T_v> operands_and_partials(u, v);
+      operands_and_partials<T_u, T_v> ops_partials(u, v);
 
-      stan::VectorView<const T_u> u_vec(u);
-      stan::VectorView<const T_v> v_vec(v);
+      scalar_seq_view<T_u> u_vec(u);
+      scalar_seq_view<T_v> v_vec(v);
       size_t N = stan::max_size(u, v);
 
 
@@ -63,11 +63,11 @@ using namespace stan;
 
         // Calculate the derivative
         if (!is_constant_struct<T_u>::value)
-            operands_and_partials.d_x1[n] += 1;
+            ops_partials.edge1_.partials_[n] += 1;
         if (!is_constant_struct<T_v>::value)
-          operands_and_partials.d_x2[n] += 1;
+          ops_partials.edge2_.partials_[n] += 1;
       }
-      return operands_and_partials.value(logp);
+      return ops_partials.build(logp);
     }
 
     template <typename T_u, typename T_v>

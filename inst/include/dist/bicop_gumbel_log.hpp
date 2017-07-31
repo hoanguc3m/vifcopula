@@ -53,11 +53,11 @@ using namespace stan;
       if (!include_summand<propto, T_u, T_v, T_theta>::value)
         return 0.0;
 
-      OperandsAndPartials<T_u, T_v, T_theta> operands_and_partials(u, v, theta);
+      operands_and_partials<T_u, T_v, T_theta> ops_partials(u, v, theta);
 
-      stan::VectorView<const T_u> u_vec(u);
-      stan::VectorView<const T_v> v_vec(v);
-      stan::VectorView<const T_theta> theta_vec(theta);
+      scalar_seq_view<T_u> u_vec(u);
+      scalar_seq_view<T_v> v_vec(v);
+      scalar_seq_view<T_theta> theta_vec(theta);
 
       size_t N = stan::max_size(u, v, theta);
 
@@ -101,12 +101,12 @@ using namespace stan;
 
          // Calculate the derivative when the type is var (not double)
          if (!is_constant_struct<T_u>::value)
-             operands_and_partials.d_x1[n] +=  log_C_u_v_theta * t_u_div_t_uv * inv_u_logu - 1/u_dbl +
+             ops_partials.edge1_.partials_[n] +=  log_C_u_v_theta * t_u_div_t_uv * inv_u_logu - 1/u_dbl +
                                             inv_theta_t2m2[n] * theta_value[n] * t_u_div_t_uv * inv_u_logu +
                                             theta_m1[n] * inv_u_logu +
                                             theta_m1[n] * t_u_div_t_uv * inv_u_logu / log_C_u_v_theta / op_theta_tuv ;
          if (!is_constant_struct<T_v>::value)
-           operands_and_partials.d_x2[n] +=  log_C_u_v_theta * t_v_div_t_uv * inv_v_logv - 1/v_dbl +
+           ops_partials.edge2_.partials_[n] +=  log_C_u_v_theta * t_v_div_t_uv * inv_v_logv - 1/v_dbl +
                                             inv_theta_t2m2[n] * theta_value[n] * t_v_div_t_uv * inv_v_logv +
                                             theta_m1[n] * inv_v_logv +
                                             theta_m1[n] * t_v_div_t_uv * inv_v_logv / log_C_u_v_theta / op_theta_tuv ;
@@ -132,14 +132,14 @@ using namespace stan;
 
 			const T_partials_return C_uvt_log_umv   = C_u_v_t_uv*log_umv_thetam1;
 
-           operands_and_partials.d_x3[n] += (log_C_u_v_theta*log_tuv_tuv*C_u_v_t_uv*log_umv_opo
+           ops_partials.edge3_.partials_[n] += (log_C_u_v_theta*log_tuv_tuv*C_u_v_t_uv*log_umv_opo
                                                 + C_u_v_t_uv*(-2.0*logtuv_div_theta_sq +inv_theta_t2m2[n]*t_u_log_t_v_log/t_uv)*log_umv_opo
                                                 +C_uvt_log_umv*log(log_u_log_v)*op_theta_tuv*o_div_uv
                                                 +C_uvt_log_umv*(t_uv_pow_minv_theta-(op_theta_tuv-1)*log_tuv_tuv)*o_div_uv) /
                                                 C_u_v_theta/t_uv_pow_thetat2m2/log_umv_thetam1/op_theta_tuv*u_dbl*v_dbl;
          }
       }
-      return operands_and_partials.value(logp);
+      return ops_partials.build(logp);
     }
 
     template <typename T_u, typename T_v, typename T_theta>

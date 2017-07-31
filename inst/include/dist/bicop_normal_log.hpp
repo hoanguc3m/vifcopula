@@ -56,11 +56,11 @@ using namespace stan;
       if (!include_summand<propto, T_u, T_v, T_rho>::value)
         return 0.0;
 
-      OperandsAndPartials<T_u, T_v, T_rho> operands_and_partials(u, v, rho);
+      operands_and_partials<T_u, T_v, T_rho> ops_partials(u, v, rho);
 
-      stan::VectorView<const T_u> u_vec(u);
-      stan::VectorView<const T_v> v_vec(v);
-      stan::VectorView<const T_rho> rho_vec(rho);
+      scalar_seq_view<T_u> u_vec(u);
+      scalar_seq_view<T_v> v_vec(v);
+      scalar_seq_view<T_rho> rho_vec(rho);
       size_t N = stan::max_size(u, v, rho);
 
       stan::VectorBuilder<true, T_partials_return, T_rho> rho_value(length(rho));
@@ -98,18 +98,18 @@ using namespace stan;
 
         // Calculate the derivative when the type is var (not double)
         if (!is_constant_struct<T_u>::value)
-            operands_and_partials.d_x1[n] += - ( sq_rho[n] * inv_u_dbl[n] - rho_value[n] * inv_v_dbl[n] )/
+            ops_partials.edge1_.partials_[n] += - ( sq_rho[n] * inv_u_dbl[n] - rho_value[n] * inv_v_dbl[n] )/
                                               (1 - sq_rho[n]) / pdf(s,inv_u_dbl[n])  ;
         if (!is_constant_struct<T_v>::value)
-          operands_and_partials.d_x2[n] += - ( sq_rho[n] * inv_v_dbl[n] - rho_value[n] * inv_u_dbl[n] ) /
+          ops_partials.edge2_.partials_[n] += - ( sq_rho[n] * inv_v_dbl[n] - rho_value[n] * inv_u_dbl[n] ) /
                                               (1 - sq_rho[n]) / pdf(s,inv_v_dbl[n])  ;
         if (!is_constant_struct<T_rho>::value)
-          operands_and_partials.d_x3[n] += rho_value[n] / (1 - sq_rho[n]) +
+          ops_partials.edge3_.partials_[n] += rho_value[n] / (1 - sq_rho[n]) +
                 ((1 + sq_rho[n]) * inv_u_dbl[n] * inv_v_dbl[n] - rho_value[n] * square(inv_u_dbl[n])
                                                                - rho_value[n] * square(inv_v_dbl[n]) ) /
                 square(1 - sq_rho[n]);
       }
-      return operands_and_partials.value(logp);
+      return ops_partials.build(logp);
     }
 
     template <typename T_u, typename T_v, typename T_rho>

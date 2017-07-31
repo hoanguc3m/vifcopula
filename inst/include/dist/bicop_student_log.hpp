@@ -63,12 +63,12 @@ using namespace stan;
       if (!include_summand<propto, T_u, T_v, T_rho, T_nu>::value)
         return 0.0;
 
-      OperandsAndPartials<T_u, T_v, T_rho, T_nu> operands_and_partials(u, v, rho, nu);
+      operands_and_partials<T_u, T_v, T_rho, T_nu> ops_partials(u, v, rho, nu);
 
-      stan::VectorView<const T_u> u_vec(u);
-      stan::VectorView<const T_v> v_vec(v);
-      stan::VectorView<const T_rho> rho_vec(rho);
-      stan::VectorView<const T_nu> nu_vec(nu);
+      scalar_seq_view<T_u> u_vec(u);
+      scalar_seq_view<T_v> v_vec(v);
+      scalar_seq_view<T_rho> rho_vec(rho);
+      scalar_seq_view<T_nu> nu_vec(nu);
       size_t N = stan::max_size(u, v, rho, nu);
 
       stan::VectorBuilder<true, T_partials_return, T_rho> rho_value(length(rho));
@@ -130,16 +130,16 @@ using namespace stan;
 
          // Calculate the derivative when the type is var (not double)
          if (!is_constant_struct<T_u>::value)
-            operands_and_partials.d_x1[n] += ((nu_value[n] + 1) *  inv_u_dbl[n] / (  nu_value[n] + square(inv_u_dbl[n]) )
+            ops_partials.edge1_.partials_[n] += ((nu_value[n] + 1) *  inv_u_dbl[n] / (  nu_value[n] + square(inv_u_dbl[n]) )
                                                 - (nu_value[n] + 2) * (inv_u_dbl[n] - rho_value[n] * inv_v_dbl[n] / M_nu_rho ) ) /
                                                 pdf(s,inv_u_dbl[n]) ;
          if (!is_constant_struct<T_v>::value)
-            operands_and_partials.d_x2[n] += ((nu_value[n] + 1) *  inv_v_dbl[n] / (  nu_value[n] + square(inv_v_dbl[n]) )
+            ops_partials.edge2_.partials_[n] += ((nu_value[n] + 1) *  inv_v_dbl[n] / (  nu_value[n] + square(inv_v_dbl[n]) )
                                             - (nu_value[n] + 2) * (inv_v_dbl[n] - rho_value[n] * inv_u_dbl[n] ) / M_nu_rho ) /
                                             pdf(s,inv_v_dbl[n]);
 
          if (!is_constant_struct<T_rho>::value)
-            operands_and_partials.d_x3[n] += - (nu_value[n] + 1) * rho_value[n] / (1 - sq_rho[n]) +
+            ops_partials.edge3_.partials_[n] += - (nu_value[n] + 1) * rho_value[n] / (1 - sq_rho[n]) +
                                                (nu_value[n] + 2) * (nu_value[n] * rho_value[n] + inv_u_dbl[n] * inv_v_dbl[n] ) / M_nu_rho  ;
 
          if (!is_constant_struct<T_nu>::value) {
@@ -186,7 +186,7 @@ using namespace stan;
             const T_partials_return x2_x1_dnu = 2 * inv_v_dbl[n] * dx1_dnu;
 
 
-            operands_and_partials.d_x4[n] += (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
+            ops_partials.edge4_.partials_[n] += (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
                                             nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) +
                                             nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) +
                                             0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) -
@@ -206,7 +206,7 @@ using namespace stan;
          }
 
       }
-      return operands_and_partials.value(logp);
+      return ops_partials.build(logp);
     }
 
     template <typename T_u, typename T_v, typename T_rho, typename T_nu>

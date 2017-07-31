@@ -235,7 +235,7 @@ vi_joe <- vifcopula::vifcop(data,init,other)
 vi_joe$cop_type
 sum(vi_joe$cop_type == datagen_joe$family)
 
-init <- list(copula_type = matrix(1,n_max,1),
+init <- list(copula_type = matrix(4,n_max,1),
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)
@@ -251,7 +251,7 @@ sum(vi_joe$cop_type == datagen_joe$family)
 ###############################################################################
 
 copfamily = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
-datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily)
+datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily, family_latent = 0 )
 datagen <- datagen_mix
 data <- list(u = datagen$u,
              n_max = datagen$n_max,

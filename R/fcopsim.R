@@ -84,7 +84,7 @@ rtheta <-  function(family,tau_gen = 0.9, theta = TRUE) {
 #' sum("a")
 #' }
 #' @export
-fcopsim <- function(t_max, n_max, k_max = 1, family, gid = rep(1,n_max), structfactor = 1, seed_num = 0) {
+fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = 1, gid = rep(1,n_max), structfactor = 1, seed_num = 0) {
     set.seed(seed_num)
 
     if (! all.equal(t_max, as.integer(t_max)))
@@ -100,9 +100,14 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, gid = rep(1,n_max), structf
         stop("'family' has to be a single number or a size n_max vector")
 
     if (length(family) == 1){
-        family = matrix(family, nrow = n_max, ncol = k_max)
-        family_latent = matrix(family, nrow = k_max-1, ncol = 1)
-        }
+        if (structfactor == 1) family = matrix(family, nrow = n_max, ncol = k_max)
+        if (structfactor == 3) family = matrix(family, nrow = n_max, ncol = 1)
+    }
+    if (structfactor == 3) {
+        family_latent = matrix(family_latent, nrow = k_max-1, ncol = 1)
+    } else {
+        family_latent = NULL
+    }
 
     u <- matrix(runif(t_max*n_max),nrow=t_max, ncol = n_max)
     theta <- matrix(0,nrow=n_max, ncol = k_max)
@@ -188,12 +193,12 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, gid = rep(1,n_max), structf
 
             tau_gen = 0.65
 
-            theta[i,2] <- rtheta(family[i,gid[i]+1],tau_gen, TRUE)
-            theta2[i,2] <- rtheta(family[i,gid[i]+1],0, FALSE)
-            tau_mat[i,2] <- BiCopPar2Tau(family = family[i,gid[i]+1], par = theta[i,2], par2 = theta2[i,2] )
+            theta[i,2] <- rtheta(family[i,1],tau_gen, TRUE)
+            theta2[i,2] <- rtheta(family[i,1],0, FALSE)
+            tau_mat[i,2] <- BiCopPar2Tau(family = family[i,1], par = theta[i,2], par2 = theta2[i,2] )
 
             # group factor
-            obj <- BiCop(family = family[i,gid[i]+1], par = theta[i,2], par2 = theta2[i,2])
+            obj <- BiCop(family = family[i,1], par = theta[i,2], par2 = theta2[i,2])
             u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
 
         }

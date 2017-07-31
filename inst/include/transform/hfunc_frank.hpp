@@ -44,9 +44,9 @@ T_u hfunc_frank(const T_u& u, const T_v& v, const T_theta& theta)
                            "Random variable v", v,
                            "Scale parameter", theta);
 
-    stan::VectorView<const T_u> u_vec(u);
-    stan::VectorView<const T_v> v_vec(v);
-    stan::VectorView<const T_theta> theta_vec(theta);
+    scalar_seq_view<T_u> u_vec(u);
+    scalar_seq_view<T_v> v_vec(v);
+    scalar_seq_view<T_theta> theta_vec(theta);
     size_t N = stan::max_size(u, v, theta);
 
     T_u u_cond(u);
