@@ -9,7 +9,7 @@
 #include <ofcop.hpp>
 #include <nestfcop.hpp>
 #include <bifcop.hpp>
-#include <transform/hfunc.hpp>
+
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -216,7 +216,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(k);
             if (k > 0)
             {
-                hfunc_trans(u,mean_iv,cop_vec_new);
+                // hfunc_trans(u,mean_iv,cop_vec_new);
             }
             Rcpp::Rcout << "########################################################" << std::endl;
             Rcpp::Rcout << " VI Estimating copula layer:" << k+1 << std::endl;

@@ -6,7 +6,7 @@
 #include <omp.h>
 #include <stan/model/model_header.hpp>
 #include <dist/bicop_log.hpp>
-
+#include <transform/hfunc_stan.hpp>
 
 // [[Rcpp::depends(StanHeaders)]]
 // [[Rcpp::depends(rstan)]]
@@ -358,7 +358,13 @@ public:
         Eigen::Matrix<T__,Eigen::Dynamic,1> u_col;
         Eigen::Matrix<T__,Eigen::Dynamic,1> vg_col;
 
-        Eigen::Matrix<T__,Eigen::Dynamic,Eigen::Dynamic> u_cond;
+        // transformed parameters
+        current_statement_begin__ = 23;
+        Eigen::Matrix<T__,Eigen::Dynamic,Eigen::Dynamic> u_cond(t_max,n_max);
+        stan::math::initialize(u_cond, DUMMY_VAR__);
+        stan::math::fill(u_cond,DUMMY_VAR__);
+
+
 
         // model body
         try
@@ -495,6 +501,8 @@ public:
             } // end for
 
             // Transform the u copula data using Hfunc2 = u_cond
+            // u_cond = hfunc_trans(copula_type, u, v1, theta, theta2 );
+
 
             current_statement_begin__ = 13;
             ibase = 0;
