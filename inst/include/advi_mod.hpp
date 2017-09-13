@@ -539,6 +539,7 @@ namespace stan {
             // Write mean of posterior approximation on first output line
             cont_params_ = vi_save.mean();
             model_.write_array(rng_, cont_params_, mean_iv);
+
         	logger.info("COMPLETED.");
 
             return stan::services::error_codes::OK;

@@ -7,6 +7,8 @@
 #include <stan/model/model_header.hpp>
 #include <dist/bicop_log.hpp>
 #include <transform/hfunc_stan.hpp>
+#include <typeinfo>
+#include <ctime>
 
 // [[Rcpp::depends(StanHeaders)]]
 // [[Rcpp::depends(rstan)]]
@@ -502,7 +504,37 @@ public:
 
             // Transform the u copula data using Hfunc2 = u_cond
             // u_cond = hfunc_trans(copula_type, u, v1, theta, theta2 );
+            u_cond = u;
+            int family = 1;
+            std::cout << " type info "  << typeid(u).name()  << " "
+                      << typeid(v1).name()  << " "
+                      << typeid(theta).name()  << " "
+                      << typeid(theta2).name()  << " "
+                        << std::endl;
+            sleep(2);
+            for ( int i = 1; i <= n_max; i++)
+            {
+                // int family = copula_type[i-1];
+                for ( int t = 1; t <= t_max; t++){
+                    // stan::math::assign(get_base1_lhs(u_cond,t,i,"u_cond",1),
+                    //                    hfunc_trans( family,
+                    //                                 get_base1(u,t,i,"u",1),
+                    //                                 get_base1(v1,t,"v1",1),
+                    //                                 get_base1(theta,i,"theta",1),
+                    //                                 get_base1(theta2,i,"theta2",1) ) );
+                    std::cout << " iter " << i << " " << hfunc_trans( family,
+                                                                get_base1(u,t,i,"u",1),
+                                                                get_base1(v1,t,"v1",1),
+                                                                get_base1(theta,i,"theta",1),
+                                                                get_base1(theta2,i,"theta2",1) )
+                                << " u " << get_base1(u,t,i,"u",1) << " "
+                                << " v " << get_base1(v1,t,"v1",1) << " "
+                                << " theta " << get_base1(theta,i,"theta",1) << " "
+                                << " theta2 " << get_base1(theta2,i,"theta2",1) << " "
+                        << std::endl;
 
+                }
+            }
 
             current_statement_begin__ = 13;
             ibase = 0;
@@ -511,7 +543,7 @@ public:
                 u_col = u_cond.col(i);
                 //VectorXd::Map(&u_col[0], t_max) = u.col(i);
 
-                vg_col = v2g.col(i);
+                vg_col = v2g.col(gid[i]);
                 // VectorXd::Map(&vg_col[0], t_max) = v2g.col(i);
 
                 ibase = i+1;
@@ -763,64 +795,64 @@ public:
                 // Send a break message.
                 break;
             }
-
-            vector_d theta_latent(n_max);
-            vector_d theta2_latent(n_max);
-
-            for (int i = 0; i < (n_max); i++)
-            {
-                switch ( latent_copula_type[i] )
-                {
-                case 0:
-                    // Independent copula
-                    break;
-                case 1:
-                    // Gaussian copula
-                    theta_latent[i] = in__.scalar_lub_constrain(0,1);
-                    vars__.push_back(theta_latent[i]);
-                    k_0__++;
-                    break;
-                case 2:
-                    // Student copula
-                    theta_latent[i] = in__.scalar_lub_constrain(-(1),1);
-                    theta2_latent[i] = in__.scalar_lub_constrain(2,30);
-                    vars__.push_back(theta_latent[i]);
-                    k_0__++;
-                    vars__.push_back(theta2_latent[i]);
-                    k_0__++;
-                    break;
-                case 3:
-                    // Clayon copula
-                    theta_latent[i] = in__.scalar_lub_constrain(0,50);
-                    vars__.push_back(theta_latent[i]);
-                    k_0__++;
-                    break;
-                case 4:
-                    // Gumbel copula
-                    theta_latent[i] = in__.scalar_lub_constrain(1,30);
-                    vars__.push_back(theta_latent[i]);
-                    k_0__++;
-                    break;
-                case 5:
-                    // Frank copula
-                    theta_latent[i] = in__.scalar_lub_constrain(0,100);
-                    vars__.push_back(theta_latent[i]);
-                    k_0__++;
-                    break;
-                case 6:
-                    // Joe copula
-                    theta_latent[i] = in__.scalar_lub_constrain(1,50);
-                    vars__.push_back(theta_latent[i]);
-                    k_0__++;
-                    break;
-                default:
-                    // Code to execute if <variable> does not equal the value following any of the cases
-                    // Send a break message.
-                    break;
-                }
-            }
-
         }
+
+        vector_d theta_latent(n_max);
+        vector_d theta2_latent(n_max);
+
+        for (int i = 0; i < n_max; i++)
+        {
+            switch ( latent_copula_type[i] )
+            {
+            case 0:
+                // Independent copula
+                break;
+            case 1:
+                // Gaussian copula
+                theta_latent[i] = in__.scalar_lub_constrain(0,1);
+                vars__.push_back(theta_latent[i]);
+                k_0__++;
+                break;
+            case 2:
+                // Student copula
+                theta_latent[i] = in__.scalar_lub_constrain(-(1),1);
+                theta2_latent[i] = in__.scalar_lub_constrain(2,30);
+                vars__.push_back(theta_latent[i]);
+                k_0__++;
+                vars__.push_back(theta2_latent[i]);
+                k_0__++;
+                break;
+            case 3:
+                // Clayon copula
+                theta_latent[i] = in__.scalar_lub_constrain(0,50);
+                vars__.push_back(theta_latent[i]);
+                k_0__++;
+                break;
+            case 4:
+                // Gumbel copula
+                theta_latent[i] = in__.scalar_lub_constrain(1,30);
+                vars__.push_back(theta_latent[i]);
+                k_0__++;
+                break;
+            case 5:
+                // Frank copula
+                theta_latent[i] = in__.scalar_lub_constrain(0,100);
+                vars__.push_back(theta_latent[i]);
+                k_0__++;
+                break;
+            case 6:
+                // Joe copula
+                theta_latent[i] = in__.scalar_lub_constrain(1,50);
+                vars__.push_back(theta_latent[i]);
+                k_0__++;
+                break;
+            default:
+                // Code to execute if <variable> does not equal the value following any of the cases
+                // Send a break message.
+                break;
+            }
+        }
+
 
         if (!include_tparams__) return;
         // declare and define transformed parameters

@@ -32,6 +32,19 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 typedef boost::ecuyer1988 rng_t;
 
+extern "C" void R_init_vifcopula(DllInfo *dll) {
+    Hfunc2 = (void (*) (int* ,int* ,double* ,double* ,double* ,double* ,double* )) R_GetCCallable("VineCopula", "Hfunc2");
+
+    diffhfunc_rho_tCopula = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_rho_tCopula");
+    diffhfunc_mod = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_mod");
+
+    diffhfunc_nu_tCopula_new = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_nu_tCopula_new");
+
+    diffhfunc_v_mod = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_v_mod");
+
+    difflPDF_nu_tCopula_new = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "difflPDF_nu_tCopula_new");
+}
+
 void save_vi( std::vector<string>& model_pars,
               std::vector<double>& mean_iv_save,
               matrix_d& sample_iv_save,
@@ -181,16 +194,21 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     Rcpp::List init(init_);
     matrix_d v = Rcpp::as<matrix_d>(init["v"]);
     matrix_int copula_type = Rcpp::as<matrix_int>(init["copula_type"]);
-    matrix_int latent_copula_type(k_max-1,1);
+
     matrix_d par = Rcpp::as<matrix_d>(init["par"]);
     Rcpp::Rcout << " Init hyperparams :" << " Checked" << std::endl;
+
+    matrix_int latent_copula_type;
+    if (structfactor == 1) {
+        latent_copula_type = matrix_int::Zero(1,1);
+    }
+    if (structfactor == 2) {
+        latent_copula_type = Rcpp::as<matrix_int>(init["latent_copula_type"]);
+    }
     if (structfactor == 3) {
         latent_copula_type = Rcpp::as<matrix_int>(init["latent_copula_type"]);
     }
 
-    if (structfactor == 1) {
-        latent_copula_type = matrix_int::Zero(1,1);
-    }
 
     // Timing variables
     clock_t start = clock();
@@ -198,8 +216,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     std::vector<int> copula_type_vec(n_max);
     std::vector<int> cop_vec_new(n_max);
-    std::vector<int> latent_copula_type_vec(k_max-1);
-    std::vector<int> latent_cop_vec_new(k_max-1);
+    std::vector<int> latent_copula_type_vec;
+    std::vector<int> latent_cop_vec_new;
 
     matrix_d sample_iv(iter,n_max);
     vector_d mean_iv(n_max);
@@ -214,6 +232,9 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         {
             // copula_type_vec = copula_type.col(k);
             VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(k);
+            latent_copula_type_vec.resize(1);
+            latent_cop_vec_new.resize(1);
+
             if (k > 0)
             {
                 // hfunc_trans(u,mean_iv,cop_vec_new);
@@ -243,7 +264,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         int k = k_max;
         // copula_type_vec = copula_type.col(k);
         VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
-        VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
+        latent_copula_type_vec.resize(n_max);
+        latent_cop_vec_new.resize(n_max);
+        VectorXi::Map(&latent_copula_type_vec[0], n_max) = latent_copula_type.col(0);
+
 
         Rcpp::Rcout << "########################################################" << std::endl;
         Rcpp::Rcout << " VI Estimating bifactor copula" << std::endl;
@@ -253,6 +277,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                       iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                       adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                       copselect, core);
+
         Objbifcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
@@ -267,6 +292,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         int k = k_max;
         // copula_type_vec = copula_type.col(k);
         VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        latent_copula_type_vec.resize(k-1);
+        latent_cop_vec_new.resize(k-1);
         VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
 
         Rcpp::Rcout << "########################################################" << std::endl;

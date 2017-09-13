@@ -4,8 +4,6 @@
 #include <stan/math.hpp>
 #include <iostream>
 
-void (*difflPDF_nu_tCopula_new) (double* u, double* v, int* n, double* param, int* copula, double* out);    // deriv par2
-
 namespace vifcopula {
 
 using namespace stan::math;
@@ -145,20 +143,66 @@ using namespace stan;
                                                (nu_value[n] + 2) * (nu_value[n] * rho_value[n] + inv_u_dbl[n] * inv_v_dbl[n] ) / M_nu_rho  ;
 
          if (!is_constant_struct<T_nu>::value) {
-             double u_double = value_of(u_vec[n]);
-             double v_double = value_of(v_vec[n]);
-             double rho_double = value_of(rho_vec[n]);
-             double nu_double = value_of(nu_vec[n]);
-             int nn = 1;
-             int family = 2;
-             double dlogc_dnu;
-             double *param = new double[2];
-             param[0] = rho_double;
-             param[1] = nu_double;
+            const T_partials_return     A_arg = nud2[n];
+            const T_partials_return     B_arg = 0.5;
 
-             difflPDF_nu_tCopula_new( &u_double, &v_double, &nn, param, &family, &dlogc_dnu);
-             delete[] param;
-             ops_partials.edge4_.partials_[n] += dlogc_dnu;
+            const T_partials_return     digammaA = digamma(A_arg);
+            const T_partials_return     digammaB = digamma(B_arg);
+            const T_partials_return     digammaSum = digamma(nud2ph[n]);
+            const T_partials_return     betaAB = exp(lbeta(A_arg,B_arg));
+            const T_partials_return     nu_p_x1_sq = nu_value[n] + square(inv_u_dbl[n]);
+            const T_partials_return     nu_p_x2_sq = nu_value[n] + square(inv_v_dbl[n]);
+
+            const T_partials_return     x_max_int1 = nu_value[n]/ nu_p_x1_sq;
+            const T_partials_return     x_max_int2 = nu_value[n]/ nu_p_x2_sq;
+            T_partials_return     grad_ibeta_1 = 1;
+            T_partials_return     grad_ibeta_2 = 1;
+
+            grad_reg_inc_beta(grad_ibeta_1, grad_ibeta_2, A_arg, B_arg, x_max_int1, digammaA, digammaB, digammaSum, betaAB);
+            const T_partials_return dev_ibeta_x1 = grad_ibeta_1;
+            grad_reg_inc_beta(grad_ibeta_1, grad_ibeta_2, A_arg, B_arg, x_max_int2, digammaA, digammaB, digammaSum, betaAB);
+            const T_partials_return dev_ibeta_x2 = grad_ibeta_1;
+
+            const T_partials_return dx1_dnu = sign(inv_u_dbl[n]) /(2 * pdf(s,inv_u_dbl[n])) * (0.5* dev_ibeta_x1 +
+                                                                        pow( nu_p_x1_sq , - nud2ph[n] ) * sign(inv_u_dbl[n]) *
+                                                                        pow( nu_value[n], nud2m1[n] ) *  inv_u_dbl[n] / betaAB );
+
+//            std::cout << pdf(s,inv_u_dbl[n]) << " " << A_arg << std::endl;
+//            std::cout << B_arg << " " << nud2ph[n] << std::endl;
+//            std::cout << pow( nu_value[n], nud2m1[n] ) *  inv_u_dbl[n] << " " <<  pow( nu_p_x1_sq , - nud2ph[n] ) << std::endl;
+//            std::cout << betaAB << " " <<  dx1_dnu << std::endl;
+            // std::cout << "inbeder_out" << dev_ibeta_x1 << " " << std::endl;
+            // std::cout << "inbeder_out" << dev_ibeta_x2 << " " << std::endl;
+
+//              One problem is the imbeder, grad_reg_inc_beta
+
+            const T_partials_return dx2_dnu = sign(inv_v_dbl[n]) /(2 * pdf(s,inv_v_dbl[n])) * (0.5* dev_ibeta_x2 +
+                                                                        pow( nu_p_x2_sq , - nud2ph[n] ) * sign(inv_v_dbl[n]) *
+                                                                        pow( nu_value[n], nud2m1[n] ) *  inv_v_dbl[n] / betaAB );
+
+            const T_partials_return x1_x1_dnu = 2 * inv_u_dbl[n] * dx1_dnu;
+            const T_partials_return x1_x2_dnu = 2 * inv_u_dbl[n] * dx2_dnu;
+            const T_partials_return x2_x2_dnu = 2 * inv_v_dbl[n] * dx2_dnu;
+            const T_partials_return x2_x1_dnu = 2 * inv_v_dbl[n] * dx1_dnu;
+
+
+            ops_partials.edge4_.partials_[n] += (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
+                                            nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) +
+                                            nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) +
+                                            0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) -
+                                            nud2p1[n] *(1-sq_rho[n] + x1_x1_dnu + x2_x2_dnu - rho_value[n]*(x1_x2_dnu+x2_x1_dnu) )/ M_nu_rho -
+                                            0.5 * logM;
+//            std::cout << dev_ibeta_x1 << " " << dev_ibeta_x2 << std::endl;
+//            std::cout << dx1_dnu << " " << dx2_dnu << std::endl;
+//            std::cout << digammaSum << " " << digammaA << std::endl;
+//            std::cout << 0.5 * log_1mrhosq[n]  << " " << nud2m1[n] / nu_value[n] << std::endl;
+//            std::cout << 0.5 * log(nu_value[n]) << " " << (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
+//                                            nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) << std::endl;
+//            std::cout << (1 + x1_x1_dnu) << " " << (1 + x2_x2_dnu) << std::endl;
+//            std::cout << nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) << " " << M_nu_rho << std::endl;
+//            std::cout << nud2p1[n] << " " << (1-sq_rho[n] + (1 - rho_value[n]) * (x1_x1_dnu + x2_x2_dnu) ) << std::endl;
+//            std::cout << 0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) << " " << 0.5 * logM << std::endl;
+
          }
 
       }

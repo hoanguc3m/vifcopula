@@ -1,11 +1,10 @@
 #ifndef VIFCOPULA_HFUNC_STAN_HPP
 #define VIFCOPULA_HFUNC_STAN_HPP
 
-#include <Rcpp.h>
-using namespace Rcpp;
 #include <stan/math/rev/core.hpp>
 
 // [[Rcpp::interfaces(r,cpp)]]
+
 
 void (*Hfunc2) (int* family,int* n,double* v,double* u,double* theta,double* nu,double* out);
 
@@ -13,18 +12,6 @@ void (*diffhfunc_rho_tCopula) (double* u, double* v, int* n, double* param, int*
 void (*diffhfunc_mod) (double* u, double* v, int* n, double* param, int* copula, double* out);              // par
 void (*diffhfunc_nu_tCopula_new) (double* u, double* v, int* n, double* param, int* copula, double* out);   // par2
 void (*diffhfunc_v_mod) (double* u, double* v, int* n, double* param, int* copula, double* out);            // u2
-
-
-extern "C" void R_init_TestVine(DllInfo *dll) {
-    Hfunc2 = (void (*) (int* ,int* ,double* ,double* ,double* ,double* ,double* )) R_GetCCallable("VineCopula", "Hfunc2");
-
-    diffhfunc_rho_tCopula = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_rho_tCopula");
-    diffhfunc_mod = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_mod");
-
-    diffhfunc_nu_tCopula_new = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_nu_tCopula_new");
-
-    diffhfunc_v_mod = (void (*) (double* , double* , int* , double* , int* , double* )) R_GetCCallable("VineCopula", "diffhfunc_v_mod");
-}
 
 
 namespace vifcopula
@@ -176,7 +163,20 @@ stan::math::var hfunc_trans (int family,
 
 }
 
+// hfunc_trans with 0 vars arguement
+double hfunc_trans (int family,
+                             double u,
+                             double v,
+                             double theta,
+                             double theta2){
+    double hfunc2_val;
+    int nn = 1;
 
+    Hfunc2(&family, &nn, &u, &v, &theta, &theta2, &hfunc2_val);
+
+    return hfunc2_val;
+
+}
 
 }       // end name_sapce
 #endif // VIFCOPULA_HFUNC_HPP
