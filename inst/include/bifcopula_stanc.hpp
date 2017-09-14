@@ -7,8 +7,6 @@
 #include <stan/model/model_header.hpp>
 #include <dist/bicop_log.hpp>
 #include <transform/hfunc_stan.hpp>
-#include <typeinfo>
-#include <ctime>
 
 // [[Rcpp::depends(StanHeaders)]]
 // [[Rcpp::depends(rstan)]]
@@ -323,6 +321,9 @@ public:
         T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
         (void) DUMMY_VAR__;  // suppress unused var warning
 
+        T__ DUMMY_VAR_ZERO__(0);
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
         static int current_statement_begin__;
 
         T__ lp__(0.0);
@@ -350,12 +351,16 @@ public:
 
         Eigen::Matrix<T__,Eigen::Dynamic,1>  theta2(n_max);
         (void) theta2;  // dummy to suppress unused var warning
+        stan::math::initialize(theta2, DUMMY_VAR_ZERO__);
+        stan::math::fill(theta2,DUMMY_VAR_ZERO__);
 
         Eigen::Matrix<T__,Eigen::Dynamic,1>  theta_latent(n_max);
         (void) theta_latent;  // dummy to suppress unused var warning
 
         Eigen::Matrix<T__,Eigen::Dynamic,1>  theta2_latent(n_max);
         (void) theta2_latent;  // dummy to suppress unused var warning
+        stan::math::initialize(theta2_latent, DUMMY_VAR_ZERO__);
+        stan::math::fill(theta2_latent,DUMMY_VAR_ZERO__);
 
         Eigen::Matrix<T__,Eigen::Dynamic,1> u_col;
         Eigen::Matrix<T__,Eigen::Dynamic,1> vg_col;
@@ -363,6 +368,7 @@ public:
         // transformed parameters
         current_statement_begin__ = 23;
         Eigen::Matrix<T__,Eigen::Dynamic,Eigen::Dynamic> u_cond(t_max,n_max);
+        (void) u_cond;  // dummy to suppress unused var warning
         stan::math::initialize(u_cond, DUMMY_VAR__);
         stan::math::fill(u_cond,DUMMY_VAR__);
 
@@ -504,35 +510,16 @@ public:
 
             // Transform the u copula data using Hfunc2 = u_cond
             // u_cond = hfunc_trans(copula_type, u, v1, theta, theta2 );
-            u_cond = u;
-            int family = 1;
-            std::cout << " type info "  << typeid(u).name()  << " "
-                      << typeid(v1).name()  << " "
-                      << typeid(theta).name()  << " "
-                      << typeid(theta2).name()  << " "
-                        << std::endl;
-            sleep(2);
             for ( int i = 1; i <= n_max; i++)
             {
-                // int family = copula_type[i-1];
+                int family = copula_type[i-1];
                 for ( int t = 1; t <= t_max; t++){
-                    // stan::math::assign(get_base1_lhs(u_cond,t,i,"u_cond",1),
-                    //                    hfunc_trans( family,
-                    //                                 get_base1(u,t,i,"u",1),
-                    //                                 get_base1(v1,t,"v1",1),
-                    //                                 get_base1(theta,i,"theta",1),
-                    //                                 get_base1(theta2,i,"theta2",1) ) );
-                    std::cout << " iter " << i << " " << hfunc_trans( family,
-                                                                get_base1(u,t,i,"u",1),
-                                                                get_base1(v1,t,"v1",1),
-                                                                get_base1(theta,i,"theta",1),
-                                                                get_base1(theta2,i,"theta2",1) )
-                                << " u " << get_base1(u,t,i,"u",1) << " "
-                                << " v " << get_base1(v1,t,"v1",1) << " "
-                                << " theta " << get_base1(theta,i,"theta",1) << " "
-                                << " theta2 " << get_base1(theta2,i,"theta2",1) << " "
-                        << std::endl;
-
+                    stan::math::assign(get_base1_lhs(u_cond,t,i,"u_cond",1),
+                                       hfunc_trans( family,
+                                                    get_base1(u,t,i,"u",1),
+                                                    get_base1(v1,t,"v1",1),
+                                                    get_base1(theta,i,"theta",1),
+                                                    get_base1(theta2,i,"theta2",1) ) );
                 }
             }
 

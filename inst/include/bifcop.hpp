@@ -10,6 +10,25 @@
 #include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
 
+#include <transform/hfunc_stan.hpp>
+
+/* PRINT_ELEMENTS()
+ * - prints optional C-string optcstr followed by
+ * - all elements of the collection coll
+ * - separated by spaces
+ */
+template <class T>
+inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
+{
+    typename T::const_iterator pos;
+
+    std::cout << optcstr;
+    for (pos=coll.begin(); pos!=coll.end(); ++pos) {
+        std::cout << *pos << ' ';
+    }
+    std::cout << std::endl;
+}
+
 namespace vifcopula
 {
 
@@ -151,132 +170,152 @@ public:
             out_parameter_writer.clear(); // Clear state flags.
 
 
-            // if (copselect){
-            //     bool keepfindcop = true;
-            //     advi_cop.get_mean(vi_save, mean_iv);
-            //
-            //     while (keepfindcop){
-            //         std::cout << " Copula selection " << std::endl;
-            //         //v1_temp = mean_iv.head(t_max);
-            //         matrix_d v2g = mean_iv.head(t_max*k);
-            //         VectorXd::Map(&v1_temp[0], t_max) = mean_iv.head(t_max);
-            //
-            //         v2g.resize(t_max,k);
-            //         std::vector<double> params_r(1);
-            //         params_r[0] = 1;
-            //         std::vector<int> params_i(0);
-            //         bool save_iterations = false;
-            //         int refresh = 0;
-            //         int return_code;
-            //
-            //
-            //         for (int j = 0; j < (n_max); j++){
-            //             //v2g_temp = v2g.col(j); get the j_th latent
-            //             VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(j+1);
-            //
-            //             biuv.reset(latent_copula_type[j], v2g_temp,v1_temp);
-            //             if (biuv.check_Ind()){
-            //                 biuv.set_copula_type(0);
-            //                 latent_cop_new[j]  = 0;
-            //
-            //             } else {
-            //                 const int cop_seq_size = 5;                     // Change the number
-            //                 int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
-            //                 double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
-            //                 double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
-            //                 double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
-            //                 double lpmax = std::numeric_limits<double>::min();
-            //                 int imax=0;
-            //                 for (int i = 0; i < cop_seq_size; i++) {
-            //                     biuv.set_copula_type(cop_seq[i]);
-            //                     std::stringstream out;
-            //                     Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
-            //                     double lp = 0;
-            //                     int ret = 0;
-            //                     while (ret == 0) {
-            //                         ret = bfgs.step();
-            //                     }
-            //                     lp = bfgs.logp();
-            //                     log_cop[i] = lp;
-            //                     AIC[i] = -2 * lp + 2 * 1;
-            //                     BIC[i] = -2 * lp + log(t_max) * 1;
-            //                     if (lp > lpmax){
-            //                         lpmax = lp;
-            //                         imax = i;
-            //                     }
-            //                 }
-            //                 latent_cop_new[j] = cop_seq[imax];
-            //                 cont_params[t_max*k+j] = 0;
-            //             }
-            //
-            //
-            //         }
-            //
-            //
-            //
-            //
-            //         for (int j = 0; j < n_max; j++){
-            //             //u_temp = u.col(j);
-            //             VectorXd::Map(&u_temp[0], t_max) = u.col(j);
-            //             VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(gid[j]+1);
-            //
-            //             biuv.reset(copula_type[j], u_temp,v2g_temp);
-            //             if (biuv.check_Ind()){
-            //                 biuv.set_copula_type(0);
-            //                 cop_new[j]  = 0;
-            //
-            //             } else {
-            //                 const int cop_seq_size = 5;                     // Change the number
-            //                 int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
-            //                 double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
-            //                 double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
-            //                 double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
-            //                 double lpmax = std::numeric_limits<double>::min();
-            //                 int imax=0;
-            //                 for (int i = 0; i < cop_seq_size; i++) {
-            //                     biuv.set_copula_type(cop_seq[i]);
-            //                     std::stringstream out;
-            //                     Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
-            //                     double lp = 0;
-            //                     int ret = 0;
-            //                     while (ret == 0) {
-            //                         ret = bfgs.step();
-            //                     }
-            //                     lp = bfgs.logp();
-            //                     log_cop[i] = lp;
-            //                     AIC[i] = -2 * lp + 2 * 1;
-            //                     BIC[i] = -2 * lp + log(t_max) * 1;
-            //                     if (lp > lpmax){
-            //                         lpmax = lp;
-            //                         imax = i;
-            //                         // std::vector<double> get_param;
-            //                         // bfgs.params_r(get_param);
-            //                         //cont_params[t_max+i] = get_param[0];
-            //                     }
-            //                 }
-            //                 cop_new[j] = cop_seq[imax];
-            //                 cont_params[t_max*k+k-1+j] = 0; // Fix me
-            //             }
-            //
-            //
-            //         }
-            //         if ((cop_new != copula_type) || (latent_cop_new != latent_copula_type)){
-            //             copula_type = cop_new;
-            //             latent_copula_type = latent_cop_new;
-            //
-            //             layer_n1.set_copula_type(copula_type);
-            //             layer_n1.set_latent_copula_type(latent_copula_type);
-            //
-            //             advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
-            //                          message_writer, parameter_writer, diagnostic_writer, vi_save);
-            //
-            //         } else {
-            //             keepfindcop = false;
-            //         }
-            //
-            //     }
-            //
-            // }
+            if (copselect){
+                bool keepfindcop = true;
+                advi_cop.get_mean(vi_save, mean_iv);
+                matrix_d u_cond(t_max,n_max);
+
+                while (keepfindcop){
+                    std::cout << " Copula selection " << std::endl;
+                    //v1_temp = mean_iv.head(t_max);
+                    matrix_d v2g = mean_iv.head(t_max*k);
+                    VectorXd::Map(&v1_temp[0], t_max) = mean_iv.head(t_max);
+
+                    v2g.resize(t_max,k);
+                    std::vector<double> params_r(1);
+                    params_r[0] = 1;
+                    std::vector<int> params_i(0);
+                    bool save_iterations = false;
+                    int refresh = 0;
+                    int return_code;
+
+
+                    for (int j = 0; j < n_max; j++){
+                        //u_temp = u.col(j);
+                        VectorXd::Map(&u_temp[0], t_max) = u.col(j);
+
+                        biuv.reset(copula_type[j], u_temp,v1_temp);
+                        if (biuv.check_Ind()){
+                            biuv.set_copula_type(0);
+                            copula_type[j]  = 0;
+
+                        } else {
+                            const int cop_seq_size = 5;                     // Change the number
+                            int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
+                            double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
+                            double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
+                            double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
+                            double lpmax = std::numeric_limits<double>::min();
+                            int imax=0;
+                            for (int i = 0; i < cop_seq_size; i++) {
+                                biuv.set_copula_type(cop_seq[i]);
+                                std::stringstream out;
+                                Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
+                                double lp = 0;
+                                int ret = 0;
+                                while (ret == 0) {
+                                    ret = bfgs.step();
+                                }
+                                lp = bfgs.logp();
+
+                                log_cop[i] = lp;
+                                AIC[i] = -2 * lp + 2 * 1;
+                                BIC[i] = -2 * lp + log(t_max) * 1;
+                                if (lp > lpmax){
+                                    lpmax = lp;
+                                    imax = i;
+                                    std::vector<double> get_param;
+                                    bfgs.params_r(get_param);
+                                    cont_params[t_max*k+j] = get_param[0];
+
+                                }
+                            }
+                            cop_new[j] = cop_seq[imax];
+                            for (int t = 0; t < t_max; t++){
+                                u_cond(t,j) = hfunc_trans(cop_new[j],  u_temp[t], v1_temp[t], cont_params[t_max*k+j], 0);
+                            }
+
+
+                            cont_params[t_max*k+j] = 0;
+                        }
+
+
+                    }
+
+
+                    std::cout << " min u_cond " << min (u_cond) << std::endl;
+                    std::cout << " max u_cond " << 1 - max (u_cond) << std::endl;
+                    std::cout << " cop_new " << std::endl; PRINT_ELEMENTS(cop_new);
+                    std::cout << " latent_copula_type " << std::endl; PRINT_ELEMENTS(latent_copula_type);
+
+
+                    for (int j = 0; j < n_max; j++){
+                        //u_temp = u_cond.col(j);
+                        VectorXd::Map(&u_temp[0], t_max) = u_cond.col(j);
+                        VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(gid[j]+1);
+
+                        biuv.reset(latent_copula_type[j], u_temp,v2g_temp);
+                        if (biuv.check_Ind()){
+                            biuv.set_copula_type(0);
+                            latent_cop_new[j]  = 0;
+
+                        } else {
+                            const int cop_seq_size = 5;                     // Change the number
+                            int cop_seq[cop_seq_size] = {1, 1, 4, 5, 6};    // Choose among copula type
+                            double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
+                            double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
+                            double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
+                            double lpmax = std::numeric_limits<double>::min();
+                            int imax=0;
+                            for (int i = 0; i < cop_seq_size; i++) {
+                                biuv.set_copula_type(cop_seq[i]);
+                                std::stringstream out;
+                                Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
+                                double lp = 0;
+                                int ret = 0;
+                                while (ret == 0) {
+                                    ret = bfgs.step();
+                                }
+                                lp = bfgs.logp();
+                                log_cop[i] = lp;
+                                AIC[i] = -2 * lp + 2 * 1;
+                                BIC[i] = -2 * lp + log(t_max) * 1;
+                                if (lp > lpmax){
+                                    lpmax = lp;
+                                    imax = i;
+                                    // std::vector<double> get_param;
+                                    // bfgs.params_r(get_param);
+                                    //cont_params[t_max+i] = get_param[0];
+                                }
+                            }
+                            latent_cop_new[j] = cop_seq[imax];
+                            cont_params[t_max*k+n_max+j] = 0;
+                        }
+
+
+                    }
+
+
+                    if ((cop_new != copula_type) || (latent_cop_new != latent_copula_type)){
+                        copula_type = cop_new;
+                        latent_copula_type = latent_cop_new;
+
+                        layer_n1.set_copula_type(copula_type);
+                        layer_n1.set_latent_copula_type(latent_copula_type);
+
+                        std::cout << " copula_type " << std::endl; PRINT_ELEMENTS(copula_type);
+                        std::cout << " latent_copula_type " << std::endl; PRINT_ELEMENTS(latent_copula_type);
+
+                        advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
+                                     message_writer, parameter_writer, diagnostic_writer, vi_save);
+
+                    } else {
+                        keepfindcop = false;
+                    }
+
+                }
+
+            }
 
             max_param = layer_n1.num_params_r();
             max_param = layer_n1.num_params_r();
