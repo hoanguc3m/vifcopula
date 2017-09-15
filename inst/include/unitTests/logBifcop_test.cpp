@@ -1,6 +1,6 @@
 #include <stan/math.hpp>
 #include <gtest/gtest.h>
-#include <logBifcop.cpp>
+#include <bicop_log.cpp>
 
 #include <iostream>
 

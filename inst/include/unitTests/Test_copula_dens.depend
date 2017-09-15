@@ -26,7 +26,7 @@
 	<dist/bicop_normal_log.cpp>
 	<ostream>
 
-1490140589 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
+1505292237 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_student_log.hpp>
@@ -36,7 +36,7 @@
 	<stan/math.hpp>
 	<iostream>
 
-1490140544 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_clayton_log_test.cpp
+1505487776 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_clayton_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_clayton_log.hpp>
@@ -45,16 +45,17 @@
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.cpp
 	<stan/math.hpp>
 
-1490140555 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
+1490743349 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_frank_log.hpp>
+	<boost/random/additive_combine.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
 	<stan/math.hpp>
 
-1490140561 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
+1490743404 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_gumbel_log.hpp>
@@ -63,7 +64,7 @@
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
 	<stan/math.hpp>
 
-1490140578 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
+1490743164 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_joe_log.hpp>
@@ -264,25 +265,29 @@
 	<stan/model/indexing/index_list.hpp>
 	<vector>
 
-1490140395 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
+1505490350 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
 	<stan/math.hpp>
 
-1490140415 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
+1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
 	<stan/math.hpp>
 
-1490140426 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
+1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
 	<stan/math.hpp>
 
-1490140440 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.hpp
+1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.hpp
 	<stan/math.hpp>
 
-1490140451 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
+1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
 	<stan/math.hpp>
 
-1490140464 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
+1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
 	<stan/math.hpp>
 
-1490403264 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
+1505295909 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
 	<stan/math.hpp>
 	<iostream>
+
+1490694811 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/imbeder_test.cpp
+	<stan/math/prim/scal.hpp>
+	<gtest/gtest.h>
 

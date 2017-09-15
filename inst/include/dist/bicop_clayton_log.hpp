@@ -73,13 +73,23 @@ using namespace stan;
 
 
       for (size_t n = 0; n < N; n++) {
-        const T_partials_return u_dbl = value_of(u_vec[n]);
-        const T_partials_return v_dbl = value_of(v_vec[n]);
+        T_partials_return u_dbl = value_of(u_vec[n]);        // No const
+        T_partials_return v_dbl = value_of(v_vec[n]);        // No const
+        
+        if (u_dbl < 1e-10) { u_dbl = 1e-10;}
+        if (v_dbl < 1e-10) { v_dbl = 1e-10;}
+        if (u_dbl > 1-1e-10) { u_dbl = 1-1e-10;}
+        if (v_dbl > 1-1e-10) { v_dbl = 1-1e-10;}
+        
         const T_partials_return log_uv = log(u_dbl) + log(v_dbl);
-        const T_partials_return A_u_v_theta
-                    = pow(u_dbl,-theta_value[n]) + pow(v_dbl,-theta_value[n]) -1 ;
-        const T_partials_return A_u_v_theta_log
-                    = pow(u_dbl,-theta_value[n]) * log(u_dbl) + pow(v_dbl,-theta_value[n]) * log(v_dbl);
+        T_partials_return A_u_v_theta
+                    = pow(u_dbl,-theta_value[n]) + pow(v_dbl,-theta_value[n]) -1 ; // No const
+        // if A_u_v_theta = Inf
+        if (A_u_v_theta >  std::numeric_limits<double>::max() ){
+            A_u_v_theta = std::numeric_limits<double>::max();
+        }
+
+
         const T_partials_return log_A = log(A_u_v_theta);
 
         // Calculate the likelihood of clayton copula
@@ -95,13 +105,23 @@ using namespace stan;
 
          // Calculate the derivative when the type is var (not double)
          if (!is_constant_struct<T_u>::value)
-             ops_partials.edge1_.partials_[n] +=  - theta_p1[n] / u_dbl +  theta_value[n] * inv_theta_p2[n] * pow(u_dbl,-theta_value[n]-1)/A_u_v_theta ;
+             ops_partials.edge1_.partials_[n] +=  - theta_p1[n] / u_dbl +  theta_value[n] * inv_theta_p2[n] /u_dbl/( 1 + pow(v_dbl/u_dbl,-theta_value[n]) - pow(u_dbl,theta_value[n])  );
          if (!is_constant_struct<T_v>::value)
-           ops_partials.edge2_.partials_[n] +=  - theta_p1[n] / v_dbl +  theta_value[n] * inv_theta_p2[n] * pow(v_dbl,-theta_value[n]-1)/A_u_v_theta ;
+            ops_partials.edge2_.partials_[n] +=  - theta_p1[n] / v_dbl +  theta_value[n] * inv_theta_p2[n] /v_dbl/( 1 + pow(u_dbl/v_dbl,-theta_value[n]) - pow(v_dbl,theta_value[n])  );
+         
 
-         if (!is_constant_struct<T_theta>::value)
-           ops_partials.edge3_.partials_[n] += 1/theta_p1[n] - log_uv + log_A/ square(theta_value[n]) +
-                                                inv_theta_p2[n] * A_u_v_theta_log / A_u_v_theta ;
+         if (!is_constant_struct<T_theta>::value){
+            T_partials_return A_u_v_theta_log_div_A
+                    = (log(u_dbl) + pow(v_dbl/u_dbl,-theta_value[n]) * log(v_dbl) ) / ( 1 + pow(v_dbl/u_dbl,-theta_value[n]) - pow(u_dbl,theta_value[n])  );
+            if (A_u_v_theta_log_div_A >  std::numeric_limits<double>::max() ){
+                A_u_v_theta_log_div_A = std::max(log(v_dbl), log(v_dbl));
+            } // check maximum double 
+            ops_partials.edge3_.partials_[n] += 1/theta_p1[n] - log_uv + log_A/ square(theta_value[n]) +
+                                                inv_theta_p2[n] * A_u_v_theta_log_div_A ;
+
+         }
+
+
       }
       return ops_partials.build(logp);
     }

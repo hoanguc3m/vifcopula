@@ -243,12 +243,6 @@ public:
                     }
 
 
-                    std::cout << " min u_cond " << min (u_cond) << std::endl;
-                    std::cout << " max u_cond " << 1 - max (u_cond) << std::endl;
-                    std::cout << " cop_new " << std::endl; PRINT_ELEMENTS(cop_new);
-                    std::cout << " latent_copula_type " << std::endl; PRINT_ELEMENTS(latent_copula_type);
-
-
                     for (int j = 0; j < n_max; j++){
                         //u_temp = u_cond.col(j);
                         VectorXd::Map(&u_temp[0], t_max) = u_cond.col(j);
@@ -261,7 +255,7 @@ public:
 
                         } else {
                             const int cop_seq_size = 5;                     // Change the number
-                            int cop_seq[cop_seq_size] = {1, 1, 4, 5, 6};    // Choose among copula type
+                            int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
                             double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
                             double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
                             double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
@@ -302,9 +296,6 @@ public:
 
                         layer_n1.set_copula_type(copula_type);
                         layer_n1.set_latent_copula_type(latent_copula_type);
-
-                        std::cout << " copula_type " << std::endl; PRINT_ELEMENTS(copula_type);
-                        std::cout << " latent_copula_type " << std::endl; PRINT_ELEMENTS(latent_copula_type);
 
                         advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                      message_writer, parameter_writer, diagnostic_writer, vi_save);

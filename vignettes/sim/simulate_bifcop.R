@@ -73,6 +73,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
 vi_clayton <- vifcopula::vifcop(data,init,other)
 
 
+
 init <- list(copula_type = gauss_init,
              latent_copula_type = gauss_latent_init,
              v = datagen$v,
