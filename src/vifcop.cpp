@@ -50,10 +50,10 @@ void save_vi( std::vector<string>& model_pars,
               matrix_d& sample_iv_save,
               const vector_d& mean_iv,
               const matrix_d& sample_iv,
-              matrix_int& copula_type,
+              vector_int& copula_type,
               const std::vector<int>& copula_type_vec,
               std::vector<int>& cop_vec_new,
-              matrix_int& latent_copula_type,
+              vector_int& latent_copula_type,
               const std::vector<int>& latent_copula_type_vec,
               std::vector<int>& latent_cop_vec_new,
               int t_max, int n_max,
@@ -90,9 +90,12 @@ void save_vi( std::vector<string>& model_pars,
 
     if (copselect)
     {
-        copula_type.col(0) = VectorXi::Map(&cop_vec_new[0], n_max);
+        copula_type = VectorXi::Map(&cop_vec_new[0], n_max);
+        if (structfactor == 2){
+            latent_copula_type = VectorXi::Map(&latent_cop_vec_new[0], n_max);
+        }
         if (structfactor == 3){
-            latent_copula_type.col(0) = VectorXi::Map(&latent_cop_vec_new[0], k-1);
+            latent_copula_type = VectorXi::Map(&latent_cop_vec_new[0], k-1);
         }
 
     }
@@ -193,20 +196,20 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     // Init hyperparams
     Rcpp::List init(init_);
     matrix_d v = Rcpp::as<matrix_d>(init["v"]);
-    matrix_int copula_type = Rcpp::as<matrix_int>(init["copula_type"]);
+    vector_int copula_type = Rcpp::as<vector_int>(init["copula_type"]);
 
-    matrix_d par = Rcpp::as<matrix_d>(init["par"]);
+    vector_d par = Rcpp::as<vector_d>(init["par"]);
     Rcpp::Rcout << " Init hyperparams :" << " Checked" << std::endl;
 
-    matrix_int latent_copula_type;
+    vector_int latent_copula_type;
     if (structfactor == 1) {
-        latent_copula_type = matrix_int::Zero(1,1);
+        latent_copula_type = vector_int::Zero(1,1);
     }
     if (structfactor == 2) {
-        latent_copula_type = Rcpp::as<matrix_int>(init["latent_copula_type"]);
+        latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
     }
     if (structfactor == 3) {
-        latent_copula_type = Rcpp::as<matrix_int>(init["latent_copula_type"]);
+        latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
     }
 
 
@@ -227,23 +230,20 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     matrix_d sample_iv_save(iter,0);
     switch (structfactor)
     {
-    case 1: // multifactor copula
-        for (int k = 0; k < k_max; k++)
-        {
-            // copula_type_vec = copula_type.col(k);
-            VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(k);
+    case 1:
+    {       // One factor copula model
+
+            // copula_type_vec = copula_type;
+            VectorXi::Map(&copula_type_vec[0], n_max) = copula_type;
+
             latent_copula_type_vec.resize(1);
             latent_cop_vec_new.resize(1);
 
-            if (k > 0)
-            {
-                // hfunc_trans(u,mean_iv,cop_vec_new);
-            }
             Rcpp::Rcout << "########################################################" << std::endl;
-            Rcpp::Rcout << " VI Estimating copula layer:" << k+1 << std::endl;
+            Rcpp::Rcout << " VI Estimating copula layer: " << 1 << std::endl;
             Rcpp::Rcout << "########################################################" << std::endl;
 
-            ofcop Objfcop(u, copula_type_vec, t_max, n_max, k, base_rng,
+            ofcop Objfcop(u, copula_type_vec, t_max, n_max, k_max-1, base_rng,
                           iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                           copselect, core);
@@ -253,11 +253,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                     mean_iv, sample_iv,
                     copula_type, copula_type_vec, cop_vec_new,
                     latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
-                    t_max, n_max, k, iter, structfactor, copselect);
+                    t_max, n_max, k_max-1, iter, structfactor, copselect);
 
-
-        }
-        break;
+    }
+    break;
 
     case 2: // bifactor copula
     {
