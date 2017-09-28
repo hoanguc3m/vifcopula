@@ -155,7 +155,7 @@ sum(vi_gumbel$latent_copula_type == datagen$family_latent)
 #################################################################################
 
 datagen_frank <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                         family = 5, seed_num = 100,
+                         family = 5, family_latent = 5, seed_num = 100,
                          structfactor = 2)
 datagen <- datagen_frank
 data <- list(u = datagen$u,
@@ -175,8 +175,14 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$theta[,2], tail(vi_frank$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+pdf(file='img/FrankBifc.pdf', width = 9, height = 4.5)
+par(mfrow =c(1,2))
+par(mar=c(5,5,3,1))
+plot(datagen$theta_latent, tail(vi_frank$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_frank$mean_iv[(t_max*k_max+1):(t_max*k_max+n_max)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+abline(a= 0, b=1, col="red")
+dev.off()
 
 init <- list(copula_type = gauss_init,
              latent_copula_type = gauss_latent_init,
@@ -188,13 +194,13 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_frank <- vifcopula::vifcop(data,init,other)
-sum(vi_frank$cop_type[,1] == datagen$family[,1])
-sum(vi_frank$latent_copula_type[,1] == datagen$family_latent[,1])
+sum(vi_frank$cop_type == datagen$family)
+sum(vi_frank$latent_copula_type == datagen$family_latent)
 
 
 #################################################################################
 datagen_joe <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                       family = 6, seed_num = 100,
+                       family = 6, family_latent = 6, seed_num = 100,
                        structfactor = 2)
 datagen <- datagen_joe
 data <- list(u = datagen$u,
@@ -214,8 +220,14 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_joe <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$theta[,2], tail(vi_joe$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+pdf(file='img/JoeBifc.pdf', width = 9, height = 4.5)
+par(mfrow =c(1,2))
+par(mar=c(5,5,3,1))
+plot(datagen$theta_latent, tail(vi_joe$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_joe$mean_iv[(t_max*k_max+1):(t_max*k_max+n_max)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+abline(a= 0, b=1, col="red")
+dev.off()
 
 init <- list(copula_type = gauss_init,
              latent_copula_type = gauss_latent_init,
@@ -231,8 +243,8 @@ vi_joe <- vifcopula::vifcop(data,init,other)
 sum(vi_joe$cop_type[,1] == datagen$family[,1])
 sum(vi_joe$latent_copula_type[,1] == datagen$family_latent[,1])
 #################################################################################
-copfamily = matrix(sample(c(1,3,4,5,6),size = n_max, replace = T),ncol=1)
-latentcopfamily = matrix(sample(c(1,3,4,5,6),size = k_max-1, replace = T),ncol=1)
+copfamily = sample(c(1,3,4,5,6), size = n_max, replace = T)
+latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                        family = copfamily, family_latent = latentcopfamily,
@@ -252,12 +264,17 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_mix <- vifcopula::vifcop(data,init,other)
 
-
-plot(datagen$theta[,2], tail(vi_mix$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+pdf(file='img/MixBifc.pdf', width = 9, height = 4.5)
+par(mfrow =c(1,2))
+par(mar=c(5,5,3,1))
+plot(datagen$theta_latent, tail(vi_mix$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_mix$mean_iv[(t_max*k_max+1):(t_max*k_max+n_max)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+abline(a= 0, b=1, col="red")
+dev.off()
 
 init <- list(copula_type = gauss_init,
              latent_copula_type = gauss_latent_init,
@@ -270,8 +287,8 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_mix <- vifcopula::vifcop(data,init,other)
 
-sum(vi_mix$cop_type[,1] == datagen$family[,1])
-sum(vi_mix$latent_copula_type[,1] == datagen$family_latent[,1])
+sum(vi_mix$cop_type == datagen$family)
+sum(vi_mix$latent_copula_type == datagen$family_latent)
 
 #################################################################################
 #################################################################################

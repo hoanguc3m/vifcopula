@@ -124,7 +124,7 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
             family_latent = rep(family_latent, n_max)
         } else {
             if (length(family_latent) != n_max )
-                stop("'family' has to be a single number or a size n_max vector")
+                stop("'family_latent' has to be a single number or a size n_max vector")
         }
         if ( k_max != max(gid)+1)
             stop("'k_max' has to be max(gid)+1")

@@ -510,6 +510,7 @@ public:
 
             // Transform the u copula data using Hfunc2 = u_cond
             // u_cond = hfunc_trans(copula_type, u, v1, theta, theta2 );
+
             for ( int i = 1; i <= n_max; i++)
             {
                 int family = copula_type[i-1];
@@ -522,7 +523,6 @@ public:
                                                     get_base1(theta2,i,"theta2",1) ) );
                 }
             }
-
             current_statement_begin__ = 13;
             ibase = 0;
             for (int i = 0; i < n_max; i++)

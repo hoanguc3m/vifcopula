@@ -202,9 +202,9 @@ public:
                 // Clayon copula
                 current_statement_begin__ = 18;
                 if (jacobian__)
-                    theta = in__.scalar_lub_constrain(0,50,lp__);
+                    theta = in__.scalar_lub_constrain(0.001,30,lp__);
                 else
-                    theta = in__.scalar_lub_constrain(0,50);
+                    theta = in__.scalar_lub_constrain(0.001,30);
 
                 //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
                 lp_accum__.add(bicop_clayton_log<propto__>(u,v,theta));
@@ -341,7 +341,7 @@ public:
             break;
         case 3:
             // Clayon copula
-            theta = in__.scalar_lub_constrain(0,50);
+            theta = in__.scalar_lub_constrain(0.001,30);
             vars__.push_back(theta);
             break;
         case 4:
