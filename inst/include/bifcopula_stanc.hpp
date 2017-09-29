@@ -457,9 +457,9 @@ public:
                     // Gumbel copula
                     current_statement_begin__ = 19;
                     if (jacobian__)
-                        theta[i] = in__.scalar_lub_constrain(1,30,lp__);
+                        theta[i] = in__.scalar_lub_constrain(1,20,lp__);
                     else
-                        theta[i] = in__.scalar_lub_constrain(1,30);
+                        theta[i] = in__.scalar_lub_constrain(1,20);
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 1, Inf)); //Improper priors
                     lp_accum__.add(bicop_gumbel_log<propto__>(u_col,
@@ -604,9 +604,9 @@ public:
                     // Gumbel copula
                     current_statement_begin__ = 19;
                     if (jacobian__)
-                        theta_latent[i] = in__.scalar_lub_constrain(1,30,lp__);
+                        theta_latent[i] = in__.scalar_lub_constrain(1,20,lp__);
                     else
-                        theta_latent[i] = in__.scalar_lub_constrain(1,30);
+                        theta_latent[i] = in__.scalar_lub_constrain(1,20);
 
                     //lp_accum__.add(uniform_lpdf<propto__>(theta_latent[i], 1, Inf)); //Improper priors
                     lp_accum__.add(bicop_gumbel_log<propto__>(u_col,
@@ -761,7 +761,7 @@ public:
                 break;
             case 4:
                 // Gumbel copula
-                theta[i] = in__.scalar_lub_constrain(1,30);
+                theta[i] = in__.scalar_lub_constrain(1,20);
                 vars__.push_back(theta[i]);
                 k_0__++;
                 break;
@@ -817,7 +817,7 @@ public:
                 break;
             case 4:
                 // Gumbel copula
-                theta_latent[i] = in__.scalar_lub_constrain(1,30);
+                theta_latent[i] = in__.scalar_lub_constrain(1,20);
                 vars__.push_back(theta_latent[i]);
                 k_0__++;
                 break;

@@ -37,22 +37,22 @@ TEST(Copula_density, DISABLE_Student_copula_rho) {
         EXPECT_FLOAT_EQ(lp1adj,-1.015308);
 }
 
-TEST(Copula_density, DISABLE_Student_copula_nu) {
-    using stan::math::var;
-
-    double nu_val = 5;
-        var nu(nu_val);
-        var lp1(0.0);
-        lp1 += vifcopula::bicop_student_log<false>(0.5, 0.5, 0.8, nu);
-        double lp1val = lp1.val();
-
-        lp1.grad();
-        double lp1adj = nu.adj();
-
-
-        std::cout << lp1val << " " << lp1adj << std::endl;
-
-        EXPECT_FLOAT_EQ(lp1val,0.228148);
-        EXPECT_FLOAT_EQ(lp1adj,0.005838773);
-}
+//TEST(Copula_density, DISABLE_Student_copula_nu) {
+//    using stan::math::var;
+//
+//    double nu_val = 5;
+//        var nu(nu_val);
+//        var lp1(0.0);
+//        lp1 += vifcopula::bicop_student_log<false>(0.5, 0.5, 0.8, nu);
+//        double lp1val = lp1.val();
+//
+//        lp1.grad();
+//        double lp1adj = nu.adj();
+//
+//
+//        std::cout << lp1val << " " << lp1adj << std::endl;
+//
+//        EXPECT_FLOAT_EQ(lp1val,0.228148);
+//        EXPECT_FLOAT_EQ(lp1adj,0.005838773);
+//}
 

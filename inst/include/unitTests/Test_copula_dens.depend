@@ -26,7 +26,7 @@
 	<dist/bicop_normal_log.cpp>
 	<ostream>
 
-1505292237 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
+1506707050 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_student_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_student_log.hpp>
@@ -55,7 +55,7 @@
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.cpp
 	<stan/math.hpp>
 
-1490743404 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
+1506706999 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_gumbel_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_gumbel_log.hpp>
@@ -265,7 +265,7 @@
 	<stan/model/indexing/index_list.hpp>
 	<vector>
 
-1505490350 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
+1505492195 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
 	<stan/math.hpp>
 
 1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp

@@ -68,3 +68,36 @@ TEST(Copula_density, Gumbel_copula_theta_50) {
 
         EXPECT_FLOAT_EQ(lp1adj,-1.181053);
 }
+//
+//TEST(Copula_density, Gumbel_copula_extreme_v) {
+//    using stan::math::var;
+//
+//    double v_val = 1-1e-10;
+//        var v(v_val);
+//        var lp1(0.0);
+//        lp1 += vifcopula::bicop_gumbel_log<false>(1-1e-10, v, 20);
+//        double lp1val = lp1.val();
+//
+//        lp1.grad();
+//        double lp1adj = v.adj();
+//
+//        EXPECT_FLOAT_EQ(lp1val,24.61865);
+//        EXPECT_FLOAT_EQ(lp1adj,-2.762388e+19);
+//}
+//
+//TEST(Copula_density, Gumbel_copula_extreme_theta) {
+//    using stan::math::var;
+//
+//    double theta_val = 20;
+//        var theta(theta_val);
+//        var lp1(0.0);
+//        lp1 += vifcopula::bicop_gumbel_log<false>(1-1e-10, 1e-10, theta);
+//        double lp1val = lp1.val();
+//
+//        lp1.grad();
+//        double lp1adj = theta.adj();
+//
+//
+//        EXPECT_FLOAT_EQ(lp1val,24.61865);
+//        EXPECT_FLOAT_EQ(lp1adj,0.01992873);
+//}
