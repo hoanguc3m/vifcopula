@@ -6,6 +6,7 @@
 #include <stan/model/model_header.hpp>
 #include <dist/bicop_log.hpp>
 #include <extra/goodman_kruskal_gamma.hpp>
+#include <service/write_theta.hpp>
 
 namespace vifcopula
 {
@@ -318,53 +319,8 @@ public:
         stan::io::reader<double> in__(params_r__,params_i__);
         static const char* function__ = "vifcopula::write_array";
         (void) function__; // dummy call to supress warning
-        double theta;
-        double theta2;
 
-        // read-transform, write parameters
-        switch ( copula_type )
-        {
-        case 0:
-            // Independent copula
-            break;
-        case 1:
-            // Gaussian copula
-            theta = in__.scalar_lub_constrain(-(1),1);
-            vars__.push_back(theta);
-            break;
-        case 2:
-            // Student copula
-            theta = in__.scalar_lub_constrain(-(1),1);
-            theta2 = in__.scalar_lub_constrain(2,30);
-            vars__.push_back(theta);
-            vars__.push_back(theta2);
-            break;
-        case 3:
-            // Clayon copula
-            theta = in__.scalar_lub_constrain(0.001,30);
-            vars__.push_back(theta);
-            break;
-        case 4:
-            // Gumbel copula
-            theta = in__.scalar_lub_constrain(1,20);
-            vars__.push_back(theta);
-            break;
-        case 5:
-            // Frank copula
-            theta = in__.scalar_lub_constrain(0,100);
-            vars__.push_back(theta);
-            break;
-        case 6:
-            // Joe copula
-            theta = in__.scalar_lub_constrain(1,50);
-            vars__.push_back(theta);
-            break;
-        default:
-            // Code to execute if <variable> does not equal the value following any of the cases
-            // Send a break message.
-            break;
-        }
-
+        write_theta(copula_type, in__, vars__);
 
         if (!include_tparams__) return;
         // declare and define transformed parameters
