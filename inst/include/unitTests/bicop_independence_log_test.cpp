@@ -19,7 +19,7 @@ TEST(Copula_density, DISABLE_independence_copula) {
         double lp1adj = v.adj();
 
         EXPECT_FLOAT_EQ(lp1val,0.0);
-        EXPECT_FLOAT_EQ(lp1adj,1.0);
+        EXPECT_FLOAT_EQ(lp1adj,0.0);
 
 }
 

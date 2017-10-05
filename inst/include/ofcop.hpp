@@ -3,13 +3,12 @@
 
 #include <omp.h>
 #include <onefcopula_stanc.hpp>
-#include <bicopula_stanc.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
 #include <stan/callbacks/writer.hpp>
 #include <stan/callbacks/stream_logger.hpp>
-#include <stan/services/optimize/bfgs.hpp>
-#include <stan/optimization/bfgs.hpp>
+#include <service/bicop_select.hpp>
+#include <service/normal_meanfield_store.hpp>
 
 namespace vifcopula
 {
@@ -100,7 +99,6 @@ public:
         vector<double> v_temp(t_max);
         vector<double> u_temp(t_max);
 
-        bicopula biuv(0,u_temp,v_temp,t_max,base_rng);
 
 
         std::vector<int> gid(n_max);
@@ -134,78 +132,47 @@ public:
         std::stringstream out_diagnostic_writer;
         stan::callbacks::stream_writer diagnostic_writer(out_diagnostic_writer);
 
-        stan::variational::normal_meanfield vi_save(max_param);
+//        stan::variational::normal_meanfield vi_save(max_param);
+        vifcopula::normal_meanfield_store vi_store;
 
         advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
-                     message_writer, parameter_writer, diagnostic_writer, vi_save);
+                     message_writer, parameter_writer, diagnostic_writer, vi_store);
         out_parameter_writer.clear(); // Clear state flags.
 
 
         if (copselect){
             bool keepfindcop = true;
-            advi_cop.get_mean(vi_save, mean_iv);
+            stan::variational::normal_meanfield vi_tmp(vi_store.mu_, vi_store.omega_);
+            advi_cop.get_mean(vi_tmp, mean_iv);
+
 
             while (keepfindcop){
+                std::cout << "########################################################" << std::endl;
                 std::cout << " Copula selection " << std::endl;
+                std::cout << "########################################################" << std::endl;
                 //v_temp = mean_iv.head(t_max);
                 VectorXd::Map(&v_temp[0], t_max) = mean_iv.head(t_max);
 
-                std::vector<double> params_r(1);
-                params_r[0] = 1;
-                std::vector<int> params_i(0);
-                bool save_iterations = false;
-                int refresh = 0;
-                int return_code;
 
                 for (int j = 0; j < n_max; j++){
                     //u_temp = u.col(j);
                     VectorXd::Map(&u_temp[0], t_max) = u.col(j);
 
-                    biuv.reset(copula_type_vec[j], u_temp,v_temp);
-                    if (biuv.check_Ind()){
-                        biuv.set_copula_type(0);
-                        cop_vec_new[j]  = 0;
-
-                    } else {
-                        const int cop_seq_size = 5;                     // Change the number
-                        int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
-                        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
-                        double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
-                        double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
-                        double lpmax = std::numeric_limits<double>::min();
-                        int imax=0;
-                        for (int i = 0; i < cop_seq_size; i++) {
-                            biuv.set_copula_type(cop_seq[i]);
-                            std::stringstream out;
-                            Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
-                            double lp = 0;
-                            int ret = 0;
-                            while (ret == 0) {
-                                ret = bfgs.step();
-                            }
-                            lp = bfgs.logp();
-                            log_cop[i] = lp;
-                            AIC[i] = -2 * lp + 2 * 1;
-                            BIC[i] = -2 * lp + log(t_max) * 1;
-                            if (lp > lpmax){
-                                lpmax = lp;
-                                imax = i;
-                                // std::vector<double> get_param;
-                                // bfgs.params_r(get_param);
-                                //cont_params[t_max+i] = get_param[0];
-                            }
-                        }
-                        cop_vec_new[j] = cop_seq[imax];
-                        cont_params[t_max+j] = 0;
-                    }
+                    std::vector<double> params_out(2);
+                    cop_vec_new[j] = bicop_select(u_temp, v_temp, t_max,params_out, base_rng);
+                    // cont_params[t_max+j] = 0;
 
 
                 }
                 if (cop_vec_new != copula_type_vec){
                     copula_type_vec = cop_vec_new;
                     layer_n1.set_copula_type(copula_type_vec);
+                    max_param = layer_n1.num_params_r();
+                    cont_params = Eigen::VectorXd::Zero(max_param);
+                    //vi_save.resize(max_param);
+
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
-                                 message_writer, parameter_writer, diagnostic_writer, vi_save);
+                                 message_writer, parameter_writer, diagnostic_writer, vi_store);
 
                 } else {
                     keepfindcop = false;
@@ -215,6 +182,7 @@ public:
 
         }
 
+        stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
         max_param = layer_n1.num_params_r();
         sample_iv.resize(iter,max_param);
         mean_iv.resize(max_param);

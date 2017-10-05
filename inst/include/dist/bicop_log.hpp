@@ -15,11 +15,13 @@ namespace vifcopula {
 using namespace stan::math;
 using namespace stan;
 
-template <bool propto__, bool jacobian__, typename T__, typename Tu__>
+template <bool propto__, bool jacobian__,
+                typename Tu__, typename Tv__,typename T__ >
+
 void bicop_log_add(int i,
     const std::vector<int>& copula_type,
     Eigen::Matrix<Tu__,Eigen::Dynamic,1>& u,
-    Eigen::Matrix<T__,Eigen::Dynamic,1>&  v,
+    Eigen::Matrix<Tv__,Eigen::Dynamic,1>&  v,
     Eigen::Matrix<T__,Eigen::Dynamic,1>& theta,
     Eigen::Matrix<T__,Eigen::Dynamic,1>&  theta2,
     T__& lp__,

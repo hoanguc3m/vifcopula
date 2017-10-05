@@ -4,6 +4,8 @@ install_github("hoanguc3m/vifcopula")
 library(vifcopula)
 t_max = 1000
 n_max = 100
+gauss_init <- matrix(1, nrow = n_max, ncol = 1)
+
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1, seed_num = 0)
 datagen <- datagen_gauss
 data <- list(u = datagen$u,
@@ -32,7 +34,7 @@ plot(datagen$theta, vi_gauss$mean_iv[(t_max+1):(t_max+n_max)] , xlab = expressio
 abline(a= 0, b=1, col="red")
 dev.off()
 
-gauss_init <- matrix(1, nrow = n_max, ncol = 1)
+
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
               eval_elbo = 50, adapt_bool = T, adapt_val = 1,
@@ -234,7 +236,7 @@ plot(datagen$theta, vi_joe$mean_iv[(t_max+1):(t_max+n_max)], xlab = expression(t
 abline(a= 0, b=1, col="red")
 dev.off()
 
-init <- list(copula_type = gauss_init,
+init <- list(copula_type = copfamily,
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)
@@ -262,6 +264,7 @@ sum(vi_joe$cop_type == datagen_joe$family)
 ###############################################################################
 
 copfamily = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
+copfamily1 = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily, family_latent = 0 )
 datagen <- datagen_mix
 data <- list(u = datagen$u,
@@ -270,7 +273,7 @@ data <- list(u = datagen$u,
              k_max = datagen$k_max,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
-init <- list(copula_type = gauss_init,
+init <- list(copula_type = copfamily1,
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)

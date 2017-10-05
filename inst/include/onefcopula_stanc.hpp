@@ -261,6 +261,19 @@ public:
 
     void set_copula_type(std::vector<int> copula_type_) {
         copula_type = copula_type_;
+
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        num_params_r__ += t_max;
+        num_params_r__ += n_max;
+        for (int i = 0; i < n_max; i++) {
+            if (copula_type[i] == 0) {
+                num_params_r__ --;
+            }
+            else if (copula_type[i] == 2) {
+                num_params_r__ ++;
+            }
+        }
     }
 
 
@@ -310,9 +323,8 @@ public:
             for (int i = 0; i < n_max; i++) {
                 current_statement_begin__ = 14;
                 u_col = u.col(i);
-                //bicop_log_add<propto__,jacobian__,T__>(i,copula_type, u_col, v, theta, theta2, lp__);
 
-                bicop_log_add<propto__,jacobian__,T__, double>(i, copula_type, u_col, v, theta, theta2, lp__, lp_accum__, in__);
+                bicop_log_add<propto__,jacobian__,double, T__, T__>(i, copula_type, u_col, v, theta, theta2, lp__, lp_accum__, in__);
 
 
             }

@@ -316,19 +316,21 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
 
 
-    Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
-                                     Rcpp::Named("sample_iv") = sample_iv_save,
-                                     Rcpp::Named("cop_type") = copula_type,
-                                     Rcpp::Named("model_pars") = model_pars,
-                                     Rcpp::Named("u") = u,
-                                     Rcpp::Named("gid") = gid,
-                                     Rcpp::Named("latent_copula_type") = latent_copula_type
-                                    );
-
     end = clock();
     double delta_t = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 
     std::cout << "It took " << delta_t << " seconds.\n"  <<  std::endl;
+
+    Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
+                                    Rcpp::Named("sample_iv") = sample_iv_save,
+                                    Rcpp::Named("cop_type") = copula_type,
+                                    Rcpp::Named("model_pars") = model_pars,
+                                    Rcpp::Named("u") = u,
+                                    Rcpp::Named("gid") = gid,
+                                    Rcpp::Named("latent_copula_type") = latent_copula_type,
+                                    Rcpp::Named("time") = delta_t
+    );
+
 
     return holder;
     PutRNGstate();

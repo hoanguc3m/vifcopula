@@ -149,10 +149,10 @@ public:
         // model parameters
         stan::io::reader<T__> in__(params_r__,params_i__);
 
-        T__  theta;
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  theta(1);
         (void) theta;  // dummy to suppress unused var warning
 
-        T__  theta2;
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  theta2(1);
         (void) theta2;  // dummy to suppress unused var warning
 
 
@@ -161,93 +161,103 @@ public:
         {
 
             current_statement_begin__ = 14;
+            // initial
+            int i = 0;
+            std::vector<int> cop_vec(1);
+            cop_vec[0] = copula_type;
+            Eigen::Matrix<double,Eigen::Dynamic,1> u_temp(t_max);
+            Eigen::Matrix<double,Eigen::Dynamic,1> v_temp(t_max);
+            u_temp = Eigen::VectorXd::Map(&u[0], t_max);
+            v_temp = Eigen::VectorXd::Map(&v[0], t_max);
 
-            switch ( copula_type )
-            {
-            case 0:
-                // Independence copula
-                current_statement_begin__ = 15;
-                //theta = in__.scalar_constrain();
-                theta = 0;
-                lp_accum__.add(bicop_independence_log<propto__>(u,v));
-                break;
-            case 1:
-                // Gaussian copula
-                current_statement_begin__ = 16;
-                if (jacobian__)
-                    theta = in__.scalar_lub_constrain(-(1),1,lp__);
-                else
-                    theta = in__.scalar_lub_constrain(-(1),1);
+            bicop_log_add<propto__,jacobian__,double, double, T__>(i, cop_vec, u_temp, v_temp, theta, theta2, lp__, lp_accum__, in__);
 
-                lp_accum__.add(uniform_lpdf(theta, -(1), 1));
-                lp_accum__.add(bicop_normal_log<propto__>(u,v,theta));
-                break;
-            case 2:
-                // Student copula
-                current_statement_begin__ = 17;
-                if (jacobian__)
-                    theta = in__.scalar_lub_constrain(-(1),1,lp__);
-                else
-                    theta = in__.scalar_lub_constrain(-(1),1);
-
-
-                if (jacobian__)
-                    theta2 = in__.scalar_lub_constrain(2,30,lp__);
-                else
-                    theta2 = in__.scalar_lub_constrain(2,30);
-
-                lp_accum__.add(uniform_lpdf(theta, -(1), 1));
-                lp_accum__.add(bicop_student_log<propto__>(u,v,theta,theta2));
-                break;
-            case 3:
-                // Clayon copula
-                current_statement_begin__ = 18;
-                if (jacobian__)
-                    theta = in__.scalar_lub_constrain(0.001,30,lp__);
-                else
-                    theta = in__.scalar_lub_constrain(0.001,30);
-
-                //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
-                lp_accum__.add(bicop_clayton_log<propto__>(u,v,theta));
-                break;
-            case 4:
-                // Gumbel copula
-                current_statement_begin__ = 19;
-                if (jacobian__)
-                    theta = in__.scalar_lub_constrain(1,20,lp__);
-                else
-                    theta = in__.scalar_lub_constrain(1,20);
-
-                //lp_accum__.add(uniform_lpdf<propto__>(theta, 1, Inf)); //Improper priors
-                lp_accum__.add(bicop_gumbel_log<propto__>(u,v,theta));
-                break;
-            case 5:
-                // Frank copula
-                current_statement_begin__ = 20;
-                if (jacobian__)
-                    theta = in__.scalar_lub_constrain(0,100,lp__);
-                else
-                    theta = in__.scalar_lub_constrain(0,100);
-
-                //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
-                lp_accum__.add(bicop_frank_log<propto__>(u,v,theta));
-                break;
-            case 6:
-                // Joe copula
-                current_statement_begin__ = 21;
-                if (jacobian__)
-                    theta = in__.scalar_lub_constrain(1,50,lp__);
-                else
-                    theta = in__.scalar_lub_constrain(1,50);
-
-                //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
-                lp_accum__.add(bicop_joe_log<propto__>(u,v,theta));
-                break;
-            default:
-                // Code to execute if <variable> does not equal the value following any of the cases
-                // Send a break message.
-                break;
-            }
+            // switch ( copula_type )
+            // {
+            // case 0:
+            //     // Independence copula
+            //     current_statement_begin__ = 15;
+            //     //theta = in__.scalar_constrain();
+            //     theta = 0;
+            //     lp_accum__.add(bicop_independence_log<propto__>(u,v));
+            //     break;
+            // case 1:
+            //     // Gaussian copula
+            //     current_statement_begin__ = 16;
+            //     if (jacobian__)
+            //         theta = in__.scalar_lub_constrain(0,1,lp__);
+            //     else
+            //         theta = in__.scalar_lub_constrain(0,1);
+            //
+            //     lp_accum__.add(uniform_lpdf(theta, 0, 1));
+            //     lp_accum__.add(bicop_normal_log<propto__>(u,v,theta));
+            //     break;
+            // case 2:
+            //     // Student copula
+            //     current_statement_begin__ = 17;
+            //     if (jacobian__)
+            //         theta = in__.scalar_lub_constrain(0,1,lp__);
+            //     else
+            //         theta = in__.scalar_lub_constrain(0,1);
+            //
+            //
+            //     if (jacobian__)
+            //         theta2 = in__.scalar_lub_constrain(2,30,lp__);
+            //     else
+            //         theta2 = in__.scalar_lub_constrain(2,30);
+            //
+            //     lp_accum__.add(uniform_lpdf(theta, 0, 1));
+            //     lp_accum__.add(bicop_student_log<propto__>(u,v,theta,theta2));
+            //     break;
+            // case 3:
+            //     // Clayon copula
+            //     current_statement_begin__ = 18;
+            //     if (jacobian__)
+            //         theta = in__.scalar_lub_constrain(0.001,30,lp__);
+            //     else
+            //         theta = in__.scalar_lub_constrain(0.001,30);
+            //
+            //     //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
+            //     lp_accum__.add(bicop_clayton_log<propto__>(u,v,theta));
+            //     break;
+            // case 4:
+            //     // Gumbel copula
+            //     current_statement_begin__ = 19;
+            //     if (jacobian__)
+            //         theta = in__.scalar_lub_constrain(1,20,lp__);
+            //     else
+            //         theta = in__.scalar_lub_constrain(1,20);
+            //
+            //     //lp_accum__.add(uniform_lpdf<propto__>(theta, 1, Inf)); //Improper priors
+            //     lp_accum__.add(bicop_gumbel_log<propto__>(u,v,theta));
+            //     break;
+            // case 5:
+            //     // Frank copula
+            //     current_statement_begin__ = 20;
+            //     if (jacobian__)
+            //         theta = in__.scalar_lub_constrain(0,20,lp__);
+            //     else
+            //         theta = in__.scalar_lub_constrain(0,20);
+            //
+            //     //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
+            //     lp_accum__.add(bicop_frank_log<propto__>(u,v,theta));
+            //     break;
+            // case 6:
+            //     // Joe copula
+            //     current_statement_begin__ = 21;
+            //     if (jacobian__)
+            //         theta = in__.scalar_lub_constrain(1,50,lp__);
+            //     else
+            //         theta = in__.scalar_lub_constrain(1,50);
+            //
+            //     //lp_accum__.add(uniform_lpdf<propto__>(theta, 0, Inf)); //Improper priors
+            //     lp_accum__.add(bicop_joe_log<propto__>(u,v,theta));
+            //     break;
+            // default:
+            //     // Code to execute if <variable> does not equal the value following any of the cases
+            //     // Send a break message.
+            //     break;
+            // }
 
 
 

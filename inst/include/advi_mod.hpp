@@ -19,6 +19,7 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <service/normal_meanfield_store.hpp>
 
 namespace stan {
 
@@ -117,7 +118,6 @@ namespace stan {
             stan::math::check_finite(function, "log_prob", log_prob);
             elbo += log_prob;
             ++i;
-            // std::cout << "iteration " << i << " " << log_prob << std::endl;
           } catch (const std::domain_error& e) {
             ++n_dropped_evaluations;
             if (n_dropped_evaluations >= n_monte_carlo_elbo_) {
@@ -132,7 +132,6 @@ namespace stan {
         }
         elbo /= n_monte_carlo_elbo_;
         elbo += variational.entropy();
-        //std::cout << "n_dropped_evaluations " << n_dropped_evaluations << " elbo " << elbo << std::endl;
         return elbo;
       }
 
@@ -413,7 +412,7 @@ namespace stan {
             ss << "  "
                << std::setw(4) << iter_counter
                << "  "
-               << std::right << std::setw(9) << std::setprecision(1)
+               << std::setw(15) << std::fixed << std::setprecision(3)
                << elbo
                << "  "
                << std::setw(16) << std::fixed << std::setprecision(3)
@@ -485,14 +484,14 @@ namespace stan {
        * @param[in,out] diagnostic_writer writer for diagnostic information
        */
       /*
-        Add vi_save as output
+        Add vi_store as output
         */
       int run(double eta, bool adapt_engaged, int adapt_iterations,
               double tol_rel_obj, int max_iterations,
               callbacks::logger& logger,
               callbacks::writer& parameter_writer,
               callbacks::writer& diagnostic_writer,
-                  Q& vi_save)
+              vifcopula::normal_meanfield_store& vi_store)
         const {
         diagnostic_writer("iter,time_in_seconds,ELBO");
 
@@ -511,7 +510,8 @@ namespace stan {
                                    tol_rel_obj, max_iterations,
                                    logger, diagnostic_writer);
 
-        vi_save = Q(variational.mu(), variational.omega());
+        vi_store.mu_ = variational.mu();
+        vi_store.omega_ = variational.omega();
 
         return stan::services::error_codes::OK;
       }

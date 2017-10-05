@@ -63,9 +63,9 @@ using namespace stan;
 
         // Calculate the derivative
         if (!is_constant_struct<T_u>::value)
-            ops_partials.edge1_.partials_[n] += 1;
+            ops_partials.edge1_.partials_[n] += 0;
         if (!is_constant_struct<T_v>::value)
-          ops_partials.edge2_.partials_[n] += 1;
+          ops_partials.edge2_.partials_[n] += 0;
       }
       return ops_partials.build(logp);
     }

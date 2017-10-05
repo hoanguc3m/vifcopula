@@ -388,7 +388,7 @@ public:
                 u_col = u.col(i);
                 //VectorXd::Map(&u_col[0], t_max) = u.col(i);
 
-                bicop_log_add<propto__,jacobian__,T__,double>(i, copula_type, u_col, v1, theta, theta2, lp__, lp_accum__, in__);
+                bicop_log_add<propto__,jacobian__,double,T__,T__>(i, copula_type, u_col, v1, theta, theta2, lp__, lp_accum__, in__);
 
                 // ibase = i+1;
                 //
@@ -537,7 +537,7 @@ public:
                 vg_col = v2g.col(gid[i]);
                 // VectorXd::Map(&vg_col[0], t_max) = v2g.col(i);
 
-                bicop_log_add<propto__,jacobian__,T__,T__>(i, latent_copula_type, u_cond_col, vg_col, theta_latent, theta2_latent, lp__, lp_accum__, in__);
+                bicop_log_add<propto__,jacobian__,T__,T__,T__>(i, latent_copula_type, u_cond_col, vg_col, theta_latent, theta2_latent, lp__, lp_accum__, in__);
 
                 // ibase = i+1;
                 //

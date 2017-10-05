@@ -7,6 +7,8 @@ t_max = 1000
 n_max = 100
 k_max = 6
 gid = sample(1:(k_max-1),n_max,replace = T)
+copfamily_rng = sample(c(1,3,4,5,6), size = n_max, replace = T)
+latentcopfamily_rng = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
 gauss_init <- matrix(1, nrow = n_max, ncol = 1)
 gauss_latent_init <- matrix(1, nrow = n_max, ncol = 1)
@@ -148,8 +150,8 @@ abline(a= 0, b=1, col="red")
 dev.off()
 
 
-init <- list(copula_type = gauss_init,
-             latent_copula_type = gauss_latent_init,
+init <- list(copula_type = copfamily_rng,
+            latent_copula_type = latentcopfamily_rng,
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)
@@ -195,8 +197,8 @@ abline(a= 0, b=1, col="red")
 dev.off()
 
 
-init <- list(copula_type = gauss_init,
-             latent_copula_type = gauss_latent_init,
+init <- list(copula_type = copfamily_rng,
+             latent_copula_type = latentcopfamily_rng,
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)
@@ -304,6 +306,9 @@ sum(vi_joe$latent_copula_type == datagen$family_latent)
 copfamily = sample(c(1,3,4,5,6), size = n_max, replace = T)
 latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
+copfamily1 = sample(c(1,3,4,5,6), size = n_max, replace = T)
+latentcopfamily1 = sample(c(1,3,4,5,6),size = n_max, replace = T)
+
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                        family = copfamily, family_latent = latentcopfamily,
                        seed_num = 100, structfactor = 2)
@@ -334,8 +339,8 @@ plot(datagen$theta, vi_mix$mean_iv[(t_max*k_max+1):(t_max*k_max+n_max)], xlab = 
 abline(a= 0, b=1, col="red")
 dev.off()
 
-init <- list(copula_type = gauss_init,
-             latent_copula_type = gauss_latent_init,
+init <- list(copula_type = copfamily1,
+             latent_copula_type = latentcopfamily1,
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)
