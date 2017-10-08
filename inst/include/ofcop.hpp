@@ -164,6 +164,10 @@ public:
 
 
                 }
+
+                // std::cout << " cop_vec_new " << std::endl;
+                // PRINT_ELEMENTS(cop_vec_new);
+                // keepfindcop = false;
                 if (cop_vec_new != copula_type_vec){
                     copula_type_vec = cop_vec_new;
                     layer_n1.set_copula_type(copula_type_vec);

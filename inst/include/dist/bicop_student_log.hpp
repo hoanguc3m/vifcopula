@@ -116,7 +116,7 @@ using namespace stan;
         static double NEGATIVE_HALF = - 0.5;
         static double POSITIVE_HALF = 0.5;
 
-        if (include_summand<propto>::value)
+        // if (include_summand<propto>::value)
           logp -= log(2.0);
 
         if (include_summand<propto, T_nu>::value)

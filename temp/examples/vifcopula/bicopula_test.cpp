@@ -1,9 +1,9 @@
-#include <bicopula.hpp>
+#include <bicopula_stanc.hpp>
 #include <advi_mod.hpp>
-#include <stan/services/optimize/do_bfgs_optimize.hpp>
 #include <stan/optimization/bfgs.hpp>
-
-#include <stan/interface_callbacks/writer/stream_writer.hpp>
+#include <stan/services/optimize/bfgs.hpp>
+#include <stan/callbacks/writer.hpp>
+#include <stan/callbacks/stream_logger.hpp>
 #include <gtest/gtest.h>
 #include <test/unit/util.hpp>
 #include <vector>
@@ -54,27 +54,29 @@ TEST(advi_test, bicopula)
     int seed  = 10;
     rng_t base_rng(seed);
 
-    int t_max  = 1000;
+    int t_max  = 5;
     int k_max  = 1;
-    vector<double> u(t_max);
-    for (int i = 0; i < t_max; i++ )
-    {
-        u[i] = uniform_rng(0.0,1.0,base_rng);
-    }
+    vector<double> u = {0.1,0.2,0.3,0.4,0.5};
+//    vector<double> u(t_max);
+//    for (int i = 0; i < t_max; i++ )
+//    {
+//        u[i] = uniform_rng(0.0,1.0,base_rng);
+//    }
 
     vector<int> gid = {1,1,1,1,1,1,1};
+    vector<double> v = {0.25,0.2,0.35,0.2,0.3};
 
-    vector<double> v(t_max);
-    for (int i = 0; i < t_max; i++ )
-    {
-        //v[i] = (u[i] + uniform_rng(0.0,1.0,base_rng))/2;
-        v[i] = uniform_rng(0.0,1.0,base_rng);
-
-    }
-    int copula_type = 5;
+//    vector<double> v(t_max);
+//    for (int i = 0; i < t_max; i++ )
+//    {
+//        //v[i] = (u[i] + uniform_rng(0.0,1.0,base_rng))/2;
+//        v[i] = uniform_rng(0.0,1.0,base_rng);
+//
+//    }
+    int copula_type = 2;
     k_max = 0;
 
-    std::vector<double> params_r(1);
+    std::vector<double> params_r(2);
     std::vector<int> params_i(0);
     std::vector<double> gradient;
     std::vector<double> hessian;
@@ -86,11 +88,12 @@ TEST(advi_test, bicopula)
     //rng_t base_rng(0);
 
     // Dummy input
-    std::cout << " copula LL :" << my_model.num_params_r() << std::endl;
+    std::cout << " copula params :" << my_model.num_params_r() << std::endl;
 
     Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(my_model.num_params_r());
     cont_params(0) = 1;
     params_r[0] = 1;
+    params_r[1] = 0;
 
     /*
           // ADVI
@@ -131,21 +134,42 @@ TEST(advi_test, bicopula)
 
     mock_callback callback;
 
-    stan::interface_callbacks::writer::stream_writer writer(out);
+    stan::callbacks::stream_writer writer(out);
     std::stringstream info_ss;
-    stan::interface_callbacks::writer::stream_writer info(info_ss);
-    return_code = stan::services::optimize::do_bfgs_optimize(my_model, bfgs, base_rng,
-                  lp, params_r, params_i,
-                  writer, info,
-                  save_iterations, refresh,
-                  callback);
+    stan::callbacks::stream_writer info(info_ss);
+//    return_code = stan::services::optimize::bfgs(my_model, bfgs, base_rng,
+//                  lp, params_r, params_i,
+//                  writer, info,
+//                  save_iterations, refresh,
+//                  callback);
+    int ret = 0;
+    while (ret == 0)
+    {
+        ret = bfgs.step();
+    }
+    lp = bfgs.logp();
+    double AIC;
+    double BIC;
+
+    if (copula_type == 2)
+    {
+        AIC = -2 * lp + 2 * 2;
+        BIC = -2 * lp + log(t_max) * 2;
+    }
+    else
+    {
+        AIC = -2 * lp + 2 * 1;
+        BIC = -2 * lp + log(t_max) * 1;
+    }
 
     std::cout << " out_stream " << info_ss.str() << std::endl;
     std::cout << " return_code " << return_code << std::endl;
     std::cout << " callback.n " << callback.n << std::endl;
     std::cout << " lp " << lp << std::endl;
+    std::cout << " AIC " << AIC << std::endl;
+    std::cout << " BIC " << BIC << std::endl;
     std::cout << " writer " << out.str() << std::endl;
-    std::cout << " Independent test " << my_model.check_Ind() << std::endl;
+//    std::cout << " Independent test " << my_model.check_Ind() << std::endl;
 }
 
 

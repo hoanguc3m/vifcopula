@@ -7,11 +7,26 @@
 #include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
 
+
+template <class T>
+inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
+{
+    typename T::const_iterator pos;
+
+    std::cout << optcstr;
+    for (pos=coll.begin(); pos!=coll.end(); ++pos) {
+        std::cout << *pos << ' ';
+    }
+    std::cout << std::endl;
+}
+
+
 namespace vifcopula{
 
 typedef boost::ecuyer1988 rng_t;
 typedef vifcopula::bicopula bicopula;
 typedef stan::optimization::BFGSLineSearch<bicopula,stan::optimization::BFGSUpdate_HInv<> > Optimizer_BFGS;
+
 
 double bicop_select(std::vector<double>& u,
                     std::vector<double>& v,
@@ -19,8 +34,9 @@ double bicop_select(std::vector<double>& u,
                     std::vector<double>& params_out,
                     rng_t& base_rng){
 
-    std::vector<double> params_r(1);
+    std::vector<double> params_r(2);
     params_r[0] = 1;
+    params_r[1] = 0;
     std::vector<int> params_i(0);
     bool save_iterations = false;
     int refresh = 0;
@@ -29,16 +45,17 @@ double bicop_select(std::vector<double>& u,
 
     bicopula biuv(1,u,v,t_max,base_rng);
 
+
     if (biuv.check_Ind()){
         //biuv.set_copula_type(0);
         return return_cop;
 
     } else {
-        const int cop_seq_size = 5;                     // Change the number
-        int cop_seq[cop_seq_size] = {1, 3, 4, 5, 6};    // Choose among copula type
-        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0};
-        double AIC[cop_seq_size] = {0, 0, 0, 0, 0};
-        double BIC[cop_seq_size] = {0, 0, 0, 0, 0};
+        const int cop_seq_size = 6;                     // Change the number
+        int cop_seq[cop_seq_size] = {1, 2, 3, 4, 5, 6};    // Choose among copula type
+        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0};
+        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0};
+        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0};
         double lpmax = std::numeric_limits<double>::min();
         double BICmin = std::numeric_limits<double>::max();
         int imax=0;
@@ -53,8 +70,15 @@ double bicop_select(std::vector<double>& u,
             }
             lp = bfgs.logp();
             log_cop[i] = lp;
-            AIC[i] = -2 * lp + 2 * 1;
-            BIC[i] = -2 * lp + log(t_max) * 1;
+
+
+            if (cop_seq[i] == 2){
+                AIC[i] = -2 * lp + 2 * 2;
+                BIC[i] = -2 * lp + log(t_max) * 2;
+            } else {
+                AIC[i] = -2 * lp + 2 * 1;
+                BIC[i] = -2 * lp + log(t_max) * 1;
+            }
             // if (lp > lpmax){
             //     lpmax = lp;
             //     imax = i;
@@ -69,7 +93,9 @@ double bicop_select(std::vector<double>& u,
                 bfgs.params_r(params_out);
                 //cont_params[t_max+i] = get_param[0];
             }
-        }
+            // std::cout << " Select cop " << cop_seq[i] << " Done " << lp << " " << params_out[0] << " "
+            //             << params_out[1] << std::endl;
+        };
         return_cop = cop_seq[imax];
 
     }

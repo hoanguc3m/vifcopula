@@ -414,12 +414,13 @@
 	<algorithm>
 	<stdint.h>
 
-1490723567 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicopula_test.cpp
-	<bicopula.hpp>
+1507301183 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicopula_test.cpp
+	<bicopula_stanc.hpp>
 	<advi_mod.hpp>
-	<stan/services/optimize/do_bfgs_optimize.hpp>
 	<stan/optimization/bfgs.hpp>
-	<stan/interface_callbacks/writer/stream_writer.hpp>
+	<stan/services/optimize/bfgs.hpp>
+	<stan/callbacks/writer.hpp>
+	<stan/callbacks/stream_logger.hpp>
 	<gtest/gtest.h>
 	<test/unit/util.hpp>
 	<vector>
@@ -497,26 +498,26 @@
 	<dist/bicop_joe_log.hpp>
 	<extra/goodman_kruskal_gamma.hpp>
 
-1490140440 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.hpp
+1507202918 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.hpp
 	<stan/math.hpp>
 
-1490140464 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
+1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
 	<stan/math.hpp>
 
-1490403264 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
+1505295909 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
 	<stan/math.hpp>
 	<iostream>
 
-1490140395 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
+1505492195 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
 	<stan/math.hpp>
 
-1490140426 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
+1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
 	<stan/math.hpp>
 
-1490743010 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
+1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
 	<stan/math.hpp>
 
-1490140451 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
+1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
 	<stan/math.hpp>
 
 1490713284 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/extra/goodman_kruskal_gamma.hpp
@@ -527,14 +528,14 @@
 	<algorithm>
 	<stdint.h>
 
-1490708032 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/advi_mod.hpp
+1507197025 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/advi_mod.hpp
 	<stan/math.hpp>
-	<stan/interface_callbacks/writer/base_writer.hpp>
-	<stan/interface_callbacks/writer/stream_writer.hpp>
+	<stan/callbacks/logger.hpp>
+	<stan/callbacks/writer.hpp>
+	<stan/callbacks/stream_writer.hpp>
 	<stan/io/dump.hpp>
-	<stan/services/io/write_iteration.hpp>
 	<stan/services/error_codes.hpp>
-	<stan/services/variational/print_progress.hpp>
+	<stan/variational/print_progress.hpp>
 	<stan/variational/families/normal_fullrank.hpp>
 	<stan/variational/families/normal_meanfield.hpp>
 	<boost/circular_buffer.hpp>
@@ -546,6 +547,7 @@
 	<vector>
 	<queue>
 	<string>
+	<service/normal_meanfield_store.hpp>
 
 1490719319 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/onefcopula_test.cpp
 	<onefcopula.hpp>
@@ -10575,4 +10577,45 @@
 
 1493371904 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_frank.hpp
 	<stan/math.hpp>
+
+1507306875 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/bicopula_stanc.hpp
+	<stan/model/model_header.hpp>
+	<dist/bicop_log.hpp>
+	<extra/goodman_kruskal_gamma.hpp>
+	<service/write_theta.hpp>
+
+1507211736 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_log.hpp
+	<dist/bicop_independence_log.hpp>
+	<dist/bicop_normal_log.hpp>
+	<dist/bicop_student_log.hpp>
+	<dist/bicop_clayton_log.hpp>
+	<dist/bicop_gumbel_log.hpp>
+	<dist/bicop_frank_log.hpp>
+	<dist/bicop_joe_log.hpp>
+
+1507043511 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/service/write_theta.hpp
+
+1507194559 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/service/normal_meanfield_store.hpp
+	<stan/math.hpp>
+
+1507304220 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/rosenbrock_test.cpp
+	<rosenbrock.hpp>
+	<advi_mod.hpp>
+	<stan/optimization/bfgs.hpp>
+	<stan/services/optimize/bfgs.hpp>
+	<stan/callbacks/writer.hpp>
+	<stan/callbacks/stream_logger.hpp>
+	<gtest/gtest.h>
+	<test/unit/util.hpp>
+	<vector>
+	<string>
+	<iostream>
+	<boost/random/additive_combine.hpp>
+	<stan/model/log_prob_propto.hpp>
+	<stan/model/grad_hess_log_prob.hpp>
+	<boost/algorithm/string.hpp>
+	<boost/lexical_cast.hpp>
+
+1507304471 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/rosenbrock.hpp
+	<stan/model/model_header.hpp>
 

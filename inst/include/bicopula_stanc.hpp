@@ -63,15 +63,15 @@ public:
 
         num_params_r__ = 0U;
         param_ranges_i__.clear();
-        num_params_r__ += 1;
-        if (copula_type == 0)
-        {
-            num_params_r__ --;
-        }
-        else if (copula_type == 2)
-        {
-            num_params_r__ ++;
-        }
+        num_params_r__ += 2;
+        // if (copula_type == 0)
+        // {
+        //     num_params_r__ --;
+        // }
+        // else if (copula_type == 2)
+        // {
+        //     num_params_r__ ++;
+        // }
     }
 
     void set_v(const vector<double>& v_){
@@ -83,6 +83,7 @@ public:
     void set_copula_type(int copula_type_){
         copula_type = copula_type_;
     }
+
     void reset(int copula_type_,
                const vector<double>& u_,
                const vector<double>& v_){
@@ -90,17 +91,6 @@ public:
         u = u_;
         v = v_;
 
-        num_params_r__ = 0U;
-        param_ranges_i__.clear();
-        num_params_r__ += 1;
-        if (copula_type == 0)
-        {
-            num_params_r__ --;
-        }
-        else if (copula_type == 2)
-        {
-            num_params_r__ ++;
-        }
     }
     // return True if the copula is independent
     bool check_Ind(void){
@@ -265,11 +255,10 @@ public:
         }
         catch (const std::exception& e)
         {
-            stan::lang::rethrow_located(e,current_statement_begin__);
+            // stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
             throw std::runtime_error(" ");
         }
-        //std::cout << " End_of_log_prob " << theta << std::endl;
 
         lp_accum__.add(lp__);
         return lp_accum__.sum();
@@ -281,9 +270,9 @@ public:
                 std::ostream* pstream = 0) const
     {
         std::vector<T_> vec_params_r;
-        vec_params_r.reserve(params_r.size());
-        for (int i = 0; i < params_r.size(); ++i)
-            vec_params_r.push_back(params_r(i));
+       vec_params_r.reserve(params_r.size());
+       for (int i = 0; i < params_r.size(); ++i)
+           vec_params_r.push_back(params_r(i));
         std::vector<int> vec_params_i;
         return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
     }

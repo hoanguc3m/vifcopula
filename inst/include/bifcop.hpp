@@ -3,26 +3,13 @@
 
 #include <omp.h>
 #include <bifcopula_stanc.hpp>
-#include <bicopula_stanc.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
 #include <stan/callbacks/stream_writer.hpp>
 #include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
-
+#include <service/bicop_select.hpp>
 #include <transform/hfunc_stan.hpp>
-
-template <class T>
-inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
-{
-    typename T::const_iterator pos;
-
-    std::cout << optcstr;
-    for (pos=coll.begin(); pos!=coll.end(); ++pos) {
-        std::cout << *pos << ' ';
-    }
-    std::cout << std::endl;
-}
 
 namespace vifcopula
 {

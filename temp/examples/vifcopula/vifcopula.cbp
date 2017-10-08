@@ -35,7 +35,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="../../../inst/include/unitTests/hfunc_test.cpp" />
+		<Unit filename="bicopula_test.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
