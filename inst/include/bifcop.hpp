@@ -104,7 +104,8 @@ public:
         void runvi( vector_d& mean_iv,
                     matrix_d& sample_iv,
                     std::vector<int>& cop_new,
-                    std::vector<int>& latent_cop_new)
+                    std::vector<int>& latent_cop_new,
+                    double& ELBO)
         {
 
             // Initiate model
@@ -223,6 +224,8 @@ public:
 
 
             stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
+            ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
+
             max_param = layer_n1.num_params_r();
             mean_iv.resize(max_param);
             sample_iv.resize(iter,max_param);

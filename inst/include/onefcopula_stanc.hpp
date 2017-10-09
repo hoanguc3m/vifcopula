@@ -405,7 +405,7 @@ public:
         int num_theta_param = num_params_r__ -  t_max;
 
         for (int i = 0; i < n_max; i++) {
-            write_theta(copula_type[i], in__, vars__);
+            write_theta(i,copula_type[i], in__, vars__);
         }
 
         if (!include_tparams__) return;

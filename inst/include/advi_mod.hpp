@@ -367,10 +367,10 @@ namespace stan {
 
         logger.info("Begin stochastic gradient ascent.");
         logger.info("  iter"
-                    "       ELBO"
-                    "   delta_ELBO_mean"
-                    "   delta_ELBO_med"
-                    "   notes ");
+                    "           ELBO"
+                    "       delta_ELBO_mean"
+                    "       delta_ELBO_med"
+                    "       notes ");
 
         // Timing variables
         clock_t start = clock();

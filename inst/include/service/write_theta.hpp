@@ -5,7 +5,7 @@
 
 namespace vifcopula{
 
-void write_theta(int copula_type,
+void write_theta(int id, int copula_type,
                 stan::io::reader<double>& in__,
                 std::vector<double>& vars__){
     double theta;
@@ -19,6 +19,11 @@ void write_theta(int copula_type,
         break;
     case 1:
         // Gaussian copula
+        // if (id == 0){
+        //     theta = in__.scalar_lub_constrain(0,1);
+        // } else {
+        //     theta = in__.scalar_lub_constrain(-1,1);
+        // }
         theta = in__.scalar_lub_constrain(0,1);
         vars__.push_back(theta);
         break;

@@ -32,12 +32,6 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 
-other <- list(seed = 126, core = 8, iter = 1000,
-    n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
-    eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-    adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
-
-
 vi_gauss <- vifcopula::vifcop(data,init,other)
 tail(vi_gauss$mean_iv,105)
 
@@ -62,6 +56,15 @@ sum(vi_gauss$cop_type == datagen_gauss$family)
 sum(vi_gauss$latent_copula_type == datagen_gauss$family_latent)
 
 
+###################
+indep_init <- matrix(1, nrow = n_max, ncol = 1)
+indep_init[10] <- indep_init[20] <- 0
+init <- list(copula_type = indep_init,
+             latent_copula_type = datagen$family_latent,
+             v = datagen$v,
+             par = datagen$theta,
+             par2 = datagen$theta2)
+vi_gauss <- vifcopula::vifcop(data,init,other)
 
 #################################################################################
 datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
@@ -245,11 +248,11 @@ vi_joe <- vifcopula::vifcop(data,init,other)
 sum(vi_joe$cop_type == datagen$family)
 sum(vi_joe$latent_copula_type == datagen$family_latent)
 #################################################################################
-copfamily = matrix(sample(c(1,3,4,5,6),size = n_max, replace = T),ncol=1)
-latentcopfamily = matrix(sample(c(1,3,4,5,6),size = k_max-1, replace = T),ncol=1)
+copfamily = matrix(sample(c(1,2,3,4,5,6),size = n_max, replace = T),ncol=1)
+latentcopfamily = matrix(sample(c(1,2,3,4,5,6),size = k_max-1, replace = T),ncol=1)
 
-copfamily1 = matrix(sample(c(1,3,4,5,6),size = n_max, replace = T),ncol=1)
-latentcopfamily1 = matrix(sample(c(1,3,4,5,6),size = k_max-1, replace = T),ncol=1)
+copfamily1 = matrix(sample(c(1,2,3,4,5,6),size = n_max, replace = T),ncol=1)
+latentcopfamily1 = matrix(sample(c(1,2,3,4,5,6),size = k_max-1, replace = T),ncol=1)
 
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                        family = copfamily, family_latent = latentcopfamily,

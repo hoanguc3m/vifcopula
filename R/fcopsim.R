@@ -31,7 +31,7 @@
 #' }
 #' @export
 rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8, theta = TRUE) {
-
+    theta_gen = 0
     if (theta){
         max_theta = BiCopTau2Par(family, tau_max, check.taus = TRUE)
         min_theta = BiCopTau2Par(family, tau_min, check.taus = TRUE)

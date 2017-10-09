@@ -90,16 +90,19 @@ double bicop_select(std::vector<double>& u,
                 BICmin = BIC[i];
                 imax = i;
                 // std::vector<double> get_param;
-                bfgs.params_r(params_out);
+                bfgs.params_r(params_r);
+                biuv.write_array(base_rng, params_r, params_i, params_out);
+
                 //cont_params[t_max+i] = get_param[0];
             }
             // std::cout << " Select cop " << cop_seq[i] << " Done " << lp << " " << params_out[0] << " "
             //             << params_out[1] << std::endl;
         };
+
         return_cop = cop_seq[imax];
 
     }
-
+    params_out.resize(2); // For theta, theta2 even we dont use it.
     return return_cop;
 }   // end func
 

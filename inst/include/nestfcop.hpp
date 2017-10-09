@@ -112,7 +112,8 @@ public:
     void runvi( vector_d& mean_iv,
                 matrix_d& sample_iv,
                 std::vector<int>& cop_new,
-                std::vector<int>& latent_cop_new)
+                std::vector<int>& latent_cop_new,
+                double& ELBO)
     {
 
         // Initiate model

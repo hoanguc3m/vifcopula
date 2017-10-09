@@ -228,6 +228,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     std::vector<string> model_pars;
     std::vector<double> mean_iv_save;
     matrix_d sample_iv_save(iter,0);
+    double ELBO_save = 0;
+
     switch (structfactor)
     {
     case 1:
@@ -247,7 +249,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                           iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                           copselect, core);
-            Objfcop.runvi(mean_iv, sample_iv, cop_vec_new);
+            Objfcop.runvi(mean_iv, sample_iv, cop_vec_new, ELBO_save);
 
             save_vi(model_pars, mean_iv_save, sample_iv_save,
                     mean_iv, sample_iv,
@@ -277,7 +279,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                       adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                       copselect, core);
 
-        Objbifcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new);
+        Objbifcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
                 mean_iv, sample_iv,
@@ -303,7 +305,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                              iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                              adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                              copselect, core);
-        Objnestfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new);
+        Objnestfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
                 mean_iv, sample_iv,
@@ -328,7 +330,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                                     Rcpp::Named("u") = u,
                                     Rcpp::Named("gid") = gid,
                                     Rcpp::Named("latent_copula_type") = latent_copula_type,
-                                    Rcpp::Named("time") = delta_t
+                                    Rcpp::Named("time") = delta_t,
+                                    Rcpp::Named("ELBO") = ELBO_save
     );
 
 

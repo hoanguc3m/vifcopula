@@ -160,7 +160,7 @@ public:
             u_temp = Eigen::VectorXd::Map(&u[0], t_max);
             v_temp = Eigen::VectorXd::Map(&v[0], t_max);
 
-            bicop_log_add<propto__,jacobian__,double, double, T__>(i, cop_vec, u_temp, v_temp, theta, theta2, lp__, lp_accum__, in__);
+            bicop_log_add<false,jacobian__,double, double, T__>(i, cop_vec, u_temp, v_temp, theta, theta2, lp__, lp_accum__, in__);
 
             // switch ( copula_type )
             // {
@@ -319,7 +319,7 @@ public:
         static const char* function__ = "vifcopula::write_array";
         (void) function__; // dummy call to supress warning
 
-        write_theta(copula_type, in__, vars__);
+        write_theta(0, copula_type, in__, vars__);
 
         if (!include_tparams__) return;
         // declare and define transformed parameters

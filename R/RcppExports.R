@@ -17,10 +17,10 @@
 #' }
 #' @export
 vifcop <- function(data_, init_, other_) {
-    .Call('_vifcopula_vifcop', PACKAGE = 'vifcopula', data_, init_, other_)
+    .Call('vifcopula_vifcop', PACKAGE = 'vifcopula', data_, init_, other_)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_vifcopula_RcppExport_registerCCallable', PACKAGE = 'vifcopula')
+    .Call('vifcopula_RcppExport_registerCCallable', PACKAGE = 'vifcopula')
 })

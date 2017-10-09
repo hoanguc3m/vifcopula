@@ -263,8 +263,8 @@ sum(vi_joe$cop_type == datagen_joe$family)
 
 ###############################################################################
 
-copfamily = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
-copfamily1 = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
+copfamily = matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
+copfamily1 = matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily, family_latent = 0 )
 datagen <- datagen_mix
 data <- list(u = datagen$u,

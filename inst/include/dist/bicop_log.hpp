@@ -40,7 +40,20 @@ void bicop_log_add(int i,
         break;
     case 1:
         // Gaussian copula
+        // if (i == 0){
+        //     if (jacobian__)
+        //         theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+        //     else
+        //         theta[i] = in__.scalar_lub_constrain(0,1);
+        // } else {
+        //     if (jacobian__)
+        //         theta[i] = in__.scalar_lub_constrain(-1,1,lp__);
+        //     else
+        //         theta[i] = in__.scalar_lub_constrain(-1,1);
+        // }
+
         if (jacobian__)
+
             theta[i] = in__.scalar_lub_constrain(0,1,lp__);
         else
             theta[i] = in__.scalar_lub_constrain(0,1);

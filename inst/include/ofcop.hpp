@@ -92,7 +92,8 @@ public:
     }
     void runvi( vector_d& mean_iv,
                 matrix_d& sample_iv,
-                std::vector<int>& cop_vec_new)
+                std::vector<int>& cop_vec_new,
+                double& ELBO)
     {
 
         // Initiate model
@@ -187,10 +188,14 @@ public:
         }
 
         stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
+        ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
+
         max_param = layer_n1.num_params_r();
         sample_iv.resize(iter,max_param);
         mean_iv.resize(max_param);
         advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
+
+
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;
 

@@ -762,11 +762,11 @@ public:
 
 
         for (int i = 0; i < (k-1); i++) {
-            write_theta(latent_copula_type[i], in__, vars__);
+            write_theta(i, latent_copula_type[i], in__, vars__);
         }
 
         for (int i = 0; i < n_max; i++) {
-            write_theta(copula_type[i], in__, vars__);
+            write_theta(i, copula_type[i], in__, vars__);
         }
 
         if (!include_tparams__) return;
