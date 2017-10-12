@@ -195,11 +195,9 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     // Init hyperparams
     Rcpp::List init(init_);
-    matrix_d v = Rcpp::as<matrix_d>(init["v"]);
+    // matrix_d v = Rcpp::as<matrix_d>(init["v"]);
+    // vector_d par = Rcpp::as<vector_d>(init["par"]);
     vector_int copula_type = Rcpp::as<vector_int>(init["copula_type"]);
-
-    vector_d par = Rcpp::as<vector_d>(init["par"]);
-    Rcpp::Rcout << " Init hyperparams :" << " Checked" << std::endl;
 
     vector_int latent_copula_type;
     if (structfactor == 1) {
@@ -211,7 +209,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     if (structfactor == 3) {
         latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
     }
-
+    Rcpp::Rcout << " Init copula types :" << " Checked" << std::endl;
 
     // Timing variables
     clock_t start = clock();
@@ -323,13 +321,20 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     std::cout << "It took " << delta_t << " seconds.\n"  <<  std::endl;
 
+    transform(gid.begin(), gid.end(), gid.begin(),
+        bind2nd(std::plus<int>(), 1));
+
     Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
                                     Rcpp::Named("sample_iv") = sample_iv_save,
                                     Rcpp::Named("cop_type") = copula_type,
-                                    Rcpp::Named("model_pars") = model_pars,
-                                    Rcpp::Named("u") = u,
-                                    Rcpp::Named("gid") = gid,
                                     Rcpp::Named("latent_copula_type") = latent_copula_type,
+                                    // Rcpp::Named("model_pars") = model_pars,
+                                    Rcpp::Named("u") = u,
+                                    Rcpp::Named("t_max") = t_max,
+                                    Rcpp::Named("n_max") = n_max,
+                                    Rcpp::Named("k_max") = k_max,
+                                    Rcpp::Named("gid") = gid,
+				                    Rcpp::Named("structfactor") = structfactor,
                                     Rcpp::Named("time") = delta_t,
                                     Rcpp::Named("ELBO") = ELBO_save
     );

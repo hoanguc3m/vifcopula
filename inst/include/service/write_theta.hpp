@@ -24,13 +24,13 @@ void write_theta(int id, int copula_type,
         // } else {
         //     theta = in__.scalar_lub_constrain(-1,1);
         // }
-        theta = in__.scalar_lub_constrain(0,1);
+        theta = in__.scalar_lub_constrain(-1,1);
         vars__.push_back(theta);
         break;
     case 2:
         // Student copula
         theta = in__.scalar_lub_constrain(0,1);
-        theta2 = in__.scalar_lub_constrain(2,30);
+        theta2 = in__.scalar_lub_constrain(2,15);
         vars__.push_back(theta);
         vars__.push_back(theta2);
         break;

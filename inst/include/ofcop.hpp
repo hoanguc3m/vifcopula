@@ -99,7 +99,7 @@ public:
         // Initiate model
         vector<double> v_temp(t_max);
         vector<double> u_temp(t_max);
-
+        double ELBO_max = std::numeric_limits<double>::min();
 
 
         std::vector<int> gid(n_max);
@@ -143,32 +143,30 @@ public:
 
         if (copselect){
             bool keepfindcop = true;
-            stan::variational::normal_meanfield vi_tmp(vi_store.mu_, vi_store.omega_);
-            advi_cop.get_mean(vi_tmp, mean_iv);
-
 
             while (keepfindcop){
                 std::cout << "########################################################" << std::endl;
                 std::cout << " Copula selection " << std::endl;
                 std::cout << "########################################################" << std::endl;
+
+                stan::variational::normal_meanfield vi_tmp(vi_store.mu_, vi_store.omega_);
+                advi_cop.get_mean(vi_tmp, mean_iv);
+
                 //v_temp = mean_iv.head(t_max);
                 VectorXd::Map(&v_temp[0], t_max) = mean_iv.head(t_max);
 
+                #ifdef _OPENMP
+                    omp_set_num_threads(core);
+                #endif
 
+                std::vector<double> params_out(2);
+                #pragma omp parallel for default(none) private(u_temp,v_temp,params_out,base_rng) shared(cop_vec_new,u,t_max,n_max)
                 for (int j = 0; j < n_max; j++){
                     //u_temp = u.col(j);
                     VectorXd::Map(&u_temp[0], t_max) = u.col(j);
-
-                    std::vector<double> params_out(2);
                     cop_vec_new[j] = bicop_select(u_temp, v_temp, t_max,params_out, base_rng);
-                    // cont_params[t_max+j] = 0;
-
-
                 }
 
-                // std::cout << " cop_vec_new " << std::endl;
-                // PRINT_ELEMENTS(cop_vec_new);
-                // keepfindcop = false;
                 if (cop_vec_new != copula_type_vec){
                     copula_type_vec = cop_vec_new;
                     layer_n1.set_copula_type(copula_type_vec);
@@ -178,6 +176,13 @@ public:
 
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
+                    stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
+                    ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
+                    if (ELBO < ELBO_max){
+                        keepfindcop = false;
+                    } else{
+                        ELBO_max = ELBO;
+                    }
 
                 } else {
                     keepfindcop = false;

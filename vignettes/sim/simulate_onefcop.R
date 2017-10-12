@@ -201,7 +201,7 @@ init <- list(copula_type = gauss_init,
              par2 = datagen$theta2)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
-              eval_elbo = 100, adapt_bool = T, adapt_val = 1,
+              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_frank <- vifcopula::vifcop(data,init,other)
 vi_frank$cop_type

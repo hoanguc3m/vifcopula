@@ -306,11 +306,71 @@ public:
     void set_copula_type(std::vector<int> copula_type_)
     {
         copula_type = copula_type_;
+
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        num_params_r__ += t_max*k;
+
+        num_params_r__ += n_max;
+        for (int i = 0; i < n_max; i++)
+        {
+            if (copula_type[i] == 0)
+            {
+                num_params_r__ --;
+            }
+            else if (copula_type[i] == 2)
+            {
+                num_params_r__ ++;
+            }
+        }
+
+        num_params_r__ += n_max;
+        for (int i = 0; i < n_max; i++)
+        {
+            if (latent_copula_type[i] == 0)
+            {
+                num_params_r__ --;
+            }
+            else if (latent_copula_type[i] == 2)
+            {
+                num_params_r__ ++;
+            }
+        }
     }
 
     void set_latent_copula_type(std::vector<int> latent_copula_type_)
     {
         latent_copula_type = latent_copula_type_;
+
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        num_params_r__ += t_max*k;
+
+        num_params_r__ += n_max;
+        for (int i = 0; i < n_max; i++)
+        {
+            if (copula_type[i] == 0)
+            {
+                num_params_r__ --;
+            }
+            else if (copula_type[i] == 2)
+            {
+                num_params_r__ ++;
+            }
+        }
+
+        num_params_r__ += n_max;
+        for (int i = 0; i < n_max; i++)
+        {
+            if (latent_copula_type[i] == 0)
+            {
+                num_params_r__ --;
+            }
+            else if (latent_copula_type[i] == 2)
+            {
+                num_params_r__ ++;
+            }
+        }
     }
 
     template <bool propto__, bool jacobian__, typename T__>

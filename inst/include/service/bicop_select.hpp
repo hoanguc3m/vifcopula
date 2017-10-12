@@ -42,6 +42,8 @@ double bicop_select(std::vector<double>& u,
     int refresh = 0;
     int return_code;
     int return_cop = 0;
+    double lpmax = std::numeric_limits<double>::min();
+    double BICmin = std::numeric_limits<double>::max();
 
     bicopula biuv(1,u,v,t_max,base_rng);
 
@@ -52,12 +54,11 @@ double bicop_select(std::vector<double>& u,
 
     } else {
         const int cop_seq_size = 6;                     // Change the number
-        int cop_seq[cop_seq_size] = {1, 2, 3, 4, 5, 6};    // Choose among copula type
+        int cop_seq[cop_seq_size] = {1, 1, 3, 4, 5, 6};    // Choose among copula type
         double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0};
         double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0};
         double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0};
-        double lpmax = std::numeric_limits<double>::min();
-        double BICmin = std::numeric_limits<double>::max();
+
         int imax=0;
         for (int i = 0; i < cop_seq_size; i++) {
             biuv.set_copula_type(cop_seq[i]);
@@ -87,6 +88,7 @@ double bicop_select(std::vector<double>& u,
             //     //cont_params[t_max+i] = get_param[0];
             // }
             if (BIC[i] < BICmin){
+                lpmax = lp;
                 BICmin = BIC[i];
                 imax = i;
                 // std::vector<double> get_param;
@@ -95,14 +97,17 @@ double bicop_select(std::vector<double>& u,
 
                 //cont_params[t_max+i] = get_param[0];
             }
-            // std::cout << " Select cop " << cop_seq[i] << " Done " << lp << " " << params_out[0] << " "
-            //             << params_out[1] << std::endl;
+
         };
 
         return_cop = cop_seq[imax];
 
     }
     params_out.resize(2); // For theta, theta2 even we dont use it.
+
+    std::cout << " Select cop " << return_cop << " Lp " << lpmax << " "
+              << " BIC " << BICmin << " " << params_out[0] << " "
+                << params_out[1] << std::endl;
     return return_cop;
 }   // end func
 

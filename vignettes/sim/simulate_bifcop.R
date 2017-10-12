@@ -7,8 +7,8 @@ t_max = 1000
 n_max = 100
 k_max = 6
 gid = sample(1:(k_max-1),n_max,replace = T)
-copfamily_rng = sample(c(1,2,3,4,5,6), size = n_max, replace = T)
-latentcopfamily_rng = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
+copfamily_rng = sample(c(1,3,4,5,6), size = n_max, replace = T)
+latentcopfamily_rng = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
 gauss_init <- matrix(1, nrow = n_max, ncol = 1)
 gauss_latent_init <- matrix(1, nrow = n_max, ncol = 1)
@@ -44,6 +44,13 @@ plot(datagen$theta, vi_gauss$mean_iv[(t_max*k_max+1):(t_max*k_max+n_max)], xlab 
 abline(a= 0, b=1, col="red")
 dev.off()
 
+hist(get_v0(vi_gauss))
+hist(get_v(vi_gauss))
+
+plot(datagen$theta_latent, get_latent_theta(vi_gauss), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, get_theta(vi_gauss), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+abline(a= 0, b=1, col="red")
 
 
 init <- list(copula_type = copfamily_rng,
@@ -71,7 +78,7 @@ init <- list(copula_type = indep_init,
              par = datagen$theta,
              par2 = datagen$theta2)
 vi_gauss <- vifcopula::vifcop(data,init,other)
-
+num_param(vi_gauss)
 #################################################################################
 
 
