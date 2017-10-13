@@ -38,18 +38,18 @@ rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8, theta = TRUE) {
 
         if (family == 1) theta_gen = runif(1, min = min_theta, max = max_theta)
         if (family == 2) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if (family == 3) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if (family == 4) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if (family == 5) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if (family == 6) theta_gen = runif(1, min = min_theta, max = max_theta)
+        if ((family == 3) | (family == 13)) theta_gen = runif(1, min = min_theta, max = max_theta)
+        if ((family == 4) | (family == 14)) theta_gen = runif(1, min = min_theta, max = max_theta)
+        if ((family == 5) | (family == 15)) theta_gen = runif(1, min = min_theta, max = max_theta)
+        if ((family == 6) | (family == 16)) theta_gen = runif(1, min = min_theta, max = max_theta)
 
     } else {
         if (family == 1) theta_gen = 0
         if (family == 2) theta_gen = runif(1, min = 2, max = 20)
-        if (family == 3) theta_gen = 0
-        if (family == 4) theta_gen = 0
-        if (family == 5) theta_gen = 0
-        if (family == 6) theta_gen = 0
+        if ((family == 3) | (family == 13)) theta_gen = 0
+        if ((family == 4) | (family == 14)) theta_gen = 0
+        if ((family == 5) | (family == 15)) theta_gen = 0
+        if ((family == 6) | (family == 16)) theta_gen = 0
     }
     theta_gen
 }
@@ -235,4 +235,58 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
           theta2_latent = theta2_latent,
           gid = gid,
           structfactor = structfactor)
+}
+
+#' @export
+comparefcop <- function(datagen,vi){
+    v0_vi = get_v0(vi)
+    v_vi = get_v(vi)
+
+
+    theta_vi = get_theta(vi)
+    theta2_vi = get_theta2(vi)
+
+    tau_vi = BiCopPar2Tau(family = vi$cop_type, par = theta_vi, par2 = theta2_vi)
+    tau = BiCopPar2Tau(family = datagen$family, par = datagen$theta, par2 = datagen$theta2)
+
+
+    latent_theta_vi = get_latent_theta(vi)
+    latent_theta2_vi = get_latent_theta2(vi)
+
+    if (vi$structfactor == 1) {
+        par(mfrow =c(1,3))
+    } else {
+        par(mfrow =c(2,3))
+    }
+
+    par(mar=c(5,5,3,1))
+
+    plot(datagen$v[,1], v0_vi, xlab = expression(v[t]), ylab = expression(v[approximated]))
+    abline(a= 0, b=1, col="red")
+
+    plot(tau, tau_vi, xlab = expression(tau[t]), ylab = expression(tau[approximated]))
+    abline(a= 0, b=1, col="red")
+
+    plot(datagen$theta, theta_vi, xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+    abline(a= 0, b=1, col="red")
+
+
+    if (vi$structfactor > 1) {
+        plot(datagen$v[,2:vi$k_max], v_vi, xlab = expression(v[t]), ylab = expression(v[approximated]))
+        abline(a= 0, b=1, col="red")
+
+        latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
+            par = latent_theta_vi, par2 = latent_theta2_vi)
+        latent_tau = BiCopPar2Tau(family = datagen$family_latent,
+            par = datagen$theta_latent, par2 = datagen$theta2_latent)
+
+
+        plot(latent_tau, latent_tau_vi, xlab = expression(tau_latent[t]), ylab = expression(tau_latent[approximated]))
+        abline(a= 0, b=1, col="red")
+
+        plot(datagen$theta_latent, latent_theta_vi, xlab = expression(theta_latent[t]), ylab = expression(theta_latent[approximated]))
+        abline(a= 0, b=1, col="red")
+
+
+    }
 }

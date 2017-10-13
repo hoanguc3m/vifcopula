@@ -9,6 +9,11 @@
 #include <dist/bicop_frank_log.hpp>
 #include <dist/bicop_joe_log.hpp>
 
+#include <dist/bicop_survival_clayton_log.hpp>
+#include <dist/bicop_survival_gumbel_log.hpp>
+#include <dist/bicop_survival_joe_log.hpp>
+
+
 
 namespace vifcopula {
 
@@ -40,23 +45,23 @@ void bicop_log_add(int i,
         break;
     case 1:
         // Gaussian copula
-        // if (i == 0){
-        //     if (jacobian__)
-        //         theta[i] = in__.scalar_lub_constrain(0,1,lp__);
-        //     else
-        //         theta[i] = in__.scalar_lub_constrain(0,1);
-        // } else {
-        //     if (jacobian__)
-        //         theta[i] = in__.scalar_lub_constrain(-1,1,lp__);
-        //     else
-        //         theta[i] = in__.scalar_lub_constrain(-1,1);
-        // }
+        if (i == 0){
+            if (jacobian__)
+                theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+            else
+                theta[i] = in__.scalar_lub_constrain(0,1);
+        } else {
+            if (jacobian__)
+                theta[i] = in__.scalar_lub_constrain(-1,1,lp__);
+            else
+                theta[i] = in__.scalar_lub_constrain(-1,1);
+        }
 
-        if (jacobian__)
-
-            theta[i] = in__.scalar_lub_constrain(-1,1,lp__);
-        else
-            theta[i] = in__.scalar_lub_constrain(-1,1);
+        // if (jacobian__)
+        //
+        //     theta[i] = in__.scalar_lub_constrain(-1,1,lp__);
+        // else
+        //     theta[i] = in__.scalar_lub_constrain(-1,1);
 
         lp_accum__.add(bicop_normal_log<propto__>(u,
             v,
@@ -110,9 +115,9 @@ void bicop_log_add(int i,
     case 5:
         // Frank copula
         if (jacobian__)
-            theta[i] = in__.scalar_lub_constrain(0,100,lp__);
+            theta[i] = in__.scalar_lub_constrain(-100,100,lp__);
         else
-            theta[i] = in__.scalar_lub_constrain(0,100);
+            theta[i] = in__.scalar_lub_constrain(-100,100);
 
         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
         lp_accum__.add(bicop_frank_log<propto__>(u,
@@ -133,6 +138,46 @@ void bicop_log_add(int i,
             get_base1(theta,ibase,"theta",1)));
 
         break;
+
+    case 13:
+        // survival Clayon copula
+
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(0.001,30,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(0.001,30);
+
+        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
+        lp_accum__.add(bicop_survival_clayton_log<propto__>(u,
+            v,
+            get_base1(theta,ibase,"theta",1)));
+        break;
+    case 14:
+        // survival Gumbel copula
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(1,15,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(1,15);
+
+        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 1, Inf)); //Improper priors
+        lp_accum__.add(bicop_survival_gumbel_log<propto__>(u,
+            v,
+            get_base1(theta,ibase,"theta",1)));
+        break;
+    case 16:
+        // survival Joe copula
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(1,30,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(1,30);
+
+        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
+        lp_accum__.add(bicop_survival_joe_log<propto__>(u,
+            v,
+            get_base1(theta,ibase,"theta",1)));
+
+        break;
+
     default:
         // Code to execute if <variable> does not equal the value following any of the cases
         // Send a break message.

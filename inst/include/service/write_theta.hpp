@@ -19,12 +19,13 @@ void write_theta(int id, int copula_type,
         break;
     case 1:
         // Gaussian copula
-        // if (id == 0){
-        //     theta = in__.scalar_lub_constrain(0,1);
-        // } else {
-        //     theta = in__.scalar_lub_constrain(-1,1);
-        // }
-        theta = in__.scalar_lub_constrain(-1,1);
+        if (id == 0){
+            theta = in__.scalar_lub_constrain(0,1);
+        } else {
+            theta = in__.scalar_lub_constrain(0,1);
+        }
+        // theta = in__.scalar_lub_constrain(-1,1);
+
         vars__.push_back(theta);
         break;
     case 2:
@@ -46,7 +47,7 @@ void write_theta(int id, int copula_type,
         break;
     case 5:
         // Frank copula
-        theta = in__.scalar_lub_constrain(0,100);
+        theta = in__.scalar_lub_constrain(-100,100);
         vars__.push_back(theta);
         break;
     case 6:
@@ -54,6 +55,23 @@ void write_theta(int id, int copula_type,
         theta = in__.scalar_lub_constrain(1,30);
         vars__.push_back(theta);
         break;
+
+    case 13:
+        // Survial Clayon copula
+        theta = in__.scalar_lub_constrain(0.001,30);
+        vars__.push_back(theta);
+        break;
+    case 14:
+        // Survial Gumbel copula
+        theta = in__.scalar_lub_constrain(1,15);
+        vars__.push_back(theta);
+        break;
+    case 16:
+        // Survial Joe copula
+        theta = in__.scalar_lub_constrain(1,30);
+        vars__.push_back(theta);
+        break;
+
     default:
         // Code to execute if <variable> does not equal the value following any of the cases
         // Send a break message.

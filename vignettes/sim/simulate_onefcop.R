@@ -293,3 +293,32 @@ abline(a= 0, b=1, col="red")
 plot(datagen$theta, vi_mix$mean_iv[(t_max+1):(t_max+n_max)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 dev.off()
+
+
+###############################################################################
+
+datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, family = 1)
+datagen <- datagen_clayton
+data <- list(u = datagen$u,
+    n_max = datagen$n_max,
+    t_max = datagen$t_max,
+    k_max = datagen$k_max,
+    gid = datagen$gid,
+    structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family,
+    v = datagen$v,
+    par = datagen$theta,
+    par2 = datagen$theta2)
+other <- list(seed = 126, core = 8, iter = 1000,
+    n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
+    eval_elbo = 100, adapt_bool = T, adapt_val = 1,
+    adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
+vi_clayton <- vifcopula::vifcop(data,init,other)
+pdf(file='img/Clayton2.pdf', width = 9, height = 4.5)
+par(mfrow =c(1,2))
+par(mar=c(5,5,3,1))
+plot(datagen$v, vi_clayton$mean_iv[1:t_max], xlab = expression(v[t]), ylab = expression(v[approximated]))
+abline(a= 0, b=1, col="red")
+plot(datagen$theta, vi_clayton$mean_iv[(t_max+1):(t_max+n_max)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+abline(a= 0, b=1, col="red")
+dev.off()

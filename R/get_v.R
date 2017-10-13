@@ -5,11 +5,15 @@ get_v0 <- function(vi) {
 
 #' @export
 get_v <- function(vi) {
-    t_max <- vi$t_max
-    n_max <- vi$n_max
-    k_max <- vi$k_max
-    v <- matrix(head(vi$mean_iv,t_max*k_max), nrow = t_max)
-    v[,2:k_max]
+    v_out <- NULL
+    if (vi$structfactor > 1){
+        t_max <- vi$t_max
+        n_max <- vi$n_max
+        k_max <- vi$k_max
+        v <- matrix(head(vi$mean_iv,t_max*k_max), nrow = t_max)
+        v_out <- v[,2:k_max]
+    }
+    v_out
 }
 
 #' @export
@@ -167,7 +171,7 @@ get_latent_theta2 <- function(vi) {
 
     count <- 0
 
-    if (structfactor == 2){	
+    if (structfactor == 2){
     	latent_theta2 <- rep(0,n_max)
         count = n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
         for (i in 1:n_max){
@@ -209,12 +213,12 @@ num_param <- function(vi) {
 	count = t_max + n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
 	}
 
-    if (structfactor == 2){	
+    if (structfactor == 2){
 	count = t_max*k_max + n_max + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0) +
 		 		n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
     }
 
-    if (structfactor == 3){	
+    if (structfactor == 3){
 	count = t_max*k_max + (k_max - 1) + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0) +
 		 		n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
     }

@@ -33,6 +33,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 
 vi_gauss <- vifcopula::vifcop(data,init,other)
+comparefcop(datagen, vi_gauss)
 tail(vi_gauss$mean_iv,105)
 
 plot(datagen$theta, tail(vi_gauss$mean_iv,100), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
