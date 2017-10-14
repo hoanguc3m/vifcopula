@@ -1,6 +1,7 @@
 #include <stan/math.hpp>
 #include <gtest/gtest.h>
 #include <dist/bicop_frank_log.hpp>
+#include <dist/bicop_r90_frank_log.hpp>
 #include <boost/random/additive_combine.hpp> // L'Ecuyer RNG
 #include <iostream>
 
@@ -99,4 +100,21 @@ TEST(Copula_density, Frank_copula_theta_50) {
     double lp1adj = theta.adj();
 //    EXPECT_FLOAT_EQ(lp1val,-39.15095);
 //    EXPECT_FLOAT_EQ(lp1adj,-0.8995);
+}
+
+TEST(Copula_density, Neg_Frank_copula_theta) {
+    using stan::math::var;
+
+    double theta_val = -1;
+        var theta(theta_val);
+        var lp1(0.0);
+        lp1 += vifcopula::bicop_r90_frank_log<false>(0.1, 0.4, theta);
+        double lp1val = lp1.val();
+
+        lp1.grad();
+        double lp1adj = theta.adj();
+
+
+        EXPECT_FLOAT_EQ(lp1val,-0.1006427);
+        EXPECT_FLOAT_EQ(lp1adj,0.12184646);
 }

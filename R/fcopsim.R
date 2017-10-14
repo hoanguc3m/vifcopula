@@ -33,23 +33,37 @@
 rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8, theta = TRUE) {
     theta_gen = 0
     if (theta){
+
+
+        if ((family == 23) | (family == 33) |
+            (family == 24) | (family == 34) |
+            (family == 26) | (family == 36) ) {
+            tau_neg_max = - abs(tau_min)
+            tau_neg_min = - abs(tau_max)
+            tau_max = tau_neg_max
+            tau_min = tau_neg_min
+        }
+
         max_theta = BiCopTau2Par(family, tau_max, check.taus = TRUE)
         min_theta = BiCopTau2Par(family, tau_min, check.taus = TRUE)
 
         if (family == 1) theta_gen = runif(1, min = min_theta, max = max_theta)
         if (family == 2) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 3) | (family == 13)) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 4) | (family == 14)) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 5) | (family == 15)) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 6) | (family == 16)) theta_gen = runif(1, min = min_theta, max = max_theta)
-
+        if ((family == 3) | (family == 13) | (family == 23) | (family == 33))
+            theta_gen = runif(1, min = min_theta, max = max_theta)
+        if ((family == 4) | (family == 14) | (family == 24) | (family == 34))
+            theta_gen = runif(1, min = min_theta, max = max_theta)
+        if (family == 5)
+            theta_gen = runif(1, min = min_theta, max = max_theta)
+        if ((family == 6) | (family == 16) | (family == 26) | (family == 36))
+            theta_gen = runif(1, min = min_theta, max = max_theta)
     } else {
         if (family == 1) theta_gen = 0
         if (family == 2) theta_gen = runif(1, min = 2, max = 20)
-        if ((family == 3) | (family == 13)) theta_gen = 0
-        if ((family == 4) | (family == 14)) theta_gen = 0
-        if ((family == 5) | (family == 15)) theta_gen = 0
-        if ((family == 6) | (family == 16)) theta_gen = 0
+        if ((family == 3) | (family == 13) | (family == 23) | (family == 33)) theta_gen = 0
+        if ((family == 4) | (family == 14) | (family == 24) | (family == 34)) theta_gen = 0
+        if (family == 5) theta_gen = 0
+        if ((family == 6) | (family == 16) | (family == 26) | (family == 36)) theta_gen = 0
     }
     theta_gen
 }

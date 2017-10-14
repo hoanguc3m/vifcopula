@@ -217,8 +217,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     std::vector<int> copula_type_vec(n_max);
     std::vector<int> cop_vec_new(n_max);
-    std::vector<int> latent_copula_type_vec;
-    std::vector<int> latent_cop_vec_new;
+    std::vector<int> latent_copula_type_vec(n_max);
+    std::vector<int> latent_cop_vec_new(n_max);
 
     matrix_d sample_iv(iter,n_max);
     vector_d mean_iv(n_max);
@@ -236,8 +236,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             // copula_type_vec = copula_type;
             VectorXi::Map(&copula_type_vec[0], n_max) = copula_type;
 
-            latent_copula_type_vec.resize(1);
-            latent_cop_vec_new.resize(1);
+            latent_copula_type_vec.resize(0);
+            latent_cop_vec_new.resize(0);
 
             Rcpp::Rcout << "########################################################" << std::endl;
             Rcpp::Rcout << " VI Estimating copula layer: " << 1 << std::endl;

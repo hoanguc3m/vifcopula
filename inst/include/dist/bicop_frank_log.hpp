@@ -63,12 +63,10 @@ using namespace stan;
 
       stan::VectorBuilder<true, T_partials_return, T_theta> theta_value(length(theta));
       stan::VectorBuilder<true, T_partials_return, T_theta> exp_theta(length(theta));
-      stan::VectorBuilder<true, T_partials_return, T_theta> log_theta(length(theta));
 
       for (size_t i = 0; i < length(theta); i++) {
         theta_value[i] = value_of(theta_vec[i]);
         exp_theta[i] = exp(theta_value[i]);
-        log_theta[i] = log(theta_value[i]);
       }
 
 
@@ -86,7 +84,7 @@ using namespace stan;
         // if (include_summand<propto>::value)
         //   logp = 0;
         if (include_summand<propto, T_theta>::value)
-            logp += log_theta[n] + log(exp_theta[n]-1);
+            logp += log(theta_value[n] * (exp_theta[n]-1));
 
 
         if (include_summand<propto, T_u, T_v, T_theta>::value)

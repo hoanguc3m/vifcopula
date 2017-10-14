@@ -53,11 +53,11 @@ double bicop_select(std::vector<double>& u,
         return return_cop;
 
     } else {
-        const int cop_seq_size = 6;                     // Change the number
-        int cop_seq[cop_seq_size] = {1, 1, 3, 4, 5, 6};    // Choose among copula type
-        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0};
-        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0};
-        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0};
+        const int cop_seq_size = 15;                     // Change the number
+        int cop_seq[cop_seq_size] = {1, 2, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36};    // Choose among copula type
+        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         int imax=0;
         for (int i = 0; i < cop_seq_size; i++) {

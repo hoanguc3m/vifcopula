@@ -263,8 +263,8 @@ sum(vi_joe$cop_type == datagen_joe$family)
 
 ###############################################################################
 
-copfamily = matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
-copfamily1 = matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
+copfamily = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
+copfamily1 = matrix(sample(c(1,3,4,5,6),size = 100, replace = T),ncol=1)
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily, family_latent = 0 )
 datagen <- datagen_mix
 data <- list(u = datagen$u,
@@ -297,7 +297,7 @@ dev.off()
 
 ###############################################################################
 
-datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, family = 1)
+datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, family = 36)
 datagen <- datagen_clayton
 data <- list(u = datagen$u,
     n_max = datagen$n_max,
@@ -311,7 +311,7 @@ init <- list(copula_type = datagen$family,
     par2 = datagen$theta2)
 other <- list(seed = 126, core = 8, iter = 1000,
     n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
-    eval_elbo = 100, adapt_bool = T, adapt_val = 1,
+    eval_elbo = 100, adapt_bool = F, adapt_val = 1,
     adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_clayton <- vifcopula::vifcop(data,init,other)
 pdf(file='img/Clayton2.pdf', width = 9, height = 4.5)

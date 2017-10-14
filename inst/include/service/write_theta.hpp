@@ -22,7 +22,7 @@ void write_theta(int id, int copula_type,
         if (id == 0){
             theta = in__.scalar_lub_constrain(0,1);
         } else {
-            theta = in__.scalar_lub_constrain(0,1);
+            theta = in__.scalar_lub_constrain(-0.9,1);
         }
         // theta = in__.scalar_lub_constrain(-1,1);
 
@@ -30,7 +30,13 @@ void write_theta(int id, int copula_type,
         break;
     case 2:
         // Student copula
-        theta = in__.scalar_lub_constrain(0,1);
+        if (id == 0){
+            theta = in__.scalar_lub_constrain(0,1);
+        } else {
+            theta = in__.scalar_lub_constrain(-0.9,1);
+        }
+
+        // theta = in__.scalar_lub_constrain(0,1);
         theta2 = in__.scalar_lub_constrain(2,15);
         vars__.push_back(theta);
         vars__.push_back(theta2);
@@ -72,6 +78,42 @@ void write_theta(int id, int copula_type,
         vars__.push_back(theta);
         break;
 
+    case 23:
+        // rotated 90 degree Clayon copula
+        theta = in__.scalar_lub_constrain(-30,-0.001);
+        vars__.push_back(theta);
+        break;
+    case 24:
+        // rotated 90 degree Gumbel copula
+        theta = in__.scalar_lub_constrain(-15,-1);
+        vars__.push_back(theta);
+        break;
+    // case 25:
+    //     // Frank copula
+    //     theta = in__.scalar_lub_constrain(-100,-0.1);
+    //     vars__.push_back(theta);
+    //     break;
+    case 26:
+        // rotated 90 degree Joe copula
+        theta = in__.scalar_lub_constrain(-30,-1);
+        vars__.push_back(theta);
+        break;
+
+    case 33:
+        // rotated 270 degree Clayon copula
+        theta = in__.scalar_lub_constrain(-30,-0.001);
+        vars__.push_back(theta);
+        break;
+    case 34:
+        // rotated 270 degree Gumbel copula
+        theta = in__.scalar_lub_constrain(-15,-1);
+        vars__.push_back(theta);
+        break;
+    case 36:
+        // rotated 270 degree Joe copula
+        theta = in__.scalar_lub_constrain(-30,-1);
+        vars__.push_back(theta);
+        break;
     default:
         // Code to execute if <variable> does not equal the value following any of the cases
         // Send a break message.

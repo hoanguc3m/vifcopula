@@ -45,10 +45,11 @@
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.cpp
 	<stan/math.hpp>
 
-1490743349 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
+1507931459 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_frank_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_frank_log.hpp>
+	<dist/bicop_r90_frank_log.hpp>
 	<boost/random/additive_combine.hpp>
 	<iostream>
 
@@ -64,10 +65,11 @@
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.cpp
 	<stan/math.hpp>
 
-1490743164 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
+1507911416 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_joe_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_joe_log.hpp>
+	<dist/bicop_r90_joe_log.hpp>
 	<iostream>
 
 1489793880 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.cpp
@@ -268,7 +270,7 @@
 1505492195 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_clayton_log.hpp
 	<stan/math.hpp>
 
-1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
+1507932886 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
 	<stan/math.hpp>
 
 1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
@@ -283,11 +285,17 @@
 1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
 	<stan/math.hpp>
 
-1505295909 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
+1507534849 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
 	<stan/math.hpp>
 	<iostream>
 
 1490694811 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/imbeder_test.cpp
 	<stan/math/prim/scal.hpp>
 	<gtest/gtest.h>
+
+1507926609 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r90_joe_log.hpp
+	<stan/math.hpp>
+
+1507932897 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r90_frank_log.hpp
+	<stan/math.hpp>
 
