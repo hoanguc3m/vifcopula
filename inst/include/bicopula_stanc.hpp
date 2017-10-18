@@ -92,8 +92,9 @@ public:
         v = v_;
 
     }
-    // return True if the copula is independent
-    bool check_Ind(void){
+
+    // return kendall tau correlation
+    double kendall(void){
 
         int concordant, discordant, extraX, extraY, spare;
         std::vector<size_t> order_U = sort_indexes(u);
@@ -102,18 +103,25 @@ public:
         std::vector<double> U_ord(t_max);
         std::vector<double> V_ord(t_max);
         for(int i = 0; i != t_max; ++i)
-          U_ord[i] = u[order_U[i]];
+            U_ord[i] = u[order_U[i]];
         for(int i = 0; i != t_max; ++i)
-          V_ord[i] = v[order_U[i]];
+            V_ord[i] = v[order_U[i]];
 
         // sort Y for equal values of X
         secondary_sort(U_ord.begin(), U_ord.end(), V_ord.begin(), V_ord.end());
 
         // calculate result
         concordance_count(U_ord.begin(), U_ord.end(), V_ord.begin(), V_ord.end(),
-		      concordant, discordant, extraX, extraY, spare);
+            concordant, discordant, extraX, extraY, spare);
 
         double tau = kendall_tau(concordant, discordant, extraX, extraY);
+        return( tau );
+    }
+
+    // return True if the copula is independent
+    bool check_Ind(void){
+
+        double tau = kendall();
         double f_stat = sqrt((9 * t_max * (t_max - 1))/(2 * (2 * t_max + 5))) * abs(tau);
         boost::math::normal s;
         double p_value = 2 * (1 - cdf(s,f_stat));

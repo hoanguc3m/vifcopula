@@ -19,25 +19,25 @@ void write_theta(int id, int copula_type,
         break;
     case 1:
         // Gaussian copula
-        if (id == 0){
-            theta = in__.scalar_lub_constrain(0,1);
-        } else {
-            theta = in__.scalar_lub_constrain(-0.9,1);
-        }
-        // theta = in__.scalar_lub_constrain(-1,1);
+        // if (id == 0){
+        //     theta = in__.scalar_lub_constrain(0,1);
+        // } else {
+        //     theta = in__.scalar_lub_constrain(-0.9,1);
+        // }
+        theta = in__.scalar_lub_constrain(0,1);
 
         vars__.push_back(theta);
         break;
     case 2:
         // Student copula
-        if (id == 0){
-            theta = in__.scalar_lub_constrain(0,1);
-        } else {
-            theta = in__.scalar_lub_constrain(-0.9,1);
-        }
+        // if (id == 0){
+        //     theta = in__.scalar_lub_constrain(0,1);
+        // } else {
+        //     theta = in__.scalar_lub_constrain(-0.9,1);
+        // }
 
-        // theta = in__.scalar_lub_constrain(0,1);
-        theta2 = in__.scalar_lub_constrain(2,15);
+        theta = in__.scalar_lub_constrain(0,1);
+        theta2 = in__.scalar_lub_constrain(2,20);
         vars__.push_back(theta);
         vars__.push_back(theta2);
         break;
@@ -53,7 +53,7 @@ void write_theta(int id, int copula_type,
         break;
     case 5:
         // Frank copula
-        theta = in__.scalar_lub_constrain(-100,100);
+        theta = in__.scalar_lub_constrain(0.1,100);
         vars__.push_back(theta);
         break;
     case 6:
@@ -78,6 +78,20 @@ void write_theta(int id, int copula_type,
         vars__.push_back(theta);
         break;
 
+    case 21:
+
+        theta = in__.scalar_lub_constrain(-1,0);
+
+        vars__.push_back(theta);
+        break;
+    case 22:
+
+        theta = in__.scalar_lub_constrain(-1,0);
+        theta2 = in__.scalar_lub_constrain(2,20);
+        vars__.push_back(theta);
+        vars__.push_back(theta2);
+        break;
+
     case 23:
         // rotated 90 degree Clayon copula
         theta = in__.scalar_lub_constrain(-30,-0.001);
@@ -88,11 +102,11 @@ void write_theta(int id, int copula_type,
         theta = in__.scalar_lub_constrain(-15,-1);
         vars__.push_back(theta);
         break;
-    // case 25:
-    //     // Frank copula
-    //     theta = in__.scalar_lub_constrain(-100,-0.1);
-    //     vars__.push_back(theta);
-    //     break;
+    case 25:
+        // Frank copula
+        theta = in__.scalar_lub_constrain(-100,-0.1);
+        vars__.push_back(theta);
+        break;
     case 26:
         // rotated 90 degree Joe copula
         theta = in__.scalar_lub_constrain(-30,-1);

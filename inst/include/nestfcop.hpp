@@ -113,7 +113,8 @@ public:
                 matrix_d& sample_iv,
                 std::vector<int>& cop_new,
                 std::vector<int>& latent_cop_new,
-                double& ELBO)
+                double& ELBO,
+                int& count_iter)
     {
 
         // Initiate model
@@ -212,7 +213,7 @@ public:
 
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
-
+                    count_iter++;
                     stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
                     ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
                     if (ELBO < ELBO_max){

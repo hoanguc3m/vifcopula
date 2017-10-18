@@ -5,6 +5,7 @@ library(vifcopula)
 t_max = 1000
 n_max = 100
 gauss_init <- matrix(1, nrow = n_max, ncol = 1)
+copfamily_init <- matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
 
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1, seed_num = 0)
 datagen <- datagen_gauss
@@ -14,33 +15,32 @@ data <- list(u = datagen$u,
              k_max = datagen$k_max,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
-init <- list(copula_type = datagen$family,
-             v = datagen$v,
-             par = datagen$theta,
-             par2 = datagen$theta2)
+init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
-              eval_elbo = 50, adapt_bool = T, adapt_val = 1,
+              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
-vi_gauss <- vifcopula::vifcop(data,init,other)
-
+vi_gauss_ginit <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Gaussian1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
-plot(datagen$v, vi_gauss$mean_iv[1:t_max], xlab = expression(v[t]), ylab = expression(v[approximated]))
+plot(datagen$v, get_v0(vi_gauss_ginit),
+     xlab = expression(v[t]), ylab = expression(v[approximated]),
+     main = " Gaussin one factor copula")
 abline(a= 0, b=1, col="red")
-plot(datagen$theta, vi_gauss$mean_iv[(t_max+1):(t_max+n_max)] , xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta, get_theta(vi_gauss_ginit) ,
+     xlab = expression(theta[t]), ylab = expression(theta[approximated]),
+     main = " Gaussin one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
 
-
+init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
-              eval_elbo = 50, adapt_bool = T, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
+                n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
+                eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
-vi_gauss$cop_type
 sum(vi_gauss$cop_type == datagen_gauss$family)
 
 
@@ -54,15 +54,19 @@ data <- list(u = datagen$u,
              k_max = datagen$k_max,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
-init <- list(copula_type = datagen$family,
-             v = datagen$v,
-             par = datagen$theta,
-             par2 = datagen$theta2)
+init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
-              eval_elbo = 100, adapt_bool = T, adapt_val = 1,
+              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
-vi_student <- vifcopula::vifcop(data,init,other)
+vi_student_tinit <- vifcopula::vifcop(data,init,other)
+
+init <- list(copula_type = copfamily_init)
+other <- list(seed = 126, core = 8, iter = 1000,
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
+              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
+vi_student_tinit <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Student1.pdf', width = 15, height = 5)
 par(mfrow =c(1,3))

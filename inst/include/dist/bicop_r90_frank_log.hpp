@@ -64,7 +64,6 @@ using namespace stan;
       stan::VectorBuilder<true, T_partials_return, T_theta> theta_value(length(theta));
       stan::VectorBuilder<true, T_partials_return, T_theta> exp_theta(length(theta));
 
-
       for (size_t i = 0; i < length(theta); i++) {
         theta_value[i] = value_of(theta_vec[i]);
         exp_theta[i] = exp(theta_value[i]);

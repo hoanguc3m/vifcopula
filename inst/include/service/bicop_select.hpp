@@ -53,11 +53,17 @@ double bicop_select(std::vector<double>& u,
         return return_cop;
 
     } else {
-        const int cop_seq_size = 15;                     // Change the number
-        int cop_seq[cop_seq_size] = {1, 2, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36};    // Choose among copula type
-        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        const int cop_seq_size = 9;                     // Change the number
+        std::vector<int> cop_seq = {1, 2, 3, 4, 5, 6, 13, 14, 16};
+
+        double tau = biuv.kendall();
+        if (tau < 0){
+            cop_seq = {21, 22, 23, 24, 25, 26, 33, 34, 36};
+        }
+
+        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         int imax=0;
         for (int i = 0; i < cop_seq_size; i++) {
@@ -73,7 +79,7 @@ double bicop_select(std::vector<double>& u,
             log_cop[i] = lp;
 
 
-            if (cop_seq[i] == 2){
+            if ((cop_seq[i] == 2) || (cop_seq[i] == 22) ){
                 AIC[i] = -2 * lp + 2 * 2;
                 BIC[i] = -2 * lp + log(t_max) * 2;
             } else {

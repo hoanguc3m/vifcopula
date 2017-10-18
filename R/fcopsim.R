@@ -59,7 +59,7 @@ rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8, theta = TRUE) {
             theta_gen = runif(1, min = min_theta, max = max_theta)
     } else {
         if (family == 1) theta_gen = 0
-        if (family == 2) theta_gen = runif(1, min = 2, max = 20)
+        if (family == 2) theta_gen = runif(1, min = 2, max = 15)
         if ((family == 3) | (family == 13) | (family == 23) | (family == 33)) theta_gen = 0
         if ((family == 4) | (family == 14) | (family == 24) | (family == 34)) theta_gen = 0
         if (family == 5) theta_gen = 0

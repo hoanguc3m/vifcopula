@@ -8,6 +8,7 @@
 #include <stan/math.hpp>
 #include <ofcop.hpp>
 #include <nestfcop.hpp>
+#include <nestselefcop.hpp>
 #include <bifcop.hpp>
 
 
@@ -209,6 +210,9 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     if (structfactor == 3) {
         latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
     }
+    if (structfactor == 4) {
+        latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
+    }
     Rcpp::Rcout << " Init copula types :" << " Checked" << std::endl;
 
     // Timing variables
@@ -227,9 +231,9 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     std::vector<double> mean_iv_save;
     matrix_d sample_iv_save(iter,0);
     double ELBO_save = 0;
+    int count_iter = 1;
 
-    switch (structfactor)
-    {
+    switch (structfactor) {
     case 1:
     {       // One factor copula model
 
@@ -247,7 +251,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                           iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                           copselect, core);
-            Objfcop.runvi(mean_iv, sample_iv, cop_vec_new, ELBO_save);
+            Objfcop.runvi(mean_iv, sample_iv, cop_vec_new, ELBO_save, count_iter);
 
             save_vi(model_pars, mean_iv_save, sample_iv_save,
                     mean_iv, sample_iv,
@@ -277,7 +281,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                       adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                       copselect, core);
 
-        Objbifcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save);
+        Objbifcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save, count_iter);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
                 mean_iv, sample_iv,
@@ -303,7 +307,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                              iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                              adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                              copselect, core);
-        Objnestfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save);
+        Objnestfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save, count_iter);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
                 mean_iv, sample_iv,
@@ -312,6 +316,35 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                 t_max, n_max, k, iter, structfactor, copselect);
     }
     break;
+    case 4: // nest factor copula
+    {
+        int k = k_max;
+        // copula_type_vec = copula_type.col(k);
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        latent_copula_type_vec.resize(k-1);
+        latent_cop_vec_new.resize(k-1);
+        VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " VI Estimating nested select factor copula" << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+        nestselefcop Objnestselefcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng,
+            iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
+            adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
+            copselect, core);
+        std::vector<int> gid_new(gid);
+        Objnestselefcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new,gid_new, ELBO_save, count_iter);
+        gid = gid_new;
+        save_vi(model_pars, mean_iv_save, sample_iv_save,
+            mean_iv, sample_iv,
+            copula_type, copula_type_vec, cop_vec_new,
+            latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
+            t_max, n_max, k, iter, structfactor, copselect);
+
+    }
+        break;
+
     } // end switch
 
 
@@ -336,7 +369,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                                     Rcpp::Named("gid") = gid,
 				                    Rcpp::Named("structfactor") = structfactor,
                                     Rcpp::Named("time") = delta_t,
-                                    Rcpp::Named("ELBO") = ELBO_save
+                                    Rcpp::Named("ELBO") = ELBO_save,
+                                    Rcpp::Named("iteration") = count_iter
     );
 
 

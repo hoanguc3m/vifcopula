@@ -15,7 +15,6 @@
 
 #include <dist/bicop_r90_clayton_log.hpp>
 #include <dist/bicop_r90_gumbel_log.hpp>
-#include <dist/bicop_r90_frank_log.hpp>
 #include <dist/bicop_r90_joe_log.hpp>
 
 #include <dist/bicop_r270_clayton_log.hpp>
@@ -52,23 +51,23 @@ void bicop_log_add(int i,
         break;
     case 1:
         // Gaussian copula
-        if (i == 0){
-            if (jacobian__)
-                theta[i] = in__.scalar_lub_constrain(0,1,lp__);
-            else
-                theta[i] = in__.scalar_lub_constrain(0,1);
-        } else {
-            if (jacobian__)
-                theta[i] = in__.scalar_lub_constrain(-0.9,1,lp__);
-            else
-                theta[i] = in__.scalar_lub_constrain(-0.9,1);
-        }
+        // if (i == 0){
+        //     if (jacobian__)
+        //         theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+        //     else
+        //         theta[i] = in__.scalar_lub_constrain(0,1);
+        // } else {
+        //     if (jacobian__)
+        //         theta[i] = in__.scalar_lub_constrain(-0.9,1,lp__);
+        //     else
+        //         theta[i] = in__.scalar_lub_constrain(-0.9,1);
+        // }
 
-        // if (jacobian__)
-        //
-        //     theta[i] = in__.scalar_lub_constrain(-1,1,lp__);
-        // else
-        //     theta[i] = in__.scalar_lub_constrain(-1,1);
+        if (jacobian__)
+
+            theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(0,1);
 
         lp_accum__.add(bicop_normal_log<propto__>(u,
             v,
@@ -77,28 +76,28 @@ void bicop_log_add(int i,
     case 2:
         // Student copula
 
-        if (i == 0){
-            if (jacobian__)
-                theta[i] = in__.scalar_lub_constrain(0,1,lp__);
-            else
-                theta[i] = in__.scalar_lub_constrain(0,1);
-        } else {
-            if (jacobian__)
-                theta[i] = in__.scalar_lub_constrain(-0.9,1,lp__);
-            else
-                theta[i] = in__.scalar_lub_constrain(-0.9,1);
-        }
-
-        // if (jacobian__)
-        //     theta[i] = in__.scalar_lub_constrain(0,1,lp__);
-        // else
-        //     theta[i] = in__.scalar_lub_constrain(0,1);
-        //
+        // if (i == 0){
+        //     if (jacobian__)
+        //         theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+        //     else
+        //         theta[i] = in__.scalar_lub_constrain(0,1);
+        // } else {
+        //     if (jacobian__)
+        //         theta[i] = in__.scalar_lub_constrain(-0.9,1,lp__);
+        //     else
+        //         theta[i] = in__.scalar_lub_constrain(-0.9,1);
+        // }
 
         if (jacobian__)
-            theta2[i] = in__.scalar_lub_constrain(2,15,lp__);
+            theta[i] = in__.scalar_lub_constrain(0,1,lp__);
         else
-            theta2[i] = in__.scalar_lub_constrain(2,15);
+            theta[i] = in__.scalar_lub_constrain(0,1);
+
+
+        if (jacobian__)
+            theta2[i] = in__.scalar_lub_constrain(2,20,lp__);
+        else
+            theta2[i] = in__.scalar_lub_constrain(2,20);
 
         lp_accum__.add(bicop_student_log<propto__>(u,
             v,
@@ -134,9 +133,9 @@ void bicop_log_add(int i,
     case 5:
         // Frank copula
         if (jacobian__)
-            theta[i] = in__.scalar_lub_constrain(-100,100,lp__);
+            theta[i] = in__.scalar_lub_constrain(0.1,100,lp__);
         else
-            theta[i] = in__.scalar_lub_constrain(-100,100);
+            theta[i] = in__.scalar_lub_constrain(0.1,100);
 
         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
         lp_accum__.add(bicop_frank_log<propto__>(u,
@@ -197,6 +196,38 @@ void bicop_log_add(int i,
 
         break;
 
+    case 21:
+
+        if (jacobian__)
+
+            theta[i] = in__.scalar_lub_constrain(-1,0,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(-1,0);
+
+        lp_accum__.add(bicop_normal_log<propto__>(u,
+            v,
+            get_base1(theta,ibase,"theta",1)));
+        break;
+    case 22:
+        // Student copula
+
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(-1,0,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(-1,0);
+
+        if (jacobian__)
+            theta2[i] = in__.scalar_lub_constrain(2,20,lp__);
+        else
+            theta2[i] = in__.scalar_lub_constrain(2,20);
+
+        lp_accum__.add(bicop_student_log<propto__>(u,
+            v,
+            get_base1(theta,ibase,"theta",1),
+            get_base1(theta2,ibase,"theta",1)));
+
+        break;
+
     case 23:
         // rotated 90 degree Clayon copula
 
@@ -223,19 +254,19 @@ void bicop_log_add(int i,
             get_base1(theta,ibase,"theta",1)));
         break;
 
-    // case 25:
-    //     // Frank copula
-    //     if (jacobian__)
-    //         theta[i] = in__.scalar_lub_constrain(-100,-0.1,lp__);
-    //     else
-    //         theta[i] = in__.scalar_lub_constrain(-100,-0.1);
-    //
-    //     //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
-    //     lp_accum__.add(bicop_r90_frank_log<propto__>(u,
-    //         v,
-    //         get_base1(theta,ibase,"theta",1)));
-    //
-    //     break;
+    case 25:
+        // Frank copula
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(-100,-0.1,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(-100,-0.1);
+
+        //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
+        lp_accum__.add(bicop_frank_log<propto__>(u,
+            v,
+            get_base1(theta,ibase,"theta",1)));
+
+        break;
 
     case 26:
         // rotated 90 degree Joe copula
