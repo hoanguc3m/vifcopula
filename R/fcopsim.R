@@ -275,7 +275,7 @@ comparefcop <- function(datagen,vi){
 
     par(mar=c(5,5,3,1))
 
-    plot(datagen$v[,1], v0_vi, xlab = expression(v[t]), ylab = expression(v[approximated]))
+    plot(datagen$v[,1], v0_vi, xlab = expression(v[t]), ylab = expression(v[approx]))
     abline(a= 0, b=1, col="red")
 
     plot(tau, tau_vi, xlab = expression(tau[t]), ylab = expression(tau[approximated]))
@@ -286,7 +286,7 @@ comparefcop <- function(datagen,vi){
 
 
     if (vi$structfactor > 1) {
-        plot(datagen$v[,2:vi$k_max], v_vi, xlab = expression(v[t]), ylab = expression(v[approximated]))
+        plot(datagen$v[,2:vi$k_max], v_vi, xlab = expression(v[t]), ylab = expression(v[approx]))
         abline(a= 0, b=1, col="red")
 
         latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,

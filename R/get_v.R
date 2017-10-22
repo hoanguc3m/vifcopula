@@ -187,7 +187,7 @@ get_latent_theta2 <- function(vi) {
 
     if (structfactor == 3){
     	latent_theta2 <- rep(0,k_max-1)
-        count = n_max + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0)
+        count = 0
         for (i in 1:(k_max-1)){
             if (vi$latent_copula_type[i] > 0){
                 count = count + 1
