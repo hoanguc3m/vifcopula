@@ -304,3 +304,44 @@ comparefcop <- function(datagen,vi){
 
     }
 }
+
+#' @export
+plot.vifcop <- function(vi) {
+    v0_vi = get_v0(vi)
+    v_vi = get_v(vi)
+    
+    
+    theta_vi = get_theta(vi)
+    theta2_vi = get_theta2(vi)
+    
+    tau_vi = BiCopPar2Tau(family = vi$cop_type, par = theta_vi, par2 = theta2_vi)
+
+    
+    latent_theta_vi = get_latent_theta(vi)
+    latent_theta2_vi = get_latent_theta2(vi)
+    
+    if (vi$structfactor == 1) {
+        par(mfrow =c(1,3))
+    } else {
+        par(mfrow =c(2,3))
+    }
+    
+    par(mar=c(5,5,3,1))
+    
+    hist(v0_vi, xlab = expression(v0[t]))
+    
+    hist(tau_vi, xlab = expression(tau[t]))
+    
+    hist(theta2_vi, xlab = expression(theta_2[t]))
+    
+    if (vi$structfactor > 1) {
+        hist(v_vi, xlab = expression(v[t]))
+        
+        latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
+            par = latent_theta_vi, par2 = latent_theta2_vi)
+
+        hist(latent_tau_vi, xlab = expression(tau_latent[t]) )
+        
+        hist(latent_theta2_vi, xlab = expression(theta_latent2[t]))
+    }
+}
