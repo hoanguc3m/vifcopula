@@ -4,7 +4,7 @@
 \alias{rtheta}
 \title{Sum of vector elements.}
 \usage{
-rtheta(family, tau_min = 0.2, tau_max = 0.8, theta = TRUE)
+rtheta(family, tau_min = 0.2, tau_max = 0.8)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

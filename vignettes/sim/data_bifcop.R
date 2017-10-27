@@ -55,5 +55,6 @@ sum(vi_mix_bf$latent_copula_type == 3) + sum(vi_mix_bf$latent_copula_type == 13)
 sum(vi_mix_bf$latent_copula_type == 4) + sum(vi_mix_bf$latent_copula_type == 14) + sum(vi_mix_bf$latent_copula_type == 24) + sum(vi_mix_bf$latent_copula_type == 34)
 sum(vi_mix_bf$latent_copula_type == 5) + sum(vi_mix_bf$latent_copula_type == 15) + sum(vi_mix_bf$latent_copula_type == 25) + sum(vi_mix_bf$latent_copula_type == 35)
 sum(vi_mix_bf$latent_copula_type == 6)
+sum(vi_mix_bf$latent_copula_type == 0)
 
 

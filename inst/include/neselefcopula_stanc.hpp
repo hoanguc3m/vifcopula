@@ -375,6 +375,39 @@ public:
 
     }
 
+    int get_eff_para(void){
+        int eff_para = 0;
+        eff_para += (k-1);
+        for (int i = 0; i < (k-1); i++)
+        {
+            if (latent_copula_type[i] == 0)
+            {
+                eff_para --;
+            }
+            else if (latent_copula_type[i] == 2)
+            {
+                eff_para ++;
+            }
+        }
+
+        eff_para += n_max;
+        for (int i = 0; i < n_max; i++)
+        {
+            if (copula_type[i] == 0)
+            {
+                eff_para --;
+            }
+            else if (copula_type[i] == 2)
+            {
+                eff_para ++;
+            }
+        }
+        return eff_para;
+    }
+    int get_t_max(void){
+        return t_max;
+    }
+
     template <bool propto__, bool jacobian__, typename T__>
     T__ log_prob(vector<T__>& params_r__,
                  vector<int>& params_i__,

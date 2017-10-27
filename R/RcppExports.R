@@ -17,29 +17,10 @@
 #' }
 #' @export
 vifcop <- function(data_, init_, other_) {
-    .Call('_vifcopula_vifcop', PACKAGE = 'vifcopula', data_, init_, other_)
-}
-
-#' Variational inference for factor copula models
-#'
-#' \code{vifcop} returns variational estimations.
-#'
-#'
-#' @param
-#' @param
-#' @return
-#' @examples
-#' vifcop(data, init, other)
-#'
-#' \dontrun{
-#' vifcop(data, init, other)
-#' }
-#' @export
-Student_deriv_nu <- function(u, v, par, nu) {
-    .Call('_vifcopula_Student_deriv_nu', PACKAGE = 'vifcopula', u, v, par, nu)
+    .Call('vifcopula_vifcop', PACKAGE = 'vifcopula', data_, init_, other_)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_vifcopula_RcppExport_registerCCallable', PACKAGE = 'vifcopula')
+    .Call('vifcopula_RcppExport_registerCCallable', PACKAGE = 'vifcopula')
 })

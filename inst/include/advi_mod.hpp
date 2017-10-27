@@ -520,6 +520,8 @@ namespace stan {
         int write(Q vi_save,
                   Eigen::Matrix<double,Eigen::Dynamic,1>& mean_iv,
                   Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_iv,
+                  std::vector<double>& ELBO,
+
                   callbacks::logger& logger)
         const {
 
@@ -531,14 +533,38 @@ namespace stan {
                << " from the approximate posterior... ";
             logger.info(ss);
 
-            for (int n = 0; n < n_posterior_samples_; ++n) {
-                vi_save.sample(rng_, cont_params_);
-                model_.write_array(rng_, cont_params_, mean_iv);
-                sample_iv.row(n) = mean_iv;
-            }
             // Write mean of posterior approximation on first output line
             cont_params_ = vi_save.mean();
             model_.write_array(rng_, cont_params_, mean_iv);
+
+            int dim = vi_save.dimension();
+            int eff_num_para = model_.get_eff_para();
+
+            Eigen::Matrix<double,Eigen::Dynamic,1> cont_params_eigen;
+            Eigen::Matrix<double,Eigen::Dynamic,1> cont_params_raw(cont_params_);
+
+            std::cout << " Calculating ELBO/AIC/BIC/DIC/log_prob " << std::endl;
+            for (int n = 0; n < n_posterior_samples_; ++n) {
+
+                vi_save.sample(rng_, cont_params_);
+                model_.write_array(rng_, cont_params_, cont_params_eigen);
+                sample_iv.row(n) = cont_params_eigen;
+                std::stringstream ss;
+                // First part of DIC:      - 4 * E(log_prob)
+                ELBO[3] += model_.template log_prob<false, true>(cont_params_, &ss);
+                // Calc log_prob with fix theta_copula:
+                cont_params_.tail(eff_num_para) = cont_params_raw.tail(eff_num_para);
+                ELBO[4] += model_.template log_prob<false, true>(cont_params_, &ss);
+            }
+
+            ELBO[3] /= n_posterior_samples_;    // DIC
+            ELBO[4] /= n_posterior_samples_;    // log_prob
+
+            ELBO[3] = - 4 * ELBO[3] + 2 * ELBO[4];
+            ELBO[1] = - 2 * ELBO[4] + 2 * eff_num_para;
+            ELBO[2] = - 2 * ELBO[4] + log(model_.get_t_max()) * eff_num_para;
+
+
 
         	logger.info("COMPLETED.");
 

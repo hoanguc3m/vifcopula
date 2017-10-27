@@ -230,7 +230,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     std::vector<string> model_pars;
     std::vector<double> mean_iv_save;
     matrix_d sample_iv_save(iter,0);
-    double ELBO_save = 0;
+    std::vector<double> ELBO_save = {0,0,0,0,0}; // ELBO, AIC, BIC, DIC, log(u)
     int count_iter = 1;
 
     switch (structfactor) {
@@ -316,34 +316,34 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                 t_max, n_max, k, iter, structfactor, copselect);
     }
     break;
-    case 4: // nest factor copula
-    {
-        int k = k_max;
-        // copula_type_vec = copula_type.col(k);
-        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
-        latent_copula_type_vec.resize(k-1);
-        latent_cop_vec_new.resize(k-1);
-        VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
-
-        Rcpp::Rcout << "########################################################" << std::endl;
-        Rcpp::Rcout << " VI Estimating nested select factor copula" << std::endl;
-        Rcpp::Rcout << "########################################################" << std::endl;
-
-        nestselefcop Objnestselefcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng,
-            iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
-            adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-            copselect, core);
-        std::vector<int> gid_new(gid);
-        Objnestselefcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new,gid_new, ELBO_save, count_iter);
-        gid = gid_new;
-        save_vi(model_pars, mean_iv_save, sample_iv_save,
-            mean_iv, sample_iv,
-            copula_type, copula_type_vec, cop_vec_new,
-            latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
-            t_max, n_max, k, iter, structfactor, copselect);
-
-    }
-        break;
+    // case 4: // nest factor copula
+    // {
+    //     int k = k_max;
+    //     // copula_type_vec = copula_type.col(k);
+    //     VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+    //     latent_copula_type_vec.resize(k-1);
+    //     latent_cop_vec_new.resize(k-1);
+    //     VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
+    //
+    //     Rcpp::Rcout << "########################################################" << std::endl;
+    //     Rcpp::Rcout << " VI Estimating nested select factor copula" << std::endl;
+    //     Rcpp::Rcout << "########################################################" << std::endl;
+    //
+    //     nestselefcop Objnestselefcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng,
+    //         iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
+    //         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
+    //         copselect, core);
+    //     std::vector<int> gid_new(gid);
+    //     Objnestselefcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new,gid_new, ELBO_save, count_iter);
+    //     gid = gid_new;
+    //     save_vi(model_pars, mean_iv_save, sample_iv_save,
+    //         mean_iv, sample_iv,
+    //         copula_type, copula_type_vec, cop_vec_new,
+    //         latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
+    //         t_max, n_max, k, iter, structfactor, copselect);
+    //
+    // }
+    //     break;
 
     } // end switch
 
@@ -380,7 +380,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                                     Rcpp::Named("gid") = gid,
 				                    Rcpp::Named("structfactor") = structfactor,
                                     Rcpp::Named("time") = delta_t,
-                                    Rcpp::Named("ELBO") = ELBO_save,
+                                    Rcpp::Named("criteria") = ELBO_save,
                                     Rcpp::Named("iteration") = count_iter
     );
 
@@ -389,41 +389,6 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     PutRNGstate();
 
     END_RCPP
-}
-
-
-
-//' Variational inference for factor copula models
-//'
-//' \code{vifcop} returns variational estimations.
-//'
-//'
-//' @param
-//' @param
-//' @return
-//' @examples
-//' vifcop(data, init, other)
-//'
-//' \dontrun{
-//' vifcop(data, init, other)
-//' }
-//' @export
-// [[Rcpp::export]]
-double Student_deriv_nu(double u, double v, double par, double nu)
-{
-    using stan::math::var;
-
-    var nu_var(nu);
-    var lp1(0.0);
-    lp1 += vifcopula::bicop_student_log<false>(u, v, par, nu_var);
-    double lp1val = lp1.val();
-
-    lp1.grad();
-    double lp1adj = nu_var.adj();
-
-
-    std::cout << lp1val << " " << lp1adj << std::endl;
-    return lp1adj;
 }
 
 #endif // VIFCOPULA_VIFCOP_CPP

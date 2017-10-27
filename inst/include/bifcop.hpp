@@ -106,7 +106,7 @@ public:
                     matrix_d& sample_iv,
                     std::vector<int>& cop_new,
                     std::vector<int>& latent_cop_new,
-                    double& ELBO,
+                    std::vector<double>& ELBO,
                     int& count_iter)
         {
 
@@ -217,11 +217,11 @@ public:
                                      message_writer, parameter_writer, diagnostic_writer, vi_store);
                         count_iter++;
                         stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
-                        ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
-                        if (ELBO < ELBO_max){
+                        ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
+                        if (ELBO[0] < ELBO_max){
                             keepfindcop = false;
                         } else{
-                            ELBO_max = ELBO;
+                            ELBO_max = ELBO[0];
                         }
                     } else {
                         keepfindcop = false;
@@ -233,12 +233,12 @@ public:
 
 
             stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
-            ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
+            ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
 
             max_param = layer_n1.num_params_r();
             mean_iv.resize(max_param);
             sample_iv.resize(iter,max_param);
-            advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
+            advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
             out_parameter_writer.clear(); // Clear state flags.
             std::cout << " Done ! " << std::endl;
 

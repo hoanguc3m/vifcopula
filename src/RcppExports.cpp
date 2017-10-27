@@ -11,7 +11,7 @@ using namespace Rcpp;
 
 // vifcop
 List vifcop(SEXP data_, SEXP init_, SEXP other_);
-static SEXP _vifcopula_vifcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+static SEXP vifcopula_vifcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type data_(data_SEXP);
@@ -21,44 +21,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _vifcopula_vifcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+RcppExport SEXP vifcopula_vifcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_vifcopula_vifcop_try(data_SEXP, init_SEXP, other_SEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// Student_deriv_nu
-double Student_deriv_nu(double u, double v, double par, double nu);
-static SEXP _vifcopula_Student_deriv_nu_try(SEXP uSEXP, SEXP vSEXP, SEXP parSEXP, SEXP nuSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type u(uSEXP);
-    Rcpp::traits::input_parameter< double >::type v(vSEXP);
-    Rcpp::traits::input_parameter< double >::type par(parSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    rcpp_result_gen = Rcpp::wrap(Student_deriv_nu(u, v, par, nu));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _vifcopula_Student_deriv_nu(SEXP uSEXP, SEXP vSEXP, SEXP parSEXP, SEXP nuSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_vifcopula_Student_deriv_nu_try(uSEXP, vSEXP, parSEXP, nuSEXP));
+        rcpp_result_gen = PROTECT(vifcopula_vifcop_try(data_SEXP, init_SEXP, other_SEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -76,19 +43,17 @@ RcppExport SEXP _vifcopula_Student_deriv_nu(SEXP uSEXP, SEXP vSEXP, SEXP parSEXP
 }
 
 // validate (ensure exported C++ functions exist before calling them)
-static int _vifcopula_RcppExport_validate(const char* sig) { 
+static int vifcopula_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("List(*vifcop)(SEXP,SEXP,SEXP)");
-        signatures.insert("double(*Student_deriv_nu)(double,double,double,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
-RcppExport SEXP _vifcopula_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("vifcopula", "_vifcopula_vifcop", (DL_FUNC)_vifcopula_vifcop_try);
-    R_RegisterCCallable("vifcopula", "_vifcopula_Student_deriv_nu", (DL_FUNC)_vifcopula_Student_deriv_nu_try);
-    R_RegisterCCallable("vifcopula", "_vifcopula_RcppExport_validate", (DL_FUNC)_vifcopula_RcppExport_validate);
+RcppExport SEXP vifcopula_RcppExport_registerCCallable() { 
+    R_RegisterCCallable("vifcopula", "vifcopula_vifcop", (DL_FUNC)vifcopula_vifcop_try);
+    R_RegisterCCallable("vifcopula", "vifcopula_RcppExport_validate", (DL_FUNC)vifcopula_RcppExport_validate);
     return R_NilValue;
 }

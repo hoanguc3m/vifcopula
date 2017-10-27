@@ -93,7 +93,7 @@ public:
     void runvi( vector_d& mean_iv,
                 matrix_d& sample_iv,
                 std::vector<int>& cop_vec_new,
-                double& ELBO,
+                std::vector<double>& ELBO,
                 int& count_iter)
     {
 
@@ -156,12 +156,7 @@ public:
                 //v_temp = mean_iv.head(t_max);
                 VectorXd::Map(&v_temp[0], t_max) = mean_iv.head(t_max);
 
-                #ifdef _OPENMP
-                    omp_set_num_threads(core);
-                #endif
-
                 std::vector<double> params_out(2);
-                #pragma omp parallel for default(none) private(u_temp,v_temp,params_out,base_rng) shared(cop_vec_new,u,t_max,n_max)
                 for (int j = 0; j < n_max; j++){
                     //u_temp = u.col(j);
                     VectorXd::Map(&u_temp[0], t_max) = u.col(j);
@@ -179,11 +174,11 @@ public:
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
                     count_iter++;
                     stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
-                    ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
-                    if (ELBO < ELBO_max){
+                    ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
+                    if (ELBO[0] < ELBO_max){
                         keepfindcop = false;
                     } else{
-                        ELBO_max = ELBO;
+                        ELBO_max = ELBO[0];
                     }
 
                 } else {
@@ -195,12 +190,13 @@ public:
         }
 
         stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
-        ELBO = advi_cop.calc_ELBO(vi_save, message_writer);
+        ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
+
 
         max_param = layer_n1.num_params_r();
         sample_iv.resize(iter,max_param);
         mean_iv.resize(max_param);
-        advi_cop.write(vi_save, mean_iv, sample_iv, message_writer);
+        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
 
 
         out_parameter_writer.clear(); // Clear state flags.

@@ -339,14 +339,14 @@ print(ELBO_init, digits = 1)
 iter_num <- c(vi_gauss_rng$iteration, vi_student_rng$iteration, vi_clayton_rng$iteration, vi_gumbel_rng$iteration, vi_frank_rng$iteration, vi_joe_rng$iteration, vi_mix_rng$iteration)
 print(iter_num, digits = 0)
 
-correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1),
-    sum(vi_student_rng$latent_copula_type == 2),
-    sum(vi_clayton_rng$latent_copula_type == 3),
-    sum(vi_gumbel_rng$latent_copula_type == 4),
-    sum(vi_frank_rng$latent_copula_type == 5),
-    sum(vi_joe_rng$latent_copula_type == 6),
-    sum(vi_mix_rng$latent_copula_type == datagen_mix$family_latent))
-print(correct_latent_percent, digits = 0)
+correct_percent <- c(sum(vi_gauss_rng$cop_type == 1),
+                     sum(vi_student_rng$cop_type == 2),
+                     sum(vi_clayton_rng$cop_type == 3),
+                     sum(vi_gumbel_rng$cop_type == 4),
+                     sum(vi_frank_rng$cop_type == 5),
+                     sum(vi_joe_rng$cop_type == 6),
+                     sum(vi_mix_rng$cop_type == datagen_mix$family))
+print(correct_percent, digits = 0)
 
 time_rng <- c(vi_gauss_rng$time, vi_student_rng$time, vi_clayton_rng$time, vi_gumbel_rng$time, vi_frank_rng$time, vi_joe_rng$time, vi_mix_rng$time)
 print(time_rng, digits = 0)
