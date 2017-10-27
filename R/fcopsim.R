@@ -30,41 +30,36 @@
 #' sum("a")
 #' }
 #' @export
-rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8, theta = TRUE) {
-    theta_gen = 0
-    if (theta){
+rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8) {
+    theta_gen = c(0,0)
 
-
-        if ((family == 23) | (family == 33) |
+    if ((family == 23) | (family == 33) |
             (family == 24) | (family == 34) |
             (family == 26) | (family == 36) ) {
-            tau_neg_max = - abs(tau_min)
-            tau_neg_min = - abs(tau_max)
-            tau_max = tau_neg_max
-            tau_min = tau_neg_min
-        }
-
-        max_theta = BiCopTau2Par(family, tau_max, check.taus = TRUE)
-        min_theta = BiCopTau2Par(family, tau_min, check.taus = TRUE)
-
-        if (family == 1) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if (family == 2) theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 3) | (family == 13) | (family == 23) | (family == 33))
-            theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 4) | (family == 14) | (family == 24) | (family == 34))
-            theta_gen = runif(1, min = min_theta, max = max_theta)
-        if (family == 5)
-            theta_gen = runif(1, min = min_theta, max = max_theta)
-        if ((family == 6) | (family == 16) | (family == 26) | (family == 36))
-            theta_gen = runif(1, min = min_theta, max = max_theta)
-    } else {
-        if (family == 1) theta_gen = 0
-        if (family == 2) theta_gen = runif(1, min = 2, max = 15)
-        if ((family == 3) | (family == 13) | (family == 23) | (family == 33)) theta_gen = 0
-        if ((family == 4) | (family == 14) | (family == 24) | (family == 34)) theta_gen = 0
-        if (family == 5) theta_gen = 0
-        if ((family == 6) | (family == 16) | (family == 26) | (family == 36)) theta_gen = 0
+        tau_neg_max = - abs(tau_min)
+        tau_neg_min = - abs(tau_max)
+        tau_max = tau_neg_max
+        tau_min = tau_neg_min
     }
+
+    max_theta = BiCopTau2Par(family, tau_max, check.taus = TRUE)
+    min_theta = BiCopTau2Par(family, tau_min, check.taus = TRUE)
+
+    if (family == 1) theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+    if (family == 2) {
+        unif_rand = BiCopSim(1,family = 1, par = 0.8)
+        theta_gen[1] = qunif(unif_rand[1], min = min_theta, max = max_theta)
+        theta_gen[2] = qunif(unif_rand[2], min = 2, max = 15)
+    }
+    if ((family == 3) | (family == 13) | (family == 23) | (family == 33))
+        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+    if ((family == 4) | (family == 14) | (family == 24) | (family == 34))
+        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+    if (family == 5)
+        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+    if ((family == 6) | (family == 16) | (family == 26) | (family == 36))
+        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+
     theta_gen
 }
 
@@ -156,83 +151,74 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
 
 
     u <- matrix(runif(t_max*n_max),nrow=t_max, ncol = n_max)
-    theta <- rep(0,n_max)
-    theta2 <- rep(0,n_max)
+    theta <- matrix(0,nrow = n_max, ncol = 2)
     theta_latent <- NULL
-    theta2_latent <- NULL
+
     tau_mat <- matrix(0,nrow=n_max, ncol = 2)
 
     if (structfactor == 1)
     {
         v <- matrix(runif(t_max*1), nrow = t_max, ncol = 1)
         for (i in 1:n_max){
-            theta[i] <- rtheta(family[i],tau_range[1], tau_range[2], TRUE)
-            theta2[i] <- rtheta(family[i],0,0, FALSE)
-            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            theta[i,] <- rtheta(family[i],tau_range[1], tau_range[2])
+            obj <- BiCop(family = family[i], par = theta[i,1], par2 = theta[i,2])
             u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
         }
-        tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta, par2 = theta2 )
+        tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta[,1], par2 = theta[,2] )
     }
 
     if (structfactor == 2)
     {
 
         v <- matrix(runif(t_max*k_max), nrow = t_max, ncol = k_max)
-        theta_latent <- rep(0,n_max)
-        theta2_latent <- rep(0,n_max)
+        theta_latent <- matrix(0,nrow = n_max, ncol = 2)
 
         for (i in 1:n_max){
-            theta_latent[i] <- rtheta(family_latent[i],tau_latent_range[1], tau_latent_range[2], TRUE)
-            theta2_latent[i] <- rtheta(family_latent[i],0, 0, FALSE)
+            theta_latent[i,] <- rtheta(family_latent[i],tau_latent_range[1], tau_latent_range[2])
 
-            obj <- BiCop(family = family_latent[i], par = theta_latent[i], par2 = theta2_latent[i])
+            obj <- BiCop(family = family_latent[i], par = theta_latent[i,1], par2 = theta_latent[i,2])
             # common factor is v[,1]
             # group factor are v[,k+1]
             u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
 
         }
-        tau_mat[,2] <- BiCopPar2Tau(family = family_latent, par = theta_latent, par2 = theta2_latent )
+        tau_mat[,2] <- BiCopPar2Tau(family = family_latent, par = theta_latent[,1], par2 = theta_latent[,2] )
 
         for (i in 1:n_max){
-            theta[i] <- rtheta(family[i], tau_range[1], tau_range[2], TRUE)
-            theta2[i] <- rtheta(family[i],0,0, FALSE)
-            tau_mat[i] <- BiCopPar2Tau(family = family[i], par = theta[i], par2 = theta2[i] )
+            theta[i,] <- rtheta(family[i], tau_range[1], tau_range[2])
 
             # group factor
-            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            obj <- BiCop(family = family[i], par = theta[i,1], par2 = theta[i,2])
             u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
 
         }
-        tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta, par2 = theta2 )
+        tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta[,1], par2 = theta[,2] )
 
     }
 
     if (structfactor == 3)
     {
         v <- matrix(runif(t_max*k_max), nrow = t_max, ncol = k_max)
-        theta_latent <- rep(0,k_max-1)
-        theta2_latent <- rep(0,k_max-1)
+        theta_latent <- matrix(0,nrow = k_max-1, ncol = 2)
         for (k in 2:k_max){
-            theta_latent[k-1] <-  rtheta(family_latent[k-1],tau_latent_range[1], tau_latent_range[2], TRUE)
-            theta2_latent[k-1] <- rtheta(family_latent[k-1],0, 0, FALSE)
-            obj <- BiCop(family = family_latent[k-1], par = theta_latent[k-1], par2 = theta2_latent[k-1])
+            theta_latent[k-1,] <-  rtheta(family_latent[k-1],tau_latent_range[1], tau_latent_range[2])
+            obj <- BiCop(family = family_latent[k-1], par = theta_latent[k-1,1], par2 = theta_latent[k-1,2])
             # common factor is v[,1]
             # group factor are v[,k]
             v[,k] <- BiCopHinv2(v[,k], v[,1], obj)
         }
-        tau_mat[1:(k_max-1),2] <- BiCopPar2Tau(family = family_latent, par = theta_latent, par2 = theta2_latent )
+        tau_mat[1:(k_max-1),2] <- BiCopPar2Tau(family = family_latent, par = theta_latent[,1], par2 = theta_latent[,2] )
 
         for (i in 1:n_max){
 
-            theta[i] <- rtheta(family[i], tau_range[1], tau_range[2], TRUE)
-            theta2[i] <- rtheta(family[i],0,0, FALSE)
+            theta[i,] <- rtheta(family[i], tau_range[1], tau_range[2])
 
             # group factor
-            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            obj <- BiCop(family = family[i], par = theta[i,1], par2 = theta[i,2])
             u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
 
         }
-        tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta, par2 = theta2 )
+        tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta[,1], par2 = theta[,2] )
     }
 
 
@@ -242,11 +228,11 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
           n_max = n_max,
           k_max = k_max,
           family = family,
-          theta = theta,
-          theta2 = theta2,
+          theta = theta[,1],
+          theta2 = theta[,2],
           family_latent = family_latent,
-          theta_latent = theta_latent,
-          theta2_latent = theta2_latent,
+          theta_latent = theta_latent[,1],
+          theta2_latent = theta_latent[,2],
           gid = gid,
           structfactor = structfactor)
 }
@@ -309,39 +295,39 @@ comparefcop <- function(datagen,vi){
 plot.vifcop <- function(vi) {
     v0_vi = get_v0(vi)
     v_vi = get_v(vi)
-    
-    
+
+
     theta_vi = get_theta(vi)
     theta2_vi = get_theta2(vi)
-    
+
     tau_vi = BiCopPar2Tau(family = vi$cop_type, par = theta_vi, par2 = theta2_vi)
 
-    
+
     latent_theta_vi = get_latent_theta(vi)
     latent_theta2_vi = get_latent_theta2(vi)
-    
+
     if (vi$structfactor == 1) {
         par(mfrow =c(1,3))
     } else {
         par(mfrow =c(2,3))
     }
-    
+
     par(mar=c(5,5,3,1))
-    
+
     hist(v0_vi, xlab = expression(v0[t]))
-    
+
     hist(tau_vi, xlab = expression(tau[t]))
-    
+
     hist(theta2_vi, xlab = expression(theta_2[t]))
-    
+
     if (vi$structfactor > 1) {
         hist(v_vi, xlab = expression(v[t]))
-        
+
         latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
             par = latent_theta_vi, par2 = latent_theta2_vi)
 
         hist(latent_tau_vi, xlab = expression(tau_latent[t]) )
-        
+
         hist(latent_theta2_vi, xlab = expression(theta_latent2[t]))
     }
 }

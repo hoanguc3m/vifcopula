@@ -95,15 +95,19 @@ void bicop_log_add(int i,
 
 
         if (jacobian__)
-            theta2[i] = in__.scalar_lub_constrain(2,20,lp__);
+            theta2[i] = in__.scalar_lub_constrain(2.1,40,lp__);
         else
-            theta2[i] = in__.scalar_lub_constrain(2,20);
+            theta2[i] = in__.scalar_lub_constrain(2.1,40);
 
         lp_accum__.add(bicop_student_log<propto__>(u,
             v,
             get_base1(theta,ibase,"theta",1),
             get_base1(theta2,ibase,"theta",1)));
 
+        // lp_accum__.add(bicop_student_log<propto__>(u,
+        //     v,
+        //     get_base1(theta,ibase,"theta",1),
+        //     7));
         break;
     case 3:
         // Clayon copula
@@ -217,9 +221,9 @@ void bicop_log_add(int i,
             theta[i] = in__.scalar_lub_constrain(-1,0);
 
         if (jacobian__)
-            theta2[i] = in__.scalar_lub_constrain(2,20,lp__);
+            theta2[i] = in__.scalar_lub_constrain(2.1,40,lp__);
         else
-            theta2[i] = in__.scalar_lub_constrain(2,20);
+            theta2[i] = in__.scalar_lub_constrain(2.1,40);
 
         lp_accum__.add(bicop_student_log<propto__>(u,
             v,

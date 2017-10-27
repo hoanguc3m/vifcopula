@@ -51,8 +51,9 @@ sum(vi_gauss_rng$latent_copula_type == datagen_gauss$family_latent)
 #################################################################################
 
 datagen_student <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max, gid = gid,
-                         family = 2, family_latent = 2, seed_num = 100,
-                         structfactor = 2)
+                         family = 2, seed_num = 100,
+                         structfactor = 2, tau_range = c(0.2,0.8),
+                         tau_latent_range = c(0.2,0.8), family_latent = sample(c(1,3,4,5,6),size = n_max, replace = T))
 datagen <- datagen_student
 data <- list(u = datagen$u,
              n_max = datagen$n_max,
@@ -68,6 +69,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
 comparefcop(datagen, vi_student)
+plot.vifcop(vi_student)
 
 init <- list(copula_type = copfamily_rng,
              latent_copula_type = latentcopfamily_rng)

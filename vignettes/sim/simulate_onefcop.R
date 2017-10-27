@@ -62,6 +62,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
 
+
 init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
@@ -69,7 +70,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_student_rng <- vifcopula::vifcop(data,init,other)
 sum(vi_student_rng$cop_type == datagen_student$family)
-
+plot.vifcop(vi_student_rng)
 pdf(file='img/Student1.pdf', width = 15, height = 5)
 par(mfrow =c(1,3))
 par(mar=c(5,5,3,1))
@@ -338,12 +339,12 @@ print(ELBO_init, digits = 1)
 iter_num <- c(vi_gauss_rng$iteration, vi_student_rng$iteration, vi_clayton_rng$iteration, vi_gumbel_rng$iteration, vi_frank_rng$iteration, vi_joe_rng$iteration, vi_mix_rng$iteration)
 print(iter_num, digits = 0)
 
-correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1), 
-    sum(vi_student_rng$latent_copula_type == 2), 
-    sum(vi_clayton_rng$latent_copula_type == 3), 
-    sum(vi_gumbel_rng$latent_copula_type == 4), 
-    sum(vi_frank_rng$latent_copula_type == 5), 
-    sum(vi_joe_rng$latent_copula_type == 6), 
+correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1),
+    sum(vi_student_rng$latent_copula_type == 2),
+    sum(vi_clayton_rng$latent_copula_type == 3),
+    sum(vi_gumbel_rng$latent_copula_type == 4),
+    sum(vi_frank_rng$latent_copula_type == 5),
+    sum(vi_joe_rng$latent_copula_type == 6),
     sum(vi_mix_rng$latent_copula_type == datagen_mix$family_latent))
 print(correct_latent_percent, digits = 0)
 

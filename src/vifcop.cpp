@@ -356,6 +356,17 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     transform(gid.begin(), gid.end(), gid.begin(),
         bind2nd(std::plus<int>(), 1));
+    for (int i = 0; i < copula_type.size(); i++){
+        if ((copula_type[i] == 21) || (copula_type[i] == 22) || (copula_type[i] == 25) ) {
+            copula_type[i] -= 20;
+        }
+    }
+    for (int i = 0; i < latent_copula_type.size(); i++){
+        if ((latent_copula_type[i] == 21) || (latent_copula_type[i] == 22) || (latent_copula_type[i] == 25) ) {
+            latent_copula_type[i] -= 20;
+        }
+    }
+
 
     Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
                                     Rcpp::Named("sample_iv") = sample_iv_save,
@@ -380,5 +391,39 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     END_RCPP
 }
 
+
+
+//' Variational inference for factor copula models
+//'
+//' \code{vifcop} returns variational estimations.
+//'
+//'
+//' @param
+//' @param
+//' @return
+//' @examples
+//' vifcop(data, init, other)
+//'
+//' \dontrun{
+//' vifcop(data, init, other)
+//' }
+//' @export
+// [[Rcpp::export]]
+double Student_deriv_nu(double u, double v, double par, double nu)
+{
+    using stan::math::var;
+
+    var nu_var(nu);
+    var lp1(0.0);
+    lp1 += vifcopula::bicop_student_log<false>(u, v, par, nu_var);
+    double lp1val = lp1.val();
+
+    lp1.grad();
+    double lp1adj = nu_var.adj();
+
+
+    std::cout << lp1val << " " << lp1adj << std::endl;
+    return lp1adj;
+}
 
 #endif // VIFCOPULA_VIFCOP_CPP

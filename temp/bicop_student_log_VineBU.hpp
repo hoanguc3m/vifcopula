@@ -87,9 +87,6 @@ using namespace stan;
       stan::VectorBuilder<true, T_partials_return, T_u> inv_u_dbl(length(u));
       stan::VectorBuilder<true, T_partials_return, T_v> inv_v_dbl(length(v));
 
-      stan::VectorBuilder<true, T_partials_return, T_u> inv_u_dbl_eps(length(u));
-      stan::VectorBuilder<true, T_partials_return, T_v> inv_v_dbl_eps(length(v));
-
       for (size_t i = 0; i < length(rho); i++) {
         rho_value[i] = value_of(rho_vec[i]);
         nu_value[i] = value_of(nu_vec[i]);
@@ -148,52 +145,20 @@ using namespace stan;
                                                (nu_value[n] + 2) * (nu_value[n] * rho_value[n] + inv_u_dbl[n] * inv_v_dbl[n] ) / M_nu_rho  ;
 
          if (!is_constant_struct<T_nu>::value) {
-             // double u_double = value_of(u_vec[n]);
-             // double v_double = value_of(v_vec[n]);
-             // double rho_double = value_of(rho_vec[n]);
-             // double nu_double = value_of(nu_vec[n]);
-             // int nn = 1;
-             // int family = 2;
-             // double dlogc_dnu;
-             // double *param = new double[2];
-             // param[0] = rho_double;
-             // param[1] = nu_double;
-             //
-             // difflPDF_nu_tCopula_new( &u_double, &v_double, &nn, param, &family, &dlogc_dnu);
-             // delete[] param;
-             // ops_partials.edge4_.partials_[n] += dlogc_dnu;
+             double u_double = value_of(u_vec[n]);
+             double v_double = value_of(v_vec[n]);
+             double rho_double = value_of(rho_vec[n]);
+             double nu_double = value_of(nu_vec[n]);
+             int nn = 1;
+             int family = 2;
+             double dlogc_dnu;
+             double *param = new double[2];
+             param[0] = rho_double;
+             param[1] = nu_double;
 
-             const T_partials_return     A_arg = nud2[n];
-             const T_partials_return     B_arg = 0.5;
-
-             const T_partials_return     digammaA = digamma(A_arg);
-             const T_partials_return     digammaB = digamma(B_arg);
-             const T_partials_return     digammaSum = digamma(nud2ph[n]);
-             const T_partials_return     betaAB = exp(lbeta(A_arg,B_arg));
-             const T_partials_return     nu_p_x1_sq = nu_value[n] + square(inv_u_dbl[n]);
-             const T_partials_return     nu_p_x2_sq = nu_value[n] + square(inv_v_dbl[n]);
-
-             double eps = 0.001;
-             students_t s_eps(nu_value[n]+eps);
-             inv_u_dbl_eps[n] = quantile(s_eps,value_of(u_vec[n]));
-             inv_v_dbl_eps[n] = quantile(s_eps,value_of(v_vec[n]));
-
-             const T_partials_return dx1_dnu = (inv_u_dbl_eps[n] - inv_u_dbl[n])/eps;
-
-             const T_partials_return dx2_dnu = (inv_v_dbl_eps[n] - inv_v_dbl[n])/eps;
-
-             const T_partials_return x1_x1_dnu = 2 * inv_u_dbl[n] * dx1_dnu;
-             const T_partials_return x1_x2_dnu = 2 * inv_u_dbl[n] * dx2_dnu;
-             const T_partials_return x2_x2_dnu = 2 * inv_v_dbl[n] * dx2_dnu;
-             const T_partials_return x2_x1_dnu = 2 * inv_v_dbl[n] * dx1_dnu;
-
-
-             ops_partials.edge4_.partials_[n] += (- digammaSum) + digammaA + 0.5 * log_1mrhosq[n] -
-                 nud2m1[n] / nu_value[n] - 0.5 * log(nu_value[n]) +
-                 nud2ph[n] * ( (1 + x1_x1_dnu)/nu_p_x1_sq + (1 + x2_x2_dnu)/nu_p_x2_sq ) +
-                 0.5 * ( log(nu_p_x1_sq) + log(nu_p_x2_sq)) -
-                 nud2p1[n] *(1-sq_rho[n] + x1_x1_dnu + x2_x2_dnu - rho_value[n]*(x1_x2_dnu+x2_x1_dnu) )/ M_nu_rho -
-                 0.5 * logM;
+             difflPDF_nu_tCopula_new( &u_double, &v_double, &nn, param, &family, &dlogc_dnu);
+             delete[] param;
+             ops_partials.edge4_.partials_[n] += dlogc_dnu;
          }
 
       }

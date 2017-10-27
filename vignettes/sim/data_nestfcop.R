@@ -14,8 +14,11 @@ gid <- c(rep(1,10),rep(2,10),rep(3,10),rep(4,10),rep(5,10),
 k_max = max(gid)+1
 structfactor = 3
 
-gauss_init <- rep(14, n_max)
-gauss_latent_init <- rep(14, k_max-1)
+gauss_init <- rep(5, n_max)
+gauss_latent_init <- rep(5, k_max-1)
+
+copfamily_init <- sample(c(1,3,4,5,6),size = 100, replace = T)
+copfamily_latent_init <- sample(c(1,3,4,5,6),size = k_max-1, replace = T)
 
 
 data <- list(u = new_u_mat,
@@ -24,15 +27,15 @@ data <- list(u = new_u_mat,
              k_max = k_max,
              gid = gid,
              structfactor = structfactor)
-init <- list(copula_type = gauss_init,
-             latent_copula_type = gauss_latent_init)
+init <- list(copula_type = copfamily_init,
+             latent_copula_type = copfamily_latent_init)
 
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_mix_nf <- vifcopula::vifcop(data,init,other)
-
+plot.vifcop(vi_mix_nf)
 sum(vi_mix_nf$cop_type == 2)
 sum(vi_mix_nf$cop_type == 2)
 save.image("/media/hoanguc3m/Data/wp2/data_nf.Rdata")

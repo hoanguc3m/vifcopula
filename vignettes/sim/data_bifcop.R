@@ -14,8 +14,8 @@ gid <- c(rep(1,10),rep(2,10),rep(3,10),rep(4,10),rep(5,10),
 k_max = max(gid)+1
 structfactor = 2
 
-gauss_init <- rep(14, n_max)
-gauss_latent_init <- rep(14, n_max)
+gauss_init <- rep(1, n_max)
+gauss_latent_init <- rep(1, n_max)
 
 
 data <- list(u = new_u_mat,
@@ -32,9 +32,9 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_mix_bf <- vifcopula::vifcop(data,init,other)
-
+plot.vifcop(vi_mix_bf)
 sum(vi_mix_bf$cop_type == 2)
-sum(vi_mix_bf$cop_type == 2)
+sum(vi_mix_bf$latent_copula_type == 0)
 save.image("/media/hoanguc3m/Data/wp2/data_bf.Rdata")
 plot.vifcop(vi_mix_bf)
 

@@ -9,6 +9,7 @@
 #include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
 #include <service/bicop_select.hpp>
+#include <service/bicop_select_latent.hpp>
 #include <transform/hfunc_stan.hpp>
 
 namespace vifcopula
@@ -190,7 +191,7 @@ public:
                         VectorXd::Map(&u_temp[0], t_max) = u_cond.col(j);
                         VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(gid[j]+1);
                         std::vector<double> params_out(2);
-                        latent_cop_new[j] = bicop_select(u_temp, v2g_temp, t_max, params_out, base_rng);
+                        latent_cop_new[j] = bicop_select_latent(u_temp, v2g_temp, t_max, params_out, base_rng);
                         }
 
 

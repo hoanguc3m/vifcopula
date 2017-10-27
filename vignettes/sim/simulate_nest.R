@@ -51,8 +51,9 @@ comparefcop(datagen, vi_gauss_rng)
 
 #################################################################################
 datagen_Student <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                           family = 2, family_latent = 2,  seed_num = 100,
-                           structfactor = 3)
+                           family = 2, seed_num = 0,
+                           structfactor = 3, tau_latent_range = c(0.6,0.8),
+                           family_latent = sample(c(1,3,4,5,6),size = k_max-1, replace = T) )
 datagen <- datagen_Student
 data <- list(u = datagen$u,
              n_max = datagen$n_max,
@@ -68,7 +69,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
 comparefcop(datagen, vi_student)
-
+plot.vifcop(vi_student)
 plot(datagen$theta, abs(tail(vi_student$mean_iv,2*n_max)[seq(1,200, by = 2)]), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 plot(datagen$theta2, tail(vi_student$mean_iv,2*n_max)[seq(2,200, by = 2)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 plot(datagen$theta_latent, vi_student$mean_iv[seq(t_max*k_max+1,t_max*k_max+k_max*2-2,by = 2)])
@@ -84,6 +85,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_student_rng <- vifcopula::vifcop(data,init,other)
+plot.vifcop(vi_student_rng)
 comparefcop(datagen, vi_student_rng)
 sum(vi_student_rng$cop_type == datagen_Student$family)
 sum(vi_student_rng$latent_copula_type == datagen_Student$family_latent)
@@ -270,21 +272,21 @@ print(ELBO_init, digits = 1)
 iter_num <- c(vi_gauss_rng$iteration, vi_student_rng$iteration, vi_clayton_rng$iteration, vi_gumbel_rng$iteration, vi_frank_rng$iteration, vi_joe_rng$iteration, vi_mix_rng$iteration)
 print(iter_num, digits = 0)
 
-correct_percent <- c(sum(vi_gauss_rng$cop_type == 1), 
-    sum(vi_student_rng$cop_type == 2), 
-    sum(vi_clayton_rng$cop_type == 3), 
-    sum(vi_gumbel_rng$cop_type == 4), 
-    sum(vi_frank_rng$cop_type == 5), 
-    sum(vi_joe_rng$cop_type == 6), 
+correct_percent <- c(sum(vi_gauss_rng$cop_type == 1),
+    sum(vi_student_rng$cop_type == 2),
+    sum(vi_clayton_rng$cop_type == 3),
+    sum(vi_gumbel_rng$cop_type == 4),
+    sum(vi_frank_rng$cop_type == 5),
+    sum(vi_joe_rng$cop_type == 6),
     sum(vi_mix_rng$cop_type == datagen_mix$family))
 print(correct_percent, digits = 0)
 
-correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1), 
-    sum(vi_student_rng$latent_copula_type == 2), 
-    sum(vi_clayton_rng$latent_copula_type == 3), 
-    sum(vi_gumbel_rng$latent_copula_type == 4), 
-    sum(vi_frank_rng$latent_copula_type == 5), 
-    sum(vi_joe_rng$latent_copula_type == 6), 
+correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1),
+    sum(vi_student_rng$latent_copula_type == 2),
+    sum(vi_clayton_rng$latent_copula_type == 3),
+    sum(vi_gumbel_rng$latent_copula_type == 4),
+    sum(vi_frank_rng$latent_copula_type == 5),
+    sum(vi_joe_rng$latent_copula_type == 6),
     sum(vi_mix_rng$latent_copula_type == datagen_mix$family_latent))
 print(correct_latent_percent, digits = 0)
 
@@ -396,16 +398,16 @@ plot(datagen_joe$theta, get_theta(vi_joe),
 abline(a= 0, b=1, col="red")
 
 # plot.new()
-# 
+#
 # plot(datagen_Student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
 #     xlab = expression(nu[t]), ylab = expression(nu[approx]),
 #     main = " Student one factor copula")
 # abline(a= 0, b=1, col="red")
-# 
+#
 # plot.new()
 # plot.new()
 # plot.new()
 # plot.new()
-# 
+#
 dev.off()
 

@@ -7,6 +7,7 @@
 #include <advi_mod.hpp>
 #include <stan/callbacks/stream_writer.hpp>
 #include <service/bicop_select.hpp>
+#include <service/bicop_select_latent.hpp>
 
 // template <class T>
 // inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
@@ -175,9 +176,11 @@ public:
                 advi_cop.get_mean(vi_tmp, mean_iv);
 
                 //v1_temp = mean_iv.head(t_max);
-                matrix_d v2g = mean_iv.head(t_max*k);
                 VectorXd::Map(&v1_temp[0], t_max) = mean_iv.head(t_max);
 
+                matrix_d v2g = mean_iv.head(t_max*k);
+                // vector<double> vec_params(t_max*k);
+                // VectorXd::Map(&vec_params[0], t_max*k) = v2g;
                 v2g.resize(t_max,k);
 
 
@@ -185,7 +188,13 @@ public:
                     //v2g_temp = v2g.col(j); get the j_th latent
                     VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(j+1);
                     std::vector<double> params_out(2);
-                    latent_cop_new[j] = bicop_select(v2g_temp, v1_temp, t_max, params_out, base_rng);
+                    latent_cop_new[j] = bicop_select_latent(v2g_temp, v1_temp, t_max, params_out, base_rng);
+                    // if (latent_cop_new[j] == 2) {
+                    //     vec_params.push_back(params_out[0]);
+                    //     vec_params.push_back(params_out[1]);
+                    // } else {
+                    //     vec_params.push_back(params_out[0]);
+                    // }
                 }
 
 
@@ -197,6 +206,12 @@ public:
                     VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(gid[j]+1);
                     std::vector<double> params_out(2);
                     cop_new[j] = bicop_select(u_temp, v2g_temp, t_max, params_out, base_rng);
+                    // if (cop_new[j] == 2) {
+                    //     vec_params.push_back(params_out[0]);
+                    //     vec_params.push_back(params_out[1]);
+                    // } else {
+                    //     vec_params.push_back(params_out[0]);
+                    // }
                 }
 
 
@@ -209,6 +224,7 @@ public:
 
                     max_param = layer_n1.num_params_r();
                     cont_params = Eigen::VectorXd::Zero(max_param);
+                    // cont_params = VectorXd::Map(&vec_params[0], max_param);
 
 
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
