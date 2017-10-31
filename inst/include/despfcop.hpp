@@ -1,25 +1,14 @@
-#ifndef VIFCOPULA_NESTOFCOP_HPP
-#define VIFCOPULA_NESTOFCOP_HPP
+#ifndef VIFCOPULA_DESPFCOP_HPP
+#define VIFCOPULA_DESPFCOP_HPP
 
 #include <omp.h>
-#include <nefcopula_stanc.hpp>
+#include <despfcopula_stanc.hpp>
 #include <stan/math.hpp>
 #include <advi_mod.hpp>
-#include <stan/callbacks/stream_writer.hpp>
+#include <stan/callbacks/writer.hpp>
+#include <stan/callbacks/stream_logger.hpp>
 #include <service/bicop_select.hpp>
-#include <service/bicop_select_latent.hpp>
-
-// template <class T>
-// inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
-// {
-//     typename T::const_iterator pos;
-//
-//     std::cout << optcstr;
-//     for (pos=coll.begin(); pos!=coll.end(); ++pos) {
-//         std::cout << *pos << ' ';
-//     }
-//     std::cout << std::endl;
-// }
+#include <service/normal_meanfield_store.hpp>
 
 namespace vifcopula
 {
@@ -37,18 +26,19 @@ typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 typedef boost::ecuyer1988 rng_t;
-typedef vifcopula::nefcopula nefcopula;
+typedef vifcopula::despfcopula despfcopula;
 typedef vifcopula::bicopula bicopula;
 typedef stan::optimization::BFGSLineSearch<bicopula,stan::optimization::BFGSUpdate_HInv<> > Optimizer_BFGS;
 
 
-class nestfcop
+class despfcop
 {
 private:
     matrix_d u;
-    vector<int> gid;             // Group of copula
-    std::vector<int> copula_type;
-    std::vector<int> latent_copula_type;
+    matrix_d u_eps;
+    std::vector<int> copula_type_vec;
+    std::vector<int> copula_eps_vec;
+    int twofcop;
     int t_max;
     int n_max;
     int k;
@@ -66,25 +56,34 @@ private:
     int core;
 
 public:
-    ~nestfcop() { }
+    ~despfcop() { }
 
     void set_u(const matrix_d& u_)
     {
         u = u_;
     }
-    void set_copula_type(std::vector<int>& copula_type_)
+    void set_u_eps(const matrix_d& u_eps_)
     {
-        copula_type = copula_type_;
+        u_eps = u_eps_;
     }
-    void set_latent_copula_type(std::vector<int>& latent_copula_type_)
+    void set_copula_type(std::vector<int>& copula_type_vec_)
     {
-        latent_copula_type = latent_copula_type_;
+        copula_type_vec = copula_type_vec_;
+    }
+    void set_copula_eps(std::vector<int>& copula_eps_vec_)
+    {
+        copula_eps_vec = copula_eps_vec_;
+    }
+    void set_twofcop(int twofcop_)
+    {
+        twofcop = twofcop_;
     }
 
-    nestfcop (const matrix_d& u_,
-              const std::vector<int>& gid_,
-            std::vector<int>& copula_type_,
-            std::vector<int>& latent_copula_type_,
+    despfcop (const matrix_d& u_,
+            const matrix_d& u_eps_,
+            std::vector<int>& copula_type_vec_,
+            std::vector<int>& copula_eps_vec_,
+            int twofcop_,
             int t_max_,
             int n_max_,
             int k_,
@@ -100,7 +99,8 @@ public:
             int max_iterations_,
             bool copselect_,
             int core_) :
-    u(u_), gid(gid_), copula_type(copula_type_), latent_copula_type(latent_copula_type_),
+    u(u_), u_eps(u_eps_),
+    copula_type_vec(copula_type_vec_), copula_eps_vec(copula_eps_vec_), twofcop(twofcop_),
     t_max(t_max_), n_max(n_max_), k(k_),
     base_rng(base_rng_), iter(iter_), n_monte_carlo_grad(n_monte_carlo_grad_),
     n_monte_carlo_elbo(n_monte_carlo_elbo_), eval_elbo(eval_elbo_),
@@ -113,28 +113,31 @@ public:
     void runvi( vector_d& mean_iv,
                 matrix_d& sample_iv,
                 std::vector<int>& cop_new,
-                std::vector<int>& latent_cop_new,
+                std::vector<int>& cop_eps_new,
+                int& twofcop_new,
                 std::vector<double>& ELBO,
                 int& count_iter)
     {
 
         // Initiate model
-        vector<double> v1_temp(t_max);
-        vector<double> v2g_temp(t_max);
+        vector<double> v_temp(t_max);
+        vector<double> v_eps_temp(t_max);
         vector<double> u_temp(t_max);
         double ELBO_max = std::numeric_limits<double>::min();
 
 
-
-        nefcopula layer_n1(u,gid,copula_type,latent_copula_type,
-                           t_max, n_max, k, base_rng);
+        std::vector<int> gid(n_max);
+        std::fill(gid.begin(), gid.end(), 0);
+        despfcopula layer_n1(u,u_eps,gid,
+                            copula_type_vec, copula_eps_vec, twofcop,
+                            t_max, n_max, k, base_rng);
 
 
         // Dummy input
         Eigen::VectorXd cont_params = Eigen::VectorXd::Zero(layer_n1.num_params_r());
 
         // ADVI
-        stan::variational::advi_mod<nefcopula, stan::variational::normal_meanfield, rng_t> advi_cop(layer_n1,
+        stan::variational::advi_mod<despfcopula, stan::variational::normal_meanfield, rng_t> advi_cop(layer_n1,
                                                                                                      cont_params,
                                                                                                      base_rng,
                                                                                                      n_monte_carlo_grad,
@@ -156,7 +159,6 @@ public:
         std::stringstream out_diagnostic_writer;
         stan::callbacks::stream_writer diagnostic_writer(out_diagnostic_writer);
 
-//        stan::variational::normal_meanfield vi_save(max_param);
         vifcopula::normal_meanfield_store vi_store;
 
         advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
@@ -175,43 +177,41 @@ public:
                 stan::variational::normal_meanfield vi_tmp(vi_store.mu_, vi_store.omega_);
                 advi_cop.get_mean(vi_tmp, mean_iv);
 
-                //v1_temp = mean_iv.head(t_max);
-                VectorXd::Map(&v1_temp[0], t_max) = mean_iv.head(t_max);
+                //v_temp = mean_iv.head(t_max);
+                matrix_d v2g = mean_iv.head(t_max*2);
+                v2g.resize(t_max,2);
 
-                matrix_d v2g = mean_iv.head(t_max*k);
-                // vector<double> vec_params(t_max*k);
-                // VectorXd::Map(&vec_params[0], t_max*k) = v2g;
-                v2g.resize(t_max,k);
+                VectorXd::Map(&v_temp[0], t_max) = v2g.col(0);
+                VectorXd::Map(&v_eps_temp[0], t_max) = v2g.col(1);
 
-
-                for (int j = 0; j < (k-1); j++){
-                    //v2g_temp = v2g.col(j); get the j_th latent
-                    VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(j+1);
-                    std::vector<double> params_out(2);
-                    latent_cop_new[j] = bicop_select_latent(v2g_temp, v1_temp, t_max, params_out, base_rng);
-                }
-
-
-
-
+                std::vector<double> params_out(2);
                 for (int j = 0; j < n_max; j++){
                     //u_temp = u.col(j);
                     VectorXd::Map(&u_temp[0], t_max) = u.col(j);
-                    VectorXd::Map(&v2g_temp[0], t_max) = v2g.col(gid[j]+1);
-                    std::vector<double> params_out(2);
-                    cop_new[j] = bicop_select(u_temp, v2g_temp, t_max, params_out, base_rng);
+                    cop_new[j] = bicop_select(u_temp, v_temp, t_max,params_out, base_rng);
                 }
 
+                for (int j = 0; j < n_max; j++){
+                    //u_temp = u.col(j);
+                    VectorXd::Map(&u_temp[0], t_max) = u_eps.col(j);
+                    cop_eps_new[j] = bicop_select(u_temp, v_eps_temp, t_max,params_out, base_rng);
+                }
 
-                if ((cop_new != copula_type) || (latent_cop_new != latent_copula_type)){
-                    copula_type = cop_new;
-                    latent_copula_type = latent_cop_new;
+                twofcop_new = bicop_select(v_temp, v_eps_temp, t_max,params_out, base_rng);
 
-                    layer_n1.set_copula_type(copula_type);
-                    layer_n1.set_latent_copula_type(latent_copula_type);
+                if ((cop_new != copula_type_vec) || (cop_eps_new != copula_eps_vec) || (twofcop_new != twofcop)){
+
+                    copula_type_vec = cop_new;
+                    copula_eps_vec = cop_eps_new;
+                    twofcop = twofcop_new;
+
+                    layer_n1.set_copula_type(copula_type_vec);
+                    layer_n1.set_copula_eps_type(copula_eps_vec);
+                    layer_n1.set_copula_twofcop(twofcop);
 
                     max_param = layer_n1.num_params_r();
                     cont_params = Eigen::VectorXd::Zero(max_param);
+                    //vi_save.resize(max_param);
 
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
@@ -235,10 +235,13 @@ public:
         stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
         ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
 
+
         max_param = layer_n1.num_params_r();
-        mean_iv.resize(max_param);
         sample_iv.resize(iter,max_param);
+        mean_iv.resize(max_param);
         advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
+
+
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;
 
@@ -251,4 +254,4 @@ public:
 }; // class
 
 }// namespace
-#endif // VIFCOPULA_NESTOFCOP_HPP
+#endif // VIFCOPULA_DESPFCOP_HPP

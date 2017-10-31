@@ -37,13 +37,13 @@ other <- list(seed = 126, core = 8, iter = 1000,
 vi_mix_nf <- vifcopula::vifcop(data,init,other)
 plot.vifcop(vi_mix_nf)
 sum(vi_mix_nf$cop_type == 2)
-sum(vi_mix_nf$cop_type == 2)
+sum(vi_mix_nf$latent_copula == 2)
 save.image("/media/hoanguc3m/Data/wp2/data_nf.Rdata")
 plot.vifcop(vi_mix_nf)
 
 plot.vifcop(vi_mix_nf)
 round(vi_mix_nf$time)
-round(vi_mix_nf$ELBO)
+round(vi_mix_nf$criteria)
 vi_mix_nf$iteration
 sum(vi_mix_nf$cop_type == 1) + sum(vi_mix_nf$cop_type == 21)
 sum(vi_mix_nf$cop_type == 2) + sum(vi_mix_nf$cop_type == 22)

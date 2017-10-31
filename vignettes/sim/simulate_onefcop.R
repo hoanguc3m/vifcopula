@@ -354,6 +354,19 @@ print(time_rng, digits = 0)
 ELBO_rng <- c(vi_gauss_rng$ELBO, vi_student_rng$ELBO, vi_clayton_rng$ELBO, vi_gumbel_rng$ELBO, vi_frank_rng$ELBO, vi_joe_rng$ELBO, vi_mix_rng$ELBO)
 print(ELBO_rng, digits = 1)
 
+pdf(file='img/OnefactorCompare1.pdf', width = 7, height = 2.5)
+par(mfrow =c(3,6))
+par(mar=c(5,5,3,1))
+comparefcop(datagen_mix,vi_mix)
+dev.off()
+
+pdf(file='img/OnefactorCompare2.pdf', width = 7, height = 2.5)
+par(mfrow =c(3,6))
+par(mar=c(5,5,3,1))
+comparefcop(datagen_mix,vi_mix_rng)
+dev.off()
+
+
 #############################################################################
 
 pdf(file='img/SimOnefactor.pdf', width = 18, height = 9)

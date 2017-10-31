@@ -264,10 +264,10 @@ comparefcop <- function(datagen,vi){
     plot(datagen$v[,1], v0_vi, xlab = expression(v[t]), ylab = expression(v[approx]))
     abline(a= 0, b=1, col="red")
 
-    plot(tau, tau_vi, xlab = expression(tau[t]), ylab = expression(tau[approximated]))
+    plot(tau, tau_vi, xlab = expression(tau[t]), ylab = expression(tau[approx]))
     abline(a= 0, b=1, col="red")
 
-    plot(datagen$theta, theta_vi, xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+    plot(datagen$theta, theta_vi, xlab = expression(theta[t]), ylab = expression(theta[approx]))
     abline(a= 0, b=1, col="red")
 
 
@@ -281,10 +281,10 @@ comparefcop <- function(datagen,vi){
             par = datagen$theta_latent, par2 = datagen$theta2_latent)
 
 
-        plot(latent_tau, latent_tau_vi, xlab = expression(tau_latent[t]), ylab = expression(tau_latent[approximated]))
+        plot(latent_tau, latent_tau_vi, xlab = expression(tau_latent[t]), ylab = expression(tau_latent[approx]))
         abline(a= 0, b=1, col="red")
 
-        plot(datagen$theta_latent, latent_theta_vi, xlab = expression(theta_latent[t]), ylab = expression(theta_latent[approximated]))
+        plot(datagen$theta_latent, latent_theta_vi, xlab = expression(theta_latent[t]), ylab = expression(theta_latent[approx]))
         abline(a= 0, b=1, col="red")
 
 

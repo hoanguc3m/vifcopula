@@ -544,6 +544,7 @@ namespace stan {
             Eigen::Matrix<double,Eigen::Dynamic,1> cont_params_raw(cont_params_);
 
             std::cout << " Calculating ELBO/AIC/BIC/DIC/log_prob " << std::endl;
+
             for (int n = 0; n < n_posterior_samples_; ++n) {
 
                 vi_save.sample(rng_, cont_params_);
@@ -559,6 +560,8 @@ namespace stan {
 
             ELBO[3] /= n_posterior_samples_;    // DIC
             ELBO[4] /= n_posterior_samples_;    // log_prob
+            std::cout << " log_prob_over_v " << ELBO[4] << " log_prob " << ELBO[3] << std::endl;
+            std::cout << " Number of parameters " << eff_num_para << " Entropy " << vi_save.entropy() << std::endl;
 
             ELBO[3] = - 4 * ELBO[3] + 2 * ELBO[4];
             ELBO[1] = - 2 * ELBO[4] + 2 * eff_num_para;

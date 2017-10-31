@@ -27,7 +27,7 @@ sum(vi_mix_1f$cop_type == 2)
 save.image("/media/hoanguc3m/Data/wp2/data_1f.Rdata")
 plot.vifcop(vi_mix_1f)
 round(vi_mix_1f$time)
-round(vi_mix_1f$ELBO)
+round(vi_mix_1f$criteria)
 vi_mix_1f$iteration
 sum(vi_mix_1f$cop_type == 1) + sum(vi_mix_1f$cop_type == 21)
 sum(vi_mix_1f$cop_type == 2) + sum(vi_mix_1f$cop_type == 22)

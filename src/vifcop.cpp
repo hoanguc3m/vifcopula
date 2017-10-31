@@ -10,7 +10,7 @@
 #include <nestfcop.hpp>
 #include <nestselefcop.hpp>
 #include <bifcop.hpp>
-
+#include <despfcop.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -213,6 +213,9 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     if (structfactor == 4) {
         latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
     }
+    if (structfactor == 5) {
+        latent_copula_type = Rcpp::as<vector_int>(init["latent_copula_type"]);
+    }
     Rcpp::Rcout << " Init copula types :" << " Checked" << std::endl;
 
     // Timing variables
@@ -345,6 +348,40 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     // }
     //     break;
 
+    case 5: // two factor copula for u_d and u_eps
+    {
+        matrix_d u_eps = Rcpp::as<matrix_d>(data["u_eps"]);
+        int twofcop = Rcpp::as<int>(init["twofcop"]);
+
+        latent_copula_type_vec.resize(n_max);
+        latent_cop_vec_new.resize(n_max);
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        VectorXi::Map(&latent_copula_type_vec[0], n_max) = latent_copula_type.col(0);
+
+        //latent_cop_vec_new.resize(0);
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " VI Estimating two factor copulas " << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+
+        despfcop Objdespfcop(u,u_eps, copula_type_vec, latent_copula_type_vec, twofcop,
+                            t_max, n_max, k_max-1, base_rng,
+            iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
+            adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
+            copselect, core);
+        Rcpp::Rcout << " All passed 1 " << std::endl;
+
+        Objdespfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, twofcop, ELBO_save, count_iter);
+
+        save_vi(model_pars, mean_iv_save, sample_iv_save,
+            mean_iv, sample_iv,
+            copula_type, copula_type_vec, cop_vec_new,
+            latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
+            t_max, n_max, k_max-1, iter, structfactor, copselect);
+
+    }
+        break;
     } // end switch
 
 

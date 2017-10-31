@@ -40,7 +40,7 @@ plot.vifcop(vi_mix_bf)
 
 plot.vifcop(vi_mix_bf)
 round(vi_mix_bf$time)
-round(vi_mix_bf$ELBO)
+round(vi_mix_bf$criteria)
 vi_mix_bf$iteration
 sum(vi_mix_bf$cop_type == 1) + sum(vi_mix_bf$cop_type == 21)
 sum(vi_mix_bf$cop_type == 2) + sum(vi_mix_bf$cop_type == 22)
