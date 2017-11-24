@@ -28,11 +28,11 @@ par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_gauss),
      xlab = expression(v[t]), ylab = expression(v[approx]),
-     main = " Gaussin one factor copula")
+     main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_gauss) ,
      xlab = expression(theta[t]), ylab = expression(theta[approx]),
-     main = " Gaussin one factor copula")
+     main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
 
@@ -375,7 +375,7 @@ par(mar=c(5,5,3,1))
 
 plot(datagen_gauss$v, get_v0(vi_gauss),
     xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Gaussin one factor copula")
+    main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v, get_v0(vi_student),
@@ -409,7 +409,7 @@ abline(a= 0, b=1, col="red")
 
 plot(datagen_gauss$theta, get_theta(vi_gauss) ,
     xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Gaussin one factor copula")
+    main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta, get_theta(vi_student),

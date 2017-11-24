@@ -237,6 +237,100 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
           structfactor = structfactor)
 }
 
+
+#' @export
+fcoppred <- function(vi, iteration, seed_num = 0) {
+    set.seed(seed_num)
+    n_max = vi$n_max
+    k_max = vi$k_max
+    family = vi$cop_type
+    family_latent = vi$latent_copula_type
+    gid = vi$gid
+    structfactor = vi$structfactor
+    theta = get_theta(vi)
+    theta2 = get_theta2(vi)
+    theta_latent = get_latent_theta(vi)
+    theta_latent2 = get_latent_theta2(vi)
+
+    if (! all.equal(iteration, as.integer(iteration)))
+        stop("'iteration' has to be a integer")
+    if (! all.equal(n_max, as.integer(n_max)))
+        stop("'n_max' has to be a integer")
+    if (! all.equal(k_max, as.integer(k_max)))
+        stop("'n_max' has to be a integer")
+    if (! (iteration > 0) & (n_max > 0) & (k_max > 0) )
+        stop("'iteration', 'n_max', 'k_max' has to be greater than 0")
+
+    if ( (structfactor == 1) && (k_max > 1))
+        stop("Only support one factor model, for two factor model try: structfactor = 2 ")
+
+
+    # Check copula latent family
+    u <- matrix(runif(iteration*n_max),nrow=iteration, ncol = n_max)
+
+    if (structfactor == 1)
+    {
+        v <- matrix(runif(iteration*1), nrow = iteration, ncol = 1)
+        for (i in 1:n_max){
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
+        }
+    }
+
+    if (structfactor == 2)
+    {
+        v <- matrix(runif(iteration*k_max), nrow = iteration, ncol = k_max)
+
+        for (i in 1:n_max){
+            obj <- BiCop(family = family_latent[i], par = theta_latent[i], par2 = theta_latent2[i])
+            # common factor is v[,1]
+            # group factor are v[,k+1]
+            u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
+
+        }
+
+        for (i in 1:n_max){
+            # group factor
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
+
+        }
+    }
+
+    if (structfactor == 3)
+    {
+        v <- matrix(runif(iteration*k_max), nrow = iteration, ncol = k_max)
+
+        for (k in 2:k_max){
+            obj <- BiCop(family = family_latent[k-1], par = theta_latent[k-1], par2 = theta_latent2[k-1])
+            # common factor is v[,1]
+            # group factor are v[,k]
+            v[,k] <- BiCopHinv2(v[,k], v[,1], obj)
+        }
+
+        for (i in 1:n_max){
+            # group factor
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
+        }
+    }
+
+
+    list( u = u,
+        v = v,
+        iteration = iteration,
+        n_max = n_max,
+        k_max = k_max,
+        family = family,
+        theta = theta,
+        theta2 = theta2,
+        family_latent = family_latent,
+        theta_latent = theta_latent,
+        theta2_latent = theta_latent2,
+        gid = gid,
+        structfactor = structfactor)
+}
+
 #' @export
 comparefcop <- function(datagen,vi){
     v0_vi = get_v0(vi)
@@ -330,4 +424,24 @@ plot.vifcop <- function(vi) {
 
         hist(latent_theta2_vi, xlab = expression(theta_latent2[t]))
     }
+}
+
+#' @export
+fcoppar2tau <- function(vi){
+    theta_vi = get_theta(vi)
+    theta2_vi = get_theta2(vi)
+    tau_vi = BiCopPar2Tau(family = vi$cop_type, par = theta_vi, par2 = theta2_vi)
+
+    latent_tau_vi = NULL
+
+
+    if (vi$structfactor > 1) {
+        latent_theta_vi = get_latent_theta(vi)
+        latent_theta2_vi = get_latent_theta2(vi)
+        latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
+                                     par = latent_theta_vi, par2 = latent_theta2_vi)
+
+    }
+
+    return(list(tau_vi = tau_vi, latent_tau_vi = latent_tau_vi))
 }

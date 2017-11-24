@@ -17,7 +17,7 @@ namespace vifcopula {
             require("vifcopula", Rcpp::Named("quietly") = true);
             typedef int(*Ptr_validate)(const char*);
             static Ptr_validate p_validate = (Ptr_validate)
-                R_GetCCallable("vifcopula", "vifcopula_RcppExport_validate");
+                R_GetCCallable("vifcopula", "_vifcopula_RcppExport_validate");
             if (!p_validate(sig)) {
                 throw Rcpp::function_not_exported(
                     "C++ function with signature '" + std::string(sig) + "' not found in vifcopula");
@@ -30,12 +30,12 @@ namespace vifcopula {
         static Ptr_vifcop p_vifcop = NULL;
         if (p_vifcop == NULL) {
             validateSignature("List(*vifcop)(SEXP,SEXP,SEXP)");
-            p_vifcop = (Ptr_vifcop)R_GetCCallable("vifcopula", "vifcopula_vifcop");
+            p_vifcop = (Ptr_vifcop)R_GetCCallable("vifcopula", "_vifcopula_vifcop");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_vifcop(Rcpp::wrap(data_), Rcpp::wrap(init_), Rcpp::wrap(other_));
+            rcpp_result_gen = p_vifcop(Shield<SEXP>(Rcpp::wrap(data_)), Shield<SEXP>(Rcpp::wrap(init_)), Shield<SEXP>(Rcpp::wrap(other_)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
