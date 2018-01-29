@@ -219,7 +219,12 @@ public:
                     stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
                     ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
                     if (ELBO[0] < ELBO_max){
-                        keepfindcop = false;
+                        if( abs(ELBO[0] / ELBO_max - 1) < 0.01 ) { // stop until convergence
+                            keepfindcop = false;
+                        } else {
+                            ELBO_max = ELBO[0];
+                        }
+
                     } else{
                         ELBO_max = ELBO[0];
                     }

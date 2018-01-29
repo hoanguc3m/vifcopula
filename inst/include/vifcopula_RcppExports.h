@@ -40,7 +40,26 @@ namespace vifcopula {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<List >(rcpp_result_gen);
+    }
+
+    inline List hmcfcop(SEXP data_, SEXP init_, SEXP other_) {
+        typedef SEXP(*Ptr_hmcfcop)(SEXP,SEXP,SEXP);
+        static Ptr_hmcfcop p_hmcfcop = NULL;
+        if (p_hmcfcop == NULL) {
+            validateSignature("List(*hmcfcop)(SEXP,SEXP,SEXP)");
+            p_hmcfcop = (Ptr_hmcfcop)R_GetCCallable("vifcopula", "_vifcopula_hmcfcop");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_hmcfcop(Shield<SEXP>(Rcpp::wrap(data_)), Shield<SEXP>(Rcpp::wrap(init_)), Shield<SEXP>(Rcpp::wrap(other_)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<List >(rcpp_result_gen);
     }
 

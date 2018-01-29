@@ -20,6 +20,25 @@ vifcop <- function(data_, init_, other_) {
     .Call('_vifcopula_vifcop', PACKAGE = 'vifcopula', data_, init_, other_)
 }
 
+#' HMC inference for factor copula models
+#'
+#' \code{vifcop} returns NUTS estimations.
+#'
+#'
+#' @param
+#' @param
+#' @return
+#' @examples
+#' hmcfcop(data, init, other)
+#'
+#' \dontrun{
+#' hmcfcop(data, init, other)
+#' }
+#' @export
+hmcfcop <- function(data_, init_, other_) {
+    .Call('_vifcopula_hmcfcop', PACKAGE = 'vifcopula', data_, init_, other_)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_vifcopula_RcppExport_registerCCallable', PACKAGE = 'vifcopula')

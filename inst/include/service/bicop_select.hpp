@@ -45,6 +45,7 @@ double bicop_select(std::vector<double>& u,
     double lpmax = std::numeric_limits<double>::min();
     double BICmin = std::numeric_limits<double>::max();
 
+
     bicopula biuv(1,u,v,t_max,base_rng);
 
 
@@ -66,16 +67,18 @@ double bicop_select(std::vector<double>& u,
         double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         int imax=0;
+
         for (int i = 0; i < cop_seq_size; i++) {
             biuv.set_copula_type(cop_seq[i]);
             std::stringstream out;
-            Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
+           Optimizer_BFGS * bfgs = new Optimizer_BFGS(biuv, params_r, params_i);
+           //Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
             double lp = 0;
             int ret = 0;
             while (ret == 0) {
-                ret = bfgs.step();
+                ret = bfgs->step();
             }
-            lp = bfgs.logp();
+            lp = bfgs->logp();
             log_cop[i] = lp;
 
 
@@ -98,17 +101,17 @@ double bicop_select(std::vector<double>& u,
                 BICmin = BIC[i];
                 imax = i;
 
-                bfgs.params_r(params_r);
+                bfgs->params_r(params_r);
 
 		        //params_out = params_r;
                 biuv.write_array(base_rng, params_r, params_i, params_out);
 
             }
-
+        delete bfgs;
+            bfgs = NULL;
         };
 
-        return_cop = cop_seq[imax];
-
+         return_cop = cop_seq[imax];
     }
     params_out.resize(2); // For theta, theta2 even we dont use it.
 

@@ -34,7 +34,7 @@ vi_mix_2f <- vifcopula::vifcop(data,init,other)
 plot.vifcop(vi_mix_2f)
 sum(vi_mix_2f$cop_type == 2)
 sum(vi_mix_2f$latent_copula_type == 0)
-save.image("/media/hoanguc3m/Data/wp2/data_bf.Rdata")
+save.image("/media/hoanguc3m/Data/wp2/data_2f.Rdata")
 plot.vifcop(vi_mix_2f)
 
 plot.vifcop(vi_mix_2f)

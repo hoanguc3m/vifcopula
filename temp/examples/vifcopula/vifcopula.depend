@@ -414,7 +414,7 @@
 	<algorithm>
 	<stdint.h>
 
-1507301183 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicopula_test.cpp
+1507308420 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicopula_test.cpp
 	<bicopula_stanc.hpp>
 	<advi_mod.hpp>
 	<stan/optimization/bfgs.hpp>
@@ -501,10 +501,10 @@
 1507202918 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_independence_log.hpp
 	<stan/math.hpp>
 
-1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
+1510070430 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_normal_log.hpp
 	<stan/math.hpp>
 
-1505295909 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
+1508947024 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_student_log.hpp
 	<stan/math.hpp>
 	<iostream>
 
@@ -514,7 +514,7 @@
 1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_gumbel_log.hpp
 	<stan/math.hpp>
 
-1501492227 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
+1507932886 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_frank_log.hpp
 	<stan/math.hpp>
 
 1501492228 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_joe_log.hpp
@@ -528,7 +528,7 @@
 	<algorithm>
 	<stdint.h>
 
-1507197025 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/advi_mod.hpp
+1511533513 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/advi_mod.hpp
 	<stan/math.hpp>
 	<stan/callbacks/logger.hpp>
 	<stan/callbacks/writer.hpp>
@@ -10578,13 +10578,13 @@
 1493371904 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/transform/hfunc_frank.hpp
 	<stan/math.hpp>
 
-1507306875 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/bicopula_stanc.hpp
+1517066533 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/bicopula_stanc.hpp
 	<stan/model/model_header.hpp>
 	<dist/bicop_log.hpp>
 	<extra/goodman_kruskal_gamma.hpp>
 	<service/write_theta.hpp>
 
-1507211736 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_log.hpp
+1509014719 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_log.hpp
 	<dist/bicop_independence_log.hpp>
 	<dist/bicop_normal_log.hpp>
 	<dist/bicop_student_log.hpp>
@@ -10592,8 +10592,17 @@
 	<dist/bicop_gumbel_log.hpp>
 	<dist/bicop_frank_log.hpp>
 	<dist/bicop_joe_log.hpp>
+	<dist/bicop_survival_clayton_log.hpp>
+	<dist/bicop_survival_gumbel_log.hpp>
+	<dist/bicop_survival_joe_log.hpp>
+	<dist/bicop_r90_clayton_log.hpp>
+	<dist/bicop_r90_gumbel_log.hpp>
+	<dist/bicop_r90_joe_log.hpp>
+	<dist/bicop_r270_clayton_log.hpp>
+	<dist/bicop_r270_gumbel_log.hpp>
+	<dist/bicop_r270_joe_log.hpp>
 
-1507043511 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/service/write_theta.hpp
+1509014816 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/service/write_theta.hpp
 
 1507194559 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/service/normal_meanfield_store.hpp
 	<stan/math.hpp>
@@ -10618,4 +10627,65 @@
 
 1507304471 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/rosenbrock.hpp
 	<stan/model/model_header.hpp>
+
+1507890281 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_survival_clayton_log.hpp
+	<stan/math.hpp>
+
+1507890559 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_survival_gumbel_log.hpp
+	<stan/math.hpp>
+
+1507891021 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_survival_joe_log.hpp
+	<stan/math.hpp>
+
+1507926844 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r90_clayton_log.hpp
+	<stan/math.hpp>
+
+1507926837 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r90_gumbel_log.hpp
+	<stan/math.hpp>
+
+1507926609 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r90_joe_log.hpp
+	<stan/math.hpp>
+
+1507927000 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r270_clayton_log.hpp
+	<stan/math.hpp>
+
+1507926988 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r270_gumbel_log.hpp
+	<stan/math.hpp>
+
+1507926889 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r270_joe_log.hpp
+	<stan/math.hpp>
+
+1516919811 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/hmc_nuts_diag_e_adapt_test.cpp
+	<stan/services/sample/hmc_nuts_diag_e_adapt.hpp>
+	<gtest/gtest.h>
+	<stan/io/empty_var_context.hpp>
+	<test/test-models/good/optimization/rosenbrock.hpp>
+	<test/unit/services/instrumented_callbacks.hpp>
+	<iostream>
+
+1516919887 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/run_adaptive_sampler_test.cpp
+	<stan/services/util/run_adaptive_sampler.hpp>
+	<gtest/gtest.h>
+	<test/test-models/good/services/test_lp.hpp>
+	<stan/io/empty_var_context.hpp>
+	<stan/services/util/create_rng.hpp>
+	<test/unit/services/instrumented_callbacks.hpp>
+	<test/unit/mcmc/hmc/mock_hmc.hpp>
+	<stan/mcmc/hmc/nuts/adapt_unit_e_nuts.hpp>
+
+1517071908 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/temp/examples/vifcopula/bicop_nuts.cpp
+	<bicopula_stanc.hpp>
+	<stan/callbacks/writer.hpp>
+	<stan/callbacks/stream_logger.hpp>
+	<stan/callbacks/interrupt.hpp>
+	<gtest/gtest.h>
+	<vector>
+	<string>
+	<iostream>
+	<boost/random/additive_combine.hpp>
+	<boost/algorithm/string.hpp>
+	<boost/lexical_cast.hpp>
+	<stan/services/sample/hmc_nuts_diag_e_adapt.hpp>
+	<stan/io/empty_var_context.hpp>
+	<test/unit/services/instrumented_callbacks.hpp>
 
