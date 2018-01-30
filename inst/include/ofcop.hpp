@@ -34,8 +34,6 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 typedef boost::ecuyer1988 rng_t;
 typedef vifcopula::onefcopula onefcopula;
-typedef vifcopula::bicopula bicopula;
-typedef stan::optimization::BFGSLineSearch<bicopula,stan::optimization::BFGSUpdate_HInv<> > Optimizer_BFGS;
 
 
 class ofcop
@@ -149,17 +147,15 @@ public:
                 //v_temp = mean_iv.head(t_max);
                 VectorXd::Map(&v_temp[0], t_max) = mean_iv.head(t_max);
 
-
-
                 std::vector<double> params_out(2);
                 matrix_d u_omp(u) ;
                 int t_max_omp = t_max;
                 int n_max_omp = n_max;
                 rng_t base_rng_omp(0);
 
-                omp_set_num_threads(1);
+                // omp_set_num_threads(1);
 
-                #pragma omp parallel for default(none) firstprivate(u_temp,v_temp,params_out,t_max_omp, base_rng_omp) shared(n_max_omp,cop_vec_new,u_omp)
+                // #pragma omp parallel for default(none) firstprivate(u_temp,v_temp,params_out,t_max_omp, base_rng_omp) shared(n_max_omp,cop_vec_new,u_omp)
                     for (int j = 0; j < n_max_omp; j++){
 
                         // int ID = omp_get_thread_num();
@@ -206,19 +202,13 @@ public:
         stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
         ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
 
-
         max_param = ObjOnefcop.num_params_r();
         sample_iv.resize(iter,max_param);
         mean_iv.resize(max_param);
         advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
 
-
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;
-
-
-
-
 
     } // function
 
@@ -230,7 +220,6 @@ public:
                  int refresh,
                  unsigned int chain,
                  double init_radius,
-
                  double stepsize,
                  double stepsize_jitter,
                  int max_depth,
@@ -250,10 +239,6 @@ public:
         std::fill(gid.begin(), gid.end(), 0);
         onefcopula ObjOnefcop(u,gid,copula_type_vec,t_max, n_max, k, base_rng);
 
-
-
-
-
         //stan::callbacks::interrupt interrupt;
         stan::test::unit::instrumented_interrupt interrupt;
 
@@ -262,17 +247,12 @@ public:
         stan::callbacks::stream_logger logger(std::cout,std::cout,std::cout,std::cout,std::cout);
 
 
-
-        //    std::stringstream parameter_stream_;
-        //    std::stringstream diagnostic_stream_;
-        //    stan::callbacks::stream_writer init_writer(diagnostic_stream_), sample_writer(parameter_stream_), diagnostic_writer(std::cout);
         stan::test::unit::instrumented_writer init_writer, sample_writer, diagnostic_writer;
 
         std::vector<int> disc_vector;
         std::vector<double> cont_vector(ObjOnefcop.num_params_r() ,0); // initial value at 0
 
         Eigen::VectorXd inv_metric;
-
         stan::io::dump dmp = stan::services::util::create_unit_e_diag_inv_metric(ObjOnefcop.num_params_r());
         stan::io::var_context& unit_e_metric = dmp;
 
