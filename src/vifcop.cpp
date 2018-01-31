@@ -168,41 +168,49 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     // Set other variables
     Rcpp::List other(other_);
     // Set seed
-    int seed  = as<int>(other["seed"]);
+    int seed  = 0;
+    int core  = 1;
+    int iter  = 1000;   // Number of iterations after converge
+    int n_monte_carlo_grad  = 1; //number of samples for gradient computation
+    int n_monte_carlo_elbo  = 10; //number of samples for ELBO computation
+    int eval_elbo  = 100;      //evaluate ELBO at every "eval_elbo" iters
+    bool adapt_bool  = FALSE;      // Using adaptation
+    double adapt_val  = 1;      // adaptation value
+    int adapt_iterations  = 50;      // number of iterations for eta adaptation
+    double tol_rel_obj = 0.1;      // relative tolerance parameter for convergence
+    int max_iterations = 2e4;      // max number of iterations to run algorithm
+    bool copselect  = FALSE;      // Automated copula selection
+
+    if ( other.hasAttribute("seed") ) seed = as<int>(other["seed"]);
     rng_t base_rng(seed);
 
-    int core  = as<int>(other["core"]);
+    if ( other.hasAttribute("core") ) {
+        // int ID = omp_get_max_threads();
+        core  = as<int>(other["core"]);
+        // Set parallel
+        #ifdef _OPENMP
+                omp_set_num_threads(core);
+        #endif
 
+    }
 
-    int ID = omp_get_max_threads();
-    //omp_set_num_threads(ID);
-    std::cout << " number of threads : " << ID << std::endl;
-
-    // Set parallel
-    #ifdef _OPENMP
-        omp_set_num_threads(core);
-    #endif
-
-    int iter  = as<int>(other["iter"]); // Number of iterations after converge
-    int n_monte_carlo_grad  = as<int>(other["n_monte_carlo_grad"]); //number of samples for gradient computation
-    int n_monte_carlo_elbo  = as<int>(other["n_monte_carlo_elbo"]); //number of samples for ELBO computation
-    int eval_elbo  = as<int>(other["eval_elbo"]);      //evaluate ELBO at every "eval_elbo" iters
-    bool adapt_bool  = as<bool>(other["adapt_bool"]);      // Using adaptation
-    double adapt_val  = as<double>(other["adapt_val"]);      // adaptation value
-    int adapt_iterations  = as<int>(other["adapt_iterations"]);      // number of iterations for eta adaptation
-    double tol_rel_obj = as<double>(other["tol_rel_obj"]);      // relative tolerance parameter for convergence
-    int max_iterations = 2e4;      // max number of iterations to run algorithm
-    bool copselect  = as<bool>(other["copselect"]);      // Automated copula selection
+    if ( other.hasAttribute("iter") )  iter = as<int>(other["iter"]);
+    if ( other.hasAttribute("n_monte_carlo_grad") )  n_monte_carlo_grad  = as<int>(other["n_monte_carlo_grad"]);
+    if ( other.hasAttribute("n_monte_carlo_elbo") )  n_monte_carlo_elbo  = as<int>(other["n_monte_carlo_elbo"]);
+    if ( other.hasAttribute("eval_elbo") )  eval_elbo  = as<int>(other["eval_elbo"]);
+    if ( other.hasAttribute("adapt_bool") )  adapt_bool  = as<bool>(other["adapt_bool"]);
+    if ( other.hasAttribute("adapt_val") ) adapt_val  = as<double>(other["adapt_val"]);
+    if ( other.hasAttribute("adapt_iterations") ) adapt_iterations  = as<int>(other["adapt_iterations"]);
+    if ( other.hasAttribute("tol_rel_obj") ) tol_rel_obj = as<double>(other["tol_rel_obj"]);
+    if ( other.hasAttribute("copselect") ) copselect  = as<bool>(other["copselect"]);      // Automated copula selection
 
     Rcpp::Rcout << " Core set : " << core << std::endl;
     Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
 
 
-
     // Init hyperparams
     Rcpp::List init(init_);
-    // matrix_d v = Rcpp::as<matrix_d>(init["v"]);
-    // vector_d par = Rcpp::as<vector_d>(init["par"]);
+
     vector_int copula_type = Rcpp::as<vector_int>(init["copula_type"]);
 
     vector_int latent_copula_type;
@@ -412,7 +420,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
 
     Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
-                                    Rcpp::Named("sample_iv") = sample_iv_save,
+                                    Rcpp::Named("sample_iv") = sample_iv_save,//not sample_iv?
                                     Rcpp::Named("cop_type") = copula_type,
                                     Rcpp::Named("latent_copula_type") = latent_copula_type,
                                     // Rcpp::Named("model_pars") = model_pars,
@@ -426,7 +434,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                                     Rcpp::Named("criteria") = ELBO_save,
                                     Rcpp::Named("iteration") = count_select
     );
-
+    holder.attr("class") = "vifcop";
 
     return holder;
     PutRNGstate();
@@ -521,12 +529,61 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     // Set other variables
     Rcpp::List other(other_);
     // Set seed
-    int seed  = as<int>(other["seed"]);
+    int seed  = 0;
+    int core  = 1;
+    int iter  = 1000;   // Number of iterations after converge
+    int num_warmup = iter / 2;
+    int num_samples = iter / 2;
+
+    unsigned int chain = 1;
+    double init_radius = 0;
+    int num_thin = 1;
+    bool save_warmup = false;
+    double stepsize = 1;
+    double stepsize_jitter = 0;
+    int max_depth = 10;
+    double delta = 0.80000000000000004;
+    double gamma = 0.050000000000000003;
+    double kappa = .75;
+    double t0 = 10;
+    unsigned int init_buffer = 75;
+    unsigned int term_buffer = 50;
+    unsigned int window = 25;
+
+    if ( other.hasAttribute("seed") ) seed = as<int>(other["seed"]);
     rng_t base_rng(seed);
 
-    int core  = as<int>(other["core"]);
+    if ( other.hasAttribute("core") ) {
+        // int ID = omp_get_max_threads();
+        core  = as<int>(other["core"]);
+        // Set parallel
+        #ifdef _OPENMP
+                omp_set_num_threads(core);
+        #endif
 
-    int iter  = as<int>(other["iter"]); // Number of iterations after converge
+    }
+
+    //if ( other.hasAttribute("iter") )  iter = as<int>(other["iter"]);
+    if ( other.hasAttribute("num_warmup") )  num_warmup  = as<int>(other["num_warmup"]);
+    if ( other.hasAttribute("num_samples") )  num_samples  = as<int>(other["num_samples"]);
+    if ( other.hasAttribute("chain") )  chain  = as<int>(other["chain"]);
+    if ( other.hasAttribute("init_radius") )  init_radius  = as<double>(other["init_radius"]);
+    if ( other.hasAttribute("num_thin") ) num_thin  = as<int>(other["num_thin"]);
+    if ( other.hasAttribute("save_warmup") ) save_warmup  = as<bool>(other["save_warmup"]);
+    if ( other.hasAttribute("stepsize") ) stepsize = as<double>(other["stepsize"]);
+    if ( other.hasAttribute("stepsize_jitter") ) stepsize_jitter  = as<double>(other["stepsize_jitter"]);
+    if ( other.hasAttribute("max_depth") ) max_depth  = as<int>(other["max_depth"]);
+    if ( other.hasAttribute("delta") ) delta  = as<double>(other["delta"]);
+    if ( other.hasAttribute("gamma") ) gamma  = as<double>(other["gamma"]);
+    if ( other.hasAttribute("kappa") ) kappa  = as<double>(other["kappa"]);
+    if ( other.hasAttribute("t0") ) t0  = as<double>(other["t0"]);
+    if ( other.hasAttribute("init_buffer") ) init_buffer  = as<int>(other["init_buffer"]);
+    if ( other.hasAttribute("term_buffer") ) term_buffer  = as<int>(other["term_buffer"]);
+    if ( other.hasAttribute("window") ) window  = as<int>(other["window"]);
+    iter = num_warmup + num_samples;
+    int refresh = iter /10;
+    Rcpp::Rcout << " Iteration set : " << iter << std::endl;
+
 
     Rcpp::Rcout << " Core set : " << core << std::endl;
     Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
@@ -561,24 +618,9 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     clock_t start = clock();
     clock_t end;
 
-    int num_warmup = iter / 2;
-    int num_samples = iter / 2;
 
-    unsigned int chain = 1;
-    double init_radius = 0;
-    int num_thin = 1;
-    bool save_warmup = false;
-    int refresh = (num_warmup + num_samples) /10;
-    double stepsize = 1;
-    double stepsize_jitter = 0;
-    int max_depth = 10;
-    double delta = 0.80000000000000004;
-    double gamma = 0.050000000000000003;
-    double kappa = .75;
-    double t0 = 10;
-    unsigned int init_buffer = 75;
-    unsigned int term_buffer = 50;
-    unsigned int window = 25;
+
+
 
 
 
@@ -691,6 +733,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
                                         Rcpp::Named("structfactor") = structfactor,
                                         Rcpp::Named("time") = delta_t
     );
+    holder.attr("class") = "hmcfcop";
 
     return holder;
     PutRNGstate();
