@@ -16,7 +16,7 @@ copfamily_latent_init <- sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
 
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                          family = 1, family_latent = 1,
-                         gid = gid, structfactor = 3, seed_num = 0)
+                         gid = gid, structfactor = 3, seed_num = 10)
 
 datagen <- datagen_gauss
 data <- list(u = datagen$u,
@@ -30,7 +30,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 10,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F, modelselect = T)
 
 vi_gauss <- vifcopula::vifcop(data,init,other)
 comparefcop(datagen, vi_gauss)

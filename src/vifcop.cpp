@@ -159,6 +159,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     stan::math::check_positive_finite(function, "Number of variables", n_max);
     stan::math::check_positive_finite(function, "Number of latents", k_max);
     stan::math::check_positive_finite(function, "factor = 1; bifactor = 2; nestfactor = 3;", structfactor);
+    int max_gid = std::max_element(gid.begin(), gid.end()) + 1;
+    // stan::math::equal(function, "Number of latent k_max and gid ", max_gid, k_max);
     //  stan::math::equal(function, "Number of matrix rows",u.rows(), t_max);
     //  stan::math::equal(function, "Number of matrix cols",u.cols(), n_max);
     //  stan::math::check_consistent_size(function, "Number of matrix columns",gid, n_max);
