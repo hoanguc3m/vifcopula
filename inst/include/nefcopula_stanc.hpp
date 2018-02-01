@@ -406,6 +406,71 @@ public:
         return t_max;
     }
 
+    double calc_log_over_v( Eigen::VectorXd& mean_iv,
+                            int eff_num_para){
+        double logc = 0;
+        int MCnum = 1000;
+        vector<double> logc_t(t_max,0.0);
+
+        Eigen::VectorXd theta_12 = mean_iv.tail(eff_num_para);
+        int count = 0;
+
+        vector<double> theta_latent(k-1,0.0);
+        vector<double> theta2_latent(k-1,0.0);
+
+        vector<double> theta(n_max,0.0);
+        vector<double> theta2(n_max,0.0);
+
+        for (int i = 0; i < (k-1); i++)
+        {
+            if (latent_copula_type[i] == 2) {
+                theta_latent[i] = theta_12(count); count++;
+                theta2_latent[i] = theta_12(count); count++;
+            } else {
+                theta_latent[i] = theta_12(count); count++;
+            }
+
+        }
+
+        for (int i = 0; i < n_max; i++) {
+            if (copula_type[i] == 2) {
+                theta[i] = theta_12(count); count++;
+                theta2[i] = theta_12(count); count++;
+            } else {
+                theta[i] = theta_12(count); count++;
+            }
+        }
+
+        for (int t = 0; t < t_max; t++) {
+
+            Eigen::VectorXd v1_t = (Eigen::VectorXd::Random(MCnum)).array().abs() ; // range [-1,1]
+            Eigen::MatrixXd v2g_t = (Eigen::MatrixXd::Random(MCnum, k-1)).array().abs() ; // range [-1,1]
+
+            Eigen::VectorXd logc_jt = Eigen::VectorXd::Zero(MCnum);
+
+
+
+            for (int j = 0; j < MCnum; j++) {
+
+                for (int i = 0; i < k-1; i++) {
+                    logc_jt(j) += bicop_log_double(latent_copula_type[i], v1_t(j), v2g_t(j,i), theta_latent[i], theta2_latent[i] )   ;
+                }
+
+                for (int i = 0; i < n_max; i++) {
+                    logc_jt(j) += bicop_log_double(copula_type[i], u(t,i), v2g_t(j,gid[i]), theta[i], theta2[i] )   ;
+                }
+            }
+
+            double max_logct = logc_jt.maxCoeff();
+            logc_t[t] = max_logct + log ( (logc_jt.array() - max_logct).array().exp().sum())   ;
+            logc_t[t] -= log(MCnum);
+        }
+
+        for (auto& log_val : logc_t)
+            logc += log_val;
+        return logc;
+    }
+
     template <bool propto__, bool jacobian__, typename T__>
     T__ log_prob(vector<T__>& params_r__,
                  vector<int>& params_i__,

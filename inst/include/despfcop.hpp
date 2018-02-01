@@ -98,6 +98,7 @@ public:
             double tol_rel_obj_,
             int max_iterations_,
             bool copselect_,
+            bool modelselect,
             int core_) :
     u(u_), u_eps(u_eps_),
     copula_type_vec(copula_type_vec_), copula_eps_vec(copula_eps_vec_), twofcop(twofcop_),
@@ -239,7 +240,7 @@ public:
         max_param = layer_n1.num_params_r();
         sample_iv.resize(iter,max_param);
         mean_iv.resize(max_param);
-        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
+        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, modelselect, message_writer);
 
 
         out_parameter_writer.clear(); // Clear state flags.

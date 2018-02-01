@@ -407,7 +407,11 @@ public:
     int get_t_max(void){
         return t_max;
     }
+    double calc_log_over_v( Eigen::VectorXd& mean_iv,
+                            int eff_num_para){
 
+        return 0;
+    }
     template <bool propto__, bool jacobian__, typename T__>
     T__ log_prob(vector<T__>& params_r__,
                  vector<int>& params_i__,

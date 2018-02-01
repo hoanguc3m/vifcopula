@@ -51,17 +51,6 @@ void bicop_log_add(int i,
         break;
     case 1:
         // Gaussian copula
-        // if (i == 0){
-        //     if (jacobian__)
-        //         theta[i] = in__.scalar_lub_constrain(0,1,lp__);
-        //     else
-        //         theta[i] = in__.scalar_lub_constrain(0,1);
-        // } else {
-        //     if (jacobian__)
-        //         theta[i] = in__.scalar_lub_constrain(-0.9,1,lp__);
-        //     else
-        //         theta[i] = in__.scalar_lub_constrain(-0.9,1);
-        // }
 
         if (jacobian__)
 
@@ -75,18 +64,6 @@ void bicop_log_add(int i,
         break;
     case 2:
         // Student copula
-
-        // if (i == 0){
-        //     if (jacobian__)
-        //         theta[i] = in__.scalar_lub_constrain(0,1,lp__);
-        //     else
-        //         theta[i] = in__.scalar_lub_constrain(0,1);
-        // } else {
-        //     if (jacobian__)
-        //         theta[i] = in__.scalar_lub_constrain(-0.9,1,lp__);
-        //     else
-        //         theta[i] = in__.scalar_lub_constrain(-0.9,1);
-        // }
 
         if (jacobian__)
             theta[i] = in__.scalar_lub_constrain(0,1,lp__);
@@ -104,10 +81,6 @@ void bicop_log_add(int i,
             get_base1(theta,ibase,"theta",1),
             get_base1(theta2,ibase,"theta",1)));
 
-        // lp_accum__.add(bicop_student_log<propto__>(u,
-        //     v,
-        //     get_base1(theta,ibase,"theta",1),
-        //     7));
         break;
     case 3:
         // Clayon copula
@@ -278,7 +251,6 @@ void bicop_log_add(int i,
             theta[i] = in__.scalar_lub_constrain(-30,-1,lp__);
         else
             theta[i] = in__.scalar_lub_constrain(-30,-1);
-        // std::cout << " theta " << theta[i] << " " << min(v) << " " << max(v) << std::endl;
         //lp_accum__.add(uniform_lpdf<propto__>(theta[i], 0, Inf)); //Improper priors
         lp_accum__.add(bicop_r90_joe_log<propto__>(u,
             v,
@@ -335,6 +307,109 @@ void bicop_log_add(int i,
 
 }
 
+
+double bicop_log_double( const int copula_type,
+                   double u,
+                   double  v,
+                   double theta,
+                   double  theta2 = 0
+) {
+    static const char* function("vifcopula::bicop_log_double");
+    double log_bicop = 0;
+    switch ( copula_type ) {
+    case 0:
+        // Independence copula
+        log_bicop = bicop_independence_log<FALSE>(u,v);
+        break;
+    case 1:
+        // Gaussian copula
+        log_bicop = bicop_normal_log<FALSE>(u,v,theta);
+        break;
+    case 2:
+        // Student copula
+        log_bicop = bicop_student_log<FALSE>(u,v,theta,theta2);
+        break;
+    case 3:
+        // Clayon copula
+        log_bicop = bicop_clayton_log<FALSE>(u,v,theta);
+        break;
+    case 4:
+        // Gumbel copula
+        log_bicop = bicop_gumbel_log<FALSE>(u,v,theta);
+        break;
+    case 5:
+        // Frank copula
+        log_bicop = bicop_frank_log<FALSE>(u,v,theta);
+        break;
+    case 6:
+        // Joe copula
+        log_bicop = bicop_joe_log<FALSE>(u,v,theta);
+        break;
+
+    case 13:
+        // survival Clayon copula
+        log_bicop = bicop_survival_clayton_log<FALSE>(u,v,theta);
+        break;
+    case 14:
+        // survival Gumbel copula
+        log_bicop = bicop_survival_gumbel_log<FALSE>(u,v,theta);
+        break;
+    case 16:
+        // survival Joe copula
+        log_bicop = bicop_survival_joe_log<FALSE>(u,v,theta);
+        break;
+
+    case 21:
+        // Gaussian neg corr
+        log_bicop = bicop_normal_log<FALSE>(u,v,theta);
+        break;
+    case 22:
+        // Student copula neg corr
+
+        log_bicop = bicop_student_log<FALSE>(u,v,theta,theta2);
+        break;
+
+    case 23:
+        // rotated 90 degree Clayon copula
+        log_bicop = bicop_r90_clayton_log<FALSE>(u,v,theta);
+        break;
+    case 24:
+        // rotated 90 degree Gumbel copula
+        log_bicop = bicop_r90_gumbel_log<FALSE>(u,v,theta);
+        break;
+
+    case 25:
+        // Frank copula
+        log_bicop = bicop_frank_log<FALSE>(u,v,theta);
+        break;
+
+    case 26:
+        // rotated 90 degree Joe copula
+        log_bicop = bicop_r90_joe_log<FALSE>(u,v,theta);
+        break;
+
+    case 33:
+        // rotated 270 degree Clayon copula
+        log_bicop = bicop_r270_clayton_log<FALSE>(u,v,theta);
+        break;
+    case 34:
+        // rotated 270 degree Gumbel copula
+        log_bicop = bicop_r270_gumbel_log<FALSE>(u,v,theta);
+        break;
+    case 36:
+        // rotated 270 degree Joe copula
+        log_bicop = bicop_r270_joe_log<FALSE>(u,v,theta);
+        break;
+
+    default:
+        // Code to execute if <variable> does not equal the value following any of the cases
+        // Send a break message.
+        break;
+    }
+
+    return log_bicop;
+
+} // function
 
 }
 

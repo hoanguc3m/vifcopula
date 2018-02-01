@@ -80,6 +80,7 @@ public:
                 double tol_rel_obj,
                 int max_iterations,
                 bool copselect,
+                bool modelselect,
                 int core,
                 vector_d& mean_iv,
                 matrix_d& sample_iv,
@@ -157,15 +158,9 @@ public:
 
                 // #pragma omp parallel for default(none) firstprivate(u_temp,v_temp,params_out,t_max_omp, base_rng_omp) shared(n_max_omp,cop_vec_new,u_omp)
                     for (int j = 0; j < n_max_omp; j++){
-
-                        // int ID = omp_get_thread_num();
-                        // printf("  hello(%d)  ",  ID);;
-                        // printf("  world(%d)  \n",  ID);;
                         //u_temp = u.col(j);
                         VectorXd::Map(&u_temp[0], t_max_omp) = u_omp.col(j);
-
                         cop_vec_new[j] = bicop_select(u_temp, v_temp, t_max_omp,params_out, base_rng_omp);
-
                     }
 
                 if (cop_vec_new != copula_type_vec){
@@ -205,7 +200,7 @@ public:
         max_param = ObjOnefcop.num_params_r();
         sample_iv.resize(iter,max_param);
         mean_iv.resize(max_param);
-        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
+        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, modelselect, message_writer);
 
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;

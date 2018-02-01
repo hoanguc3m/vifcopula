@@ -99,6 +99,7 @@ public:
             double tol_rel_obj_,
             int max_iterations_,
             bool copselect_,
+            bool modelselect,
             int core_) :
     u(u_), gid(gid_), copula_type(copula_type_), latent_copula_type(latent_copula_type_),
     t_max(t_max_), n_max(n_max_), k(k_),
@@ -242,7 +243,7 @@ public:
         max_param = layer_n1.num_params_r();
         mean_iv.resize(max_param);
         sample_iv.resize(iter,max_param);
-        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
+        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, modelselect, message_writer);
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;
 

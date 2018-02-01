@@ -8,9 +8,9 @@
 #include <stan/math.hpp>
 #include <ofcop.hpp>
 #include <nestfcop.hpp>
-#include <nestselefcop.hpp>
+//#include <nestselefcop.hpp>
 #include <bifcop.hpp>
-#include <despfcop.hpp>
+//#include <despfcop.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -180,11 +180,12 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     double tol_rel_obj = 0.1;      // relative tolerance parameter for convergence
     int max_iterations = 2e4;      // max number of iterations to run algorithm
     bool copselect  = FALSE;      // Automated copula selection
+    bool modelselect  = FALSE;      // Automated copula selection
 
-    if ( other.hasAttribute("seed") ) seed = as<int>(other["seed"]);
+    if ( other.containsElementNamed("seed") ) seed = as<int>(other["seed"]);
     rng_t base_rng(seed);
 
-    if ( other.hasAttribute("core") ) {
+    if ( other.containsElementNamed("core") ) {
         // int ID = omp_get_max_threads();
         core  = as<int>(other["core"]);
         // Set parallel
@@ -194,15 +195,16 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     }
 
-    if ( other.hasAttribute("iter") )  iter = as<int>(other["iter"]);
-    if ( other.hasAttribute("n_monte_carlo_grad") )  n_monte_carlo_grad  = as<int>(other["n_monte_carlo_grad"]);
-    if ( other.hasAttribute("n_monte_carlo_elbo") )  n_monte_carlo_elbo  = as<int>(other["n_monte_carlo_elbo"]);
-    if ( other.hasAttribute("eval_elbo") )  eval_elbo  = as<int>(other["eval_elbo"]);
-    if ( other.hasAttribute("adapt_bool") )  adapt_bool  = as<bool>(other["adapt_bool"]);
-    if ( other.hasAttribute("adapt_val") ) adapt_val  = as<double>(other["adapt_val"]);
-    if ( other.hasAttribute("adapt_iterations") ) adapt_iterations  = as<int>(other["adapt_iterations"]);
-    if ( other.hasAttribute("tol_rel_obj") ) tol_rel_obj = as<double>(other["tol_rel_obj"]);
-    if ( other.hasAttribute("copselect") ) copselect  = as<bool>(other["copselect"]);      // Automated copula selection
+    if ( other.containsElementNamed("iter") )  iter = as<int>(other["iter"]);
+    if ( other.containsElementNamed("n_monte_carlo_grad") )  n_monte_carlo_grad  = as<int>(other["n_monte_carlo_grad"]);
+    if ( other.containsElementNamed("n_monte_carlo_elbo") )  n_monte_carlo_elbo  = as<int>(other["n_monte_carlo_elbo"]);
+    if ( other.containsElementNamed("eval_elbo") )  eval_elbo  = as<int>(other["eval_elbo"]);
+    if ( other.containsElementNamed("adapt_bool") )  adapt_bool  = as<bool>(other["adapt_bool"]);
+    if ( other.containsElementNamed("adapt_val") ) adapt_val  = as<double>(other["adapt_val"]);
+    if ( other.containsElementNamed("adapt_iterations") ) adapt_iterations  = as<int>(other["adapt_iterations"]);
+    if ( other.containsElementNamed("tol_rel_obj") ) tol_rel_obj = as<double>(other["tol_rel_obj"]);
+    if ( other.containsElementNamed("copselect") ) copselect  = as<bool>(other["copselect"]);      // Automated copula selection
+    if ( other.containsElementNamed("modelselect") ) modelselect  = as<bool>(other["modelselect"]);      // Automated copula selection
 
     Rcpp::Rcout << " Core set : " << core << std::endl;
     Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
@@ -246,7 +248,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     std::vector<string> model_pars;
     std::vector<double> mean_iv_save;
     matrix_d sample_iv_save(iter,0);
-    std::vector<double> ELBO_save = {0,0,0,0,0}; // ELBO, AIC, BIC, DIC, log(u)
+    std::vector<double> ELBO_save = {0,0,0,0}; // ELBO, AIC, BIC, log(u)
     int count_select = 1;
 
     switch (structfactor) {
@@ -266,7 +268,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             ofcop Objfcop(u, copula_type_vec, t_max, n_max, k_max-1, base_rng);
             Objfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-                          copselect, core,
+                          copselect, modelselect, core,
                           mean_iv, sample_iv, cop_vec_new, ELBO_save, count_select);
 
             save_vi(model_pars, mean_iv_save, sample_iv_save,
@@ -296,7 +298,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
         Objbifcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-                        copselect, core,
+                        copselect, modelselect, core,
                         mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
@@ -322,7 +324,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         nestfcop Objnestfcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng);
         Objnestfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-                          copselect, core,
+                          copselect, modelselect, core,
                           mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
 
         save_vi(model_pars, mean_iv_save, sample_iv_save,
@@ -349,7 +351,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     //     nestselefcop Objnestselefcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng,
     //         iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
     //         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-    //         copselect, core);
+    //         copselect, modelselect, core);
     //     std::vector<int> gid_new(gid);
     //     Objnestselefcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new,gid_new, ELBO_save, count_select);
     //     gid = gid_new;
@@ -383,7 +385,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     //                         t_max, n_max, k_max-1, base_rng,
     //         iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
     //         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-    //         copselect, core);
+    //         copselect, modelselect, core);
     //     Rcpp::Rcout << " All passed 1 " << std::endl;
     //
     //     Objdespfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, twofcop, ELBO_save, count_select);
@@ -550,10 +552,10 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     unsigned int term_buffer = 50;
     unsigned int window = 25;
 
-    if ( other.hasAttribute("seed") ) seed = as<int>(other["seed"]);
+    if ( other.containsElementNamed("seed") ) seed = as<int>(other["seed"]);
     rng_t base_rng(seed);
 
-    if ( other.hasAttribute("core") ) {
+    if ( other.containsElementNamed("core") ) {
         // int ID = omp_get_max_threads();
         core  = as<int>(other["core"]);
         // Set parallel
@@ -563,23 +565,23 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
 
     }
 
-    //if ( other.hasAttribute("iter") )  iter = as<int>(other["iter"]);
-    if ( other.hasAttribute("num_warmup") )  num_warmup  = as<int>(other["num_warmup"]);
-    if ( other.hasAttribute("num_samples") )  num_samples  = as<int>(other["num_samples"]);
-    if ( other.hasAttribute("chain") )  chain  = as<int>(other["chain"]);
-    if ( other.hasAttribute("init_radius") )  init_radius  = as<double>(other["init_radius"]);
-    if ( other.hasAttribute("num_thin") ) num_thin  = as<int>(other["num_thin"]);
-    if ( other.hasAttribute("save_warmup") ) save_warmup  = as<bool>(other["save_warmup"]);
-    if ( other.hasAttribute("stepsize") ) stepsize = as<double>(other["stepsize"]);
-    if ( other.hasAttribute("stepsize_jitter") ) stepsize_jitter  = as<double>(other["stepsize_jitter"]);
-    if ( other.hasAttribute("max_depth") ) max_depth  = as<int>(other["max_depth"]);
-    if ( other.hasAttribute("delta") ) delta  = as<double>(other["delta"]);
-    if ( other.hasAttribute("gamma") ) gamma  = as<double>(other["gamma"]);
-    if ( other.hasAttribute("kappa") ) kappa  = as<double>(other["kappa"]);
-    if ( other.hasAttribute("t0") ) t0  = as<double>(other["t0"]);
-    if ( other.hasAttribute("init_buffer") ) init_buffer  = as<int>(other["init_buffer"]);
-    if ( other.hasAttribute("term_buffer") ) term_buffer  = as<int>(other["term_buffer"]);
-    if ( other.hasAttribute("window") ) window  = as<int>(other["window"]);
+    //if ( other.containsElementNamed("iter") )  iter = as<int>(other["iter"]);
+    if ( other.containsElementNamed("num_warmup") )  num_warmup  = as<int>(other["num_warmup"]);
+    if ( other.containsElementNamed("num_samples") )  num_samples  = as<int>(other["num_samples"]);
+    if ( other.containsElementNamed("chain") )  chain  = as<int>(other["chain"]);
+    if ( other.containsElementNamed("init_radius") )  init_radius  = as<double>(other["init_radius"]);
+    if ( other.containsElementNamed("num_thin") ) num_thin  = as<int>(other["num_thin"]);
+    if ( other.containsElementNamed("save_warmup") ) save_warmup  = as<bool>(other["save_warmup"]);
+    if ( other.containsElementNamed("stepsize") ) stepsize = as<double>(other["stepsize"]);
+    if ( other.containsElementNamed("stepsize_jitter") ) stepsize_jitter  = as<double>(other["stepsize_jitter"]);
+    if ( other.containsElementNamed("max_depth") ) max_depth  = as<int>(other["max_depth"]);
+    if ( other.containsElementNamed("delta") ) delta  = as<double>(other["delta"]);
+    if ( other.containsElementNamed("gamma") ) gamma  = as<double>(other["gamma"]);
+    if ( other.containsElementNamed("kappa") ) kappa  = as<double>(other["kappa"]);
+    if ( other.containsElementNamed("t0") ) t0  = as<double>(other["t0"]);
+    if ( other.containsElementNamed("init_buffer") ) init_buffer  = as<int>(other["init_buffer"]);
+    if ( other.containsElementNamed("term_buffer") ) term_buffer  = as<int>(other["term_buffer"]);
+    if ( other.containsElementNamed("window") ) window  = as<int>(other["window"]);
     iter = num_warmup + num_samples;
     int refresh = iter /10;
     Rcpp::Rcout << " Iteration set : " << iter << std::endl;

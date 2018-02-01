@@ -85,6 +85,7 @@ public:
                     double tol_rel_obj,
                     int max_iterations,
                     bool copselect,
+                    bool modelselect,
                     int core,
                     vector_d& mean_iv,
                     matrix_d& sample_iv,
@@ -227,7 +228,7 @@ public:
             max_param = Objbifcop.num_params_r();
             mean_iv.resize(max_param);
             sample_iv.resize(iter,max_param);
-            advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, message_writer);
+            advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, modelselect, message_writer);
             out_parameter_writer.clear(); // Clear state flags.
             std::cout << " Done ! " << std::endl;
 
