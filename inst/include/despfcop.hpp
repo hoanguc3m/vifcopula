@@ -111,8 +111,8 @@ public:
     {
 
     }
-    void runvi( vector_d& mean_iv,
-                matrix_d& sample_iv,
+    void runvi( vector_d& mean_vi,
+                matrix_d& sample_vi,
                 std::vector<int>& cop_new,
                 std::vector<int>& cop_eps_new,
                 int& twofcop_new,
@@ -146,8 +146,8 @@ public:
                                                                                                      eval_elbo,
                                                                                                      iter);
         int max_param = layer_n1.num_params_r();
-        sample_iv.resize(iter,max_param);
-        mean_iv.resize(max_param);
+        sample_vi.resize(iter,max_param);
+        mean_vi.resize(max_param);
 
         //Could be change to Rcout in rstan
         std::stringstream out_message_writer;
@@ -176,10 +176,10 @@ public:
                 std::cout << "########################################################" << std::endl;
 
                 stan::variational::normal_meanfield vi_tmp(vi_store.mu_, vi_store.omega_);
-                advi_cop.get_mean(vi_tmp, mean_iv);
+                advi_cop.get_mean(vi_tmp, mean_vi);
 
-                //v_temp = mean_iv.head(t_max);
-                matrix_d v2g = mean_iv.head(t_max*2);
+                //v_temp = mean_vi.head(t_max);
+                matrix_d v2g = mean_vi.head(t_max*2);
                 v2g.resize(t_max,2);
 
                 VectorXd::Map(&v_temp[0], t_max) = v2g.col(0);
@@ -238,9 +238,9 @@ public:
 
 
         max_param = layer_n1.num_params_r();
-        sample_iv.resize(iter,max_param);
-        mean_iv.resize(max_param);
-        advi_cop.write(vi_save, mean_iv, sample_iv, ELBO, modelselect, message_writer);
+        sample_vi.resize(iter,max_param);
+        mean_vi.resize(max_param);
+        advi_cop.write(vi_save, mean_vi, sample_vi, ELBO, modelselect, message_writer);
 
 
         out_parameter_writer.clear(); // Clear state flags.

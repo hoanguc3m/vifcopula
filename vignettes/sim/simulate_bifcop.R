@@ -31,7 +31,7 @@ other <- list(seed = 100909, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F, selectmodel = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_gauss, vi_gauss)
+compare_sim_vi(datagen_gauss, vi_gauss)
 
 init <- list(copula_type = copfamily_rng,
              latent_copula_type = latentcopfamily_rng)
@@ -42,7 +42,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 
 vi_gauss_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_gauss, vi_gauss_rng)
+compare_sim_vi(datagen_gauss, vi_gauss_rng)
 sum(vi_gauss_rng$cop_type == datagen_gauss$family)
 sum(vi_gauss_rng$latent_copula_type == datagen_gauss$family_latent)
 #save.image("/media/hoanguc3m/Data/wp2/simbf_gauss.Rdata")
@@ -68,7 +68,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_student, vi_student)
+compare_sim_vi(datagen_student, vi_student)
 plot.vifcop(vi_student)
 
 init <- list(copula_type = copfamily_rng,
@@ -78,7 +78,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_student_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_student, vi_student_rng)
+compare_sim_vi(datagen_student, vi_student_rng)
 
 sum(vi_student_rng$cop_type == datagen_student$family)
 sum(vi_student_rng$latent_copula_type == datagen_student$family_latent)
@@ -104,7 +104,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_clayton <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_clayton, vi_clayton)
+compare_sim_vi(datagen_clayton, vi_clayton)
 
 init <- list(copula_type = copfamily_rng,
             latent_copula_type = latentcopfamily_rng)
@@ -113,7 +113,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_clayton_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_clayton, vi_clayton_rng)
+compare_sim_vi(datagen_clayton, vi_clayton_rng)
 sum(vi_clayton_rng$cop_type == datagen_clayton$family)
 sum(vi_clayton_rng$latent_copula_type == datagen_clayton$family_latent)
 #save.image("/media/hoanguc3m/Data/wp2/simbf_clayton.Rdata")
@@ -136,7 +136,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_gumbel, vi_gumbel)
+compare_sim_vi(datagen_gumbel, vi_gumbel)
 
 init <- list(copula_type = copfamily_rng,
              latent_copula_type = latentcopfamily_rng)
@@ -145,7 +145,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gumbel_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_gumbel, vi_gumbel_rng)
+compare_sim_vi(datagen_gumbel, vi_gumbel_rng)
 
 sum(vi_gumbel_rng$cop_type == datagen_gumbel$family)
 sum(vi_gumbel_rng$latent_copula_type == datagen_gumbel$family_latent)
@@ -171,7 +171,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_frank, vi_frank)
+compare_sim_vi(datagen_frank, vi_frank)
 
 init <- list(copula_type = copfamily_rng,
              latent_copula_type = latentcopfamily_rng)
@@ -180,7 +180,7 @@ other <- list(seed = 112321, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_frank_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_frank, vi_frank_rng)
+compare_sim_vi(datagen_frank, vi_frank_rng)
 
 sum(vi_frank_rng$cop_type == datagen_frank$family)
 sum(vi_frank_rng$latent_copula_type == datagen_frank$family_latent)
@@ -204,7 +204,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_joe <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_joe, vi_joe)
+compare_sim_vi(datagen_joe, vi_joe)
 
 init <- list(copula_type = copfamily_rng,
              latent_copula_type = latentcopfamily_rng)
@@ -213,7 +213,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_joe_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_joe, vi_joe_rng)
+compare_sim_vi(datagen_joe, vi_joe_rng)
 
 sum(vi_joe_rng$cop_type == datagen_joe$family)
 sum(vi_joe_rng$latent_copula_type == datagen_joe$family_latent)
@@ -241,7 +241,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_mix <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen_mix, vi_mix)
+compare_sim_vi(datagen_mix, vi_mix)
 
 
 init <- list(copula_type = copfamily_rng,
@@ -255,7 +255,7 @@ vi_mix_rng <- vifcopula::vifcop(data,init,other)
 
 sum(vi_mix_rng$cop_type == datagen$family)
 sum(vi_mix_rng$latent_copula_type == datagen$family_latent)
-comparefcop(datagen_mix, vi_mix_rng)
+compare_sim_vi(datagen_mix, vi_mix_rng)
 # save.image("/media/hoanguc3m/Data/wp2/simbf_mix.Rdata")
 
 #################################################################################

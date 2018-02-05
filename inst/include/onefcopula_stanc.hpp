@@ -295,13 +295,13 @@ public:
     int get_n_max(void){
         return n_max;
     }
-    double calc_log_over_v( Eigen::VectorXd& mean_iv,
+    double calc_log_over_v( Eigen::VectorXd& mean_vi,
                             int eff_num_para){
         double logc = 0;
         int MCnum = 1000;
         vector<double> logc_t(t_max,0.0);
 
-        Eigen::VectorXd theta_12 = mean_iv.tail(eff_num_para);
+        Eigen::VectorXd theta_12 = mean_vi.tail(eff_num_para);
         int count = 0;
         vector<double> theta(n_max,0.0);
         vector<double> theta2(n_max,0.0);
@@ -335,17 +335,17 @@ public:
         return logc;
     }
 
-    // double calc_log_over_v( Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_iv,
+    // double calc_log_over_v( Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_vi,
     //                         Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& save_unconstrain,
     //                         Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& save_eta,
-    //                         Eigen::VectorXd& mean_iv,
+    //                         Eigen::VectorXd& mean_vi,
     //                         Eigen::VectorXd& vi_v_log_sd,
     //                         int dim, int eff_num_para){
     //     double logc = 0;
-    //     int MCnum = sample_iv.rows();
+    //     int MCnum = sample_vi.rows();
     //     vector<double> logc_t(t_max,0.0);
     //
-    //     Eigen::VectorXd theta_12 = mean_iv.tail(eff_num_para);
+    //     Eigen::VectorXd theta_12 = mean_vi.tail(eff_num_para);
     //     int count = 0;
     //     vector<double> theta(n_max,0.0);
     //     vector<double> theta2(n_max,0.0);
@@ -361,7 +361,7 @@ public:
     //     using boost::math::normal  s;
     //
     //     for (int t = 0; t < t_max; t++) {
-    //         Eigen::VectorXd v_t = sample_iv.col(t);
+    //         Eigen::VectorXd v_t = sample_vi.col(t);
     //         Eigen::VectorXd eta = save_eta.col(t);
     //         Eigen::VectorXd xi = save_unconstrain.col(t);
     //         vector<double> logc_jt(MCnum,0.0);

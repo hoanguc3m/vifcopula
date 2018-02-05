@@ -406,13 +406,13 @@ public:
         return t_max;
     }
 
-    double calc_log_over_v( Eigen::VectorXd& mean_iv,
+    double calc_log_over_v( Eigen::VectorXd& mean_vi,
                             int eff_num_para){
         double logc = 0;
         int MCnum = 1000;
         vector<double> logc_t(t_max,0.0);
 
-        Eigen::VectorXd theta_12 = mean_iv.tail(eff_num_para);
+        Eigen::VectorXd theta_12 = mean_vi.tail(eff_num_para);
         int count = 0;
 
         vector<double> theta_latent(k-1,0.0);

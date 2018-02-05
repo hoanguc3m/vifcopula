@@ -47,10 +47,10 @@ extern "C" void R_init_vifcopula(DllInfo *dll) {
 }
 
 void save_vi( std::vector<string>& model_pars,
-              std::vector<double>& mean_iv_save,
-              matrix_d& sample_iv_save,
-              const vector_d& mean_iv,
-              const matrix_d& sample_iv,
+              std::vector<double>& mean_vi_save,
+              matrix_d& sample_vi_save,
+              const vector_d& mean_vi,
+              const matrix_d& sample_vi,
               vector_int& copula_type,
               const std::vector<int>& copula_type_vec,
               std::vector<int>& cop_vec_new,
@@ -79,15 +79,15 @@ void save_vi( std::vector<string>& model_pars,
     for (int i = 0; i < t_max; i++)
     {
         model_pars.push_back("v" + std::to_string(k+1) + "." + std::to_string(i+1));
-        mean_iv_save.push_back(mean_iv[i]);
+        mean_vi_save.push_back(mean_vi[i]);
     }
-    for (int i = t_max; i < length(mean_iv); i++)
+    for (int i = t_max; i < length(mean_vi); i++)
     {
         model_pars.push_back("theta" + std::to_string(k+1) + "." + std::to_string(i+1-t_max));
-        mean_iv_save.push_back(mean_iv[i]);
+        mean_vi_save.push_back(mean_vi[i]);
     }
-    sample_iv_save.conservativeResize(NoChange, sample_iv_save.cols()+sample_iv.cols());
-    sample_iv_save.block(0,sample_iv_save.cols()-sample_iv.cols(),iter, sample_iv.cols()) = sample_iv;
+    sample_vi_save.conservativeResize(NoChange, sample_vi_save.cols()+sample_vi.cols());
+    sample_vi_save.block(0,sample_vi_save.cols()-sample_vi.cols(),iter, sample_vi.cols()) = sample_vi;
 
     if (copselect)
     {
@@ -244,12 +244,12 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     std::vector<int> latent_copula_type_vec(n_max);
     std::vector<int> latent_cop_vec_new(n_max);
 
-    matrix_d sample_iv(iter,n_max);
-    vector_d mean_iv(n_max);
+    matrix_d sample_vi(iter,n_max);
+    vector_d mean_vi(n_max);
 
     std::vector<string> model_pars;
-    std::vector<double> mean_iv_save;
-    matrix_d sample_iv_save(iter,0);
+    std::vector<double> mean_vi_save;
+    matrix_d sample_vi_save(iter,0);
     std::vector<double> ELBO_save = {0,0,0,0}; // ELBO, AIC, BIC, log(u)
     int count_select = 1;
 
@@ -271,10 +271,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             Objfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                           copselect, modelselect, core,
-                          mean_iv, sample_iv, cop_vec_new, ELBO_save, count_select);
+                          mean_vi, sample_vi, cop_vec_new, ELBO_save, count_select);
 
-            save_vi(model_pars, mean_iv_save, sample_iv_save,
-                    mean_iv, sample_iv,
+            save_vi(model_pars, mean_vi_save, sample_vi_save,
+                    mean_vi, sample_vi,
                     copula_type, copula_type_vec, cop_vec_new,
                     latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
                     t_max, n_max, k_max-1, iter, structfactor, copselect);
@@ -301,10 +301,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         Objbifcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                         copselect, modelselect, core,
-                        mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
+                        mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
 
-        save_vi(model_pars, mean_iv_save, sample_iv_save,
-                mean_iv, sample_iv,
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+                mean_vi, sample_vi,
                 copula_type, copula_type_vec, cop_vec_new,
                 latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
                 t_max, n_max, k, iter, structfactor, copselect);
@@ -327,10 +327,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         Objnestfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
                           copselect, modelselect, core,
-                          mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
+                          mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
 
-        save_vi(model_pars, mean_iv_save, sample_iv_save,
-                mean_iv, sample_iv,
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+                mean_vi, sample_vi,
                 copula_type, copula_type_vec, cop_vec_new,
                 latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
                 t_max, n_max, k, iter, structfactor, copselect);
@@ -355,10 +355,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     //         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
     //         copselect, modelselect, core);
     //     std::vector<int> gid_new(gid);
-    //     Objnestselefcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new,gid_new, ELBO_save, count_select);
+    //     Objnestselefcop.runvi(mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new,gid_new, ELBO_save, count_select);
     //     gid = gid_new;
-    //     save_vi(model_pars, mean_iv_save, sample_iv_save,
-    //         mean_iv, sample_iv,
+    //     save_vi(model_pars, mean_vi_save, sample_vi_save,
+    //         mean_vi, sample_vi,
     //         copula_type, copula_type_vec, cop_vec_new,
     //         latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
     //         t_max, n_max, k, iter, structfactor, copselect);
@@ -390,10 +390,10 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     //         copselect, modelselect, core);
     //     Rcpp::Rcout << " All passed 1 " << std::endl;
     //
-    //     Objdespfcop.runvi(mean_iv, sample_iv, cop_vec_new, latent_cop_vec_new, twofcop, ELBO_save, count_select);
+    //     Objdespfcop.runvi(mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, twofcop, ELBO_save, count_select);
     //
-    //     save_vi(model_pars, mean_iv_save, sample_iv_save,
-    //         mean_iv, sample_iv,
+    //     save_vi(model_pars, mean_vi_save, sample_vi_save,
+    //         mean_vi, sample_vi,
     //         copula_type, copula_type_vec, cop_vec_new,
     //         latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
     //         t_max, n_max, k_max-1, iter, structfactor, copselect);
@@ -423,8 +423,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     }
 
 
-    Rcpp::List holder = List::create(Rcpp::Named("mean_iv") = mean_iv_save,
-                                    Rcpp::Named("sample_iv") = sample_iv_save,//not sample_iv?
+    Rcpp::List holder = List::create(Rcpp::Named("mean_vi") = mean_vi_save,
+                                    Rcpp::Named("sample_vi") = sample_vi_save,//not sample_vi?
                                     Rcpp::Named("cop_type") = copula_type,
                                     Rcpp::Named("latent_copula_type") = latent_copula_type,
                                     // Rcpp::Named("model_pars") = model_pars,
@@ -636,8 +636,8 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     std::vector<int> copula_type_vec(n_max);
     std::vector<int> latent_copula_type_vec(n_max);
 
-    matrix_d sample_iv(iter,n_max);
-    vector_d mean_iv(n_max);
+    matrix_d sample_vi(iter,n_max);
+    vector_d mean_vi(n_max);
 
     std::vector<string> model_pars;
     vector_d mean_hmc;

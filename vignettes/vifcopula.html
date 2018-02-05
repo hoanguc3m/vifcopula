@@ -12,7 +12,7 @@
 
 <meta name="author" content="Vignette Author" />
 
-<meta name="date" content="2017-04-24" />
+<meta name="date" content="2018-02-05" />
 
 <title>Vignette Title</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Vignette Title</h1>
 <h4 class="author"><em>Vignette Author</em></h4>
-<h4 class="date"><em>2017-04-24</em></h4>
+<h4 class="date"><em>2018-02-05</em></h4>
 
 
 
@@ -95,12 +95,12 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> T)
 vi_gauss &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_gauss$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_gauss$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_gauss$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)])
+<span class="kw">plot</span>(datagen$theta, vi_gauss$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 vi_gauss$cop_vec_new
-rho_vi =<span class="st"> </span>vi_gauss$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)]
+rho_vi =<span class="st"> </span>vi_gauss$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)]
 selec &lt;-<span class="st"> </span><span class="kw">as.logical</span>(vi_gauss$cop_vec_new)
 pos =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,n_max)
 rho_vi[pos[!selec]]
@@ -149,10 +149,10 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> F)
 vi_student &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_student$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_student$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_student$mean_iv[<span class="kw">seq</span>(<span class="dt">from =</span> t_max<span class="dv">+1</span>, <span class="dt">to =</span> t_max<span class="dv">+2</span>*n_max, <span class="dt">by =</span> <span class="dv">2</span> )])
-<span class="kw">plot</span>(datagen$theta2, vi_student$mean_iv[<span class="kw">seq</span>(<span class="dt">from =</span> t_max<span class="dv">+2</span>, <span class="dt">to =</span> t_max+n_max, <span class="dt">by =</span> <span class="dv">2</span> )])
+<span class="kw">plot</span>(datagen$theta, vi_student$mean_vi[<span class="kw">seq</span>(<span class="dt">from =</span> t_max<span class="dv">+1</span>, <span class="dt">to =</span> t_max<span class="dv">+2</span>*n_max, <span class="dt">by =</span> <span class="dv">2</span> )])
+<span class="kw">plot</span>(datagen$theta2, vi_student$mean_vi[<span class="kw">seq</span>(<span class="dt">from =</span> t_max<span class="dv">+2</span>, <span class="dt">to =</span> t_max+n_max, <span class="dt">by =</span> <span class="dv">2</span> )])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datagen_clayton &lt;-<span class="st"> </span><span class="kw">fcopsim</span>(<span class="dt">t_max =</span> <span class="dv">1000</span>, <span class="dt">n_max =</span> <span class="dv">100</span>, <span class="dt">family =</span> <span class="dv">3</span>)
 datagen &lt;-<span class="st"> </span>datagen_clayton
@@ -172,9 +172,9 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> T)
 vi_clayton &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_clayton$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_clayton$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_clayton$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)])
+<span class="kw">plot</span>(datagen$theta, vi_clayton$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 vi_clayton$cop_vec_new</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datagen_gumbel &lt;-<span class="st"> </span><span class="kw">fcopsim</span>(<span class="dt">t_max =</span> <span class="dv">1000</span>, <span class="dt">n_max =</span> <span class="dv">100</span>, <span class="dt">family =</span> <span class="dv">4</span>)
@@ -195,9 +195,9 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> T)
 vi_gumbel &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_gumbel$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_gumbel$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_gumbel$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)])
+<span class="kw">plot</span>(datagen$theta, vi_gumbel$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 vi_gumbel$cop_vec_new</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datagen_frank &lt;-<span class="st"> </span><span class="kw">fcopsim</span>(<span class="dt">t_max =</span> <span class="dv">1000</span>, <span class="dt">n_max =</span> <span class="dv">100</span>, <span class="dt">family =</span> <span class="dv">5</span>)
@@ -218,9 +218,9 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> T)
 vi_frank &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_frank$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_frank$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_frank$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)])
+<span class="kw">plot</span>(datagen$theta, vi_frank$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 vi_frank$cop_vec_new</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datagen_joe &lt;-<span class="st"> </span><span class="kw">fcopsim</span>(<span class="dt">t_max =</span> <span class="dv">1000</span>, <span class="dt">n_max =</span> <span class="dv">100</span>, <span class="dt">family =</span> <span class="dv">6</span>)
@@ -241,9 +241,9 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> T)
 vi_joe &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_joe$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_joe$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_joe$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)])
+<span class="kw">plot</span>(datagen$theta, vi_joe$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 vi_joe$cop_vec_new
 <span class="kw">sum</span>(vi_joe$cop_vec_new ==<span class="st"> </span>datagen_joe$family)</code></pre></div>
@@ -266,9 +266,9 @@ other &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt
               <span class="dt">adapt_iterations =</span> <span class="dv">50</span>, <span class="dt">tol_rel_obj =</span> <span class="fl">0.1</span>, <span class="dt">copselect =</span> T)
 vi_mix &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(data,init,other)
 
-<span class="kw">plot</span>(datagen$v, vi_mix$mean_iv[<span class="dv">1</span>:t_max])
+<span class="kw">plot</span>(datagen$v, vi_mix$mean_vi[<span class="dv">1</span>:t_max])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">plot</span>(datagen$theta, vi_mix$mean_iv[(t_max<span class="dv">+1</span>):(t_max+n_max)])
+<span class="kw">plot</span>(datagen$theta, vi_mix$mean_vi[(t_max<span class="dv">+1</span>):(t_max+n_max)])
 <span class="kw">abline</span>(<span class="dt">a=</span> <span class="dv">0</span>, <span class="dt">b=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 <span class="kw">sum</span>(vi_mix$cop_vec_new ==<span class="st"> </span>datagen$family)
 
@@ -286,7 +286,7 @@ vi_mix &lt;-<span class="st"> </span>vifcopula::<span class="kw">vifcop</span>(d
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

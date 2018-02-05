@@ -23,14 +23,14 @@ typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 
-void hfunc_trans(matrix_d& u, const vector_d& mean_iv, const std::vector<int>& cop_vec){
+void hfunc_trans(matrix_d& u, const vector_d& mean_vi, const std::vector<int>& cop_vec){
     int t_max = u.rows();
     int n_max = u.cols();
     int theta_pos = t_max;
     double theta1;
     double theta2;
 
-    vector_d v_temp = mean_iv.head(t_max);
+    vector_d v_temp = mean_vi.head(t_max);
     vector_d u_temp(t_max);
     vector_d u_trans(t_max);
 
@@ -43,33 +43,33 @@ void hfunc_trans(matrix_d& u, const vector_d& mean_iv, const std::vector<int>& c
             break;
         case 1:
             // Gaussian copula
-            theta1 = mean_iv[theta_pos]; theta_pos++;
+            theta1 = mean_vi[theta_pos]; theta_pos++;
             u_trans = hfunc_normal(u_temp,v_temp,theta1);
             break;
         case 2:
             // Student copula
-            theta1 = mean_iv[theta_pos]; theta_pos++;
-            theta2 = mean_iv[theta_pos]; theta_pos++;
+            theta1 = mean_vi[theta_pos]; theta_pos++;
+            theta2 = mean_vi[theta_pos]; theta_pos++;
             u_trans = hfunc_student(u_temp,v_temp,theta1,theta2);
             break;
         case 3:
             // Clayon copula
-            theta1 = mean_iv[theta_pos]; theta_pos++;
+            theta1 = mean_vi[theta_pos]; theta_pos++;
             u_trans = hfunc_clayton(u_temp,v_temp,theta1);
             break;
         case 4:
             // Gumbel copula
-            theta1 = mean_iv[theta_pos]; theta_pos++;
+            theta1 = mean_vi[theta_pos]; theta_pos++;
             u_trans = hfunc_gumbel(u_temp,v_temp,theta1);
             break;
         case 5:
             // Frank copula
-            theta1 = mean_iv[theta_pos]; theta_pos++;
+            theta1 = mean_vi[theta_pos]; theta_pos++;
             u_trans = hfunc_frank(u_temp,v_temp,theta1);
             break;
         case 6:
             // Joe copula
-            theta1 = mean_iv[theta_pos]; theta_pos++;
+            theta1 = mean_vi[theta_pos]; theta_pos++;
             u_trans = hfunc_joe(u_temp,v_temp,theta1);
             break;
         default:

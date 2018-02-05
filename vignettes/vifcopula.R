@@ -20,12 +20,12 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 #  vi_gauss <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_gauss$mean_iv[1:t_max])
+#  plot(datagen$v, vi_gauss$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_gauss$mean_iv[(t_max+1):(t_max+n_max)])
+#  plot(datagen$theta, vi_gauss$mean_vi[(t_max+1):(t_max+n_max)])
 #  abline(a= 0, b=1, col="red")
 #  vi_gauss$cop_vec_new
-#  rho_vi = vi_gauss$mean_iv[(t_max+1):(t_max+n_max)]
+#  rho_vi = vi_gauss$mean_vi[(t_max+1):(t_max+n_max)]
 #  selec <- as.logical(vi_gauss$cop_vec_new)
 #  pos = seq(1,n_max)
 #  rho_vi[pos[!selec]]
@@ -55,10 +55,10 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 #  vi_student <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_student$mean_iv[1:t_max])
+#  plot(datagen$v, vi_student$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_student$mean_iv[seq(from = t_max+1, to = t_max+2*n_max, by = 2 )])
-#  plot(datagen$theta2, vi_student$mean_iv[seq(from = t_max+2, to = t_max+n_max, by = 2 )])
+#  plot(datagen$theta, vi_student$mean_vi[seq(from = t_max+1, to = t_max+2*n_max, by = 2 )])
+#  plot(datagen$theta2, vi_student$mean_vi[seq(from = t_max+2, to = t_max+n_max, by = 2 )])
 #  abline(a= 0, b=1, col="red")
 
 ## ---- eval=FALSE---------------------------------------------------------
@@ -80,9 +80,9 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 #  vi_clayton <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_clayton$mean_iv[1:t_max])
+#  plot(datagen$v, vi_clayton$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_clayton$mean_iv[(t_max+1):(t_max+n_max)])
+#  plot(datagen$theta, vi_clayton$mean_vi[(t_max+1):(t_max+n_max)])
 #  abline(a= 0, b=1, col="red")
 #  vi_clayton$cop_vec_new
 
@@ -105,9 +105,9 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 #  vi_gumbel <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_gumbel$mean_iv[1:t_max])
+#  plot(datagen$v, vi_gumbel$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_gumbel$mean_iv[(t_max+1):(t_max+n_max)])
+#  plot(datagen$theta, vi_gumbel$mean_vi[(t_max+1):(t_max+n_max)])
 #  abline(a= 0, b=1, col="red")
 #  vi_gumbel$cop_vec_new
 #  
@@ -131,9 +131,9 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 #  vi_frank <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_frank$mean_iv[1:t_max])
+#  plot(datagen$v, vi_frank$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_frank$mean_iv[(t_max+1):(t_max+n_max)])
+#  plot(datagen$theta, vi_frank$mean_vi[(t_max+1):(t_max+n_max)])
 #  abline(a= 0, b=1, col="red")
 #  vi_frank$cop_vec_new
 #  
@@ -157,9 +157,9 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 #  vi_joe <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_joe$mean_iv[1:t_max])
+#  plot(datagen$v, vi_joe$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_joe$mean_iv[(t_max+1):(t_max+n_max)])
+#  plot(datagen$theta, vi_joe$mean_vi[(t_max+1):(t_max+n_max)])
 #  abline(a= 0, b=1, col="red")
 #  vi_joe$cop_vec_new
 #  sum(vi_joe$cop_vec_new == datagen_joe$family)
@@ -185,9 +185,9 @@
 #                adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 #  vi_mix <- vifcopula::vifcop(data,init,other)
 #  
-#  plot(datagen$v, vi_mix$mean_iv[1:t_max])
+#  plot(datagen$v, vi_mix$mean_vi[1:t_max])
 #  abline(a= 0, b=1, col="red")
-#  plot(datagen$theta, vi_mix$mean_iv[(t_max+1):(t_max+n_max)])
+#  plot(datagen$theta, vi_mix$mean_vi[(t_max+1):(t_max+n_max)])
 #  abline(a= 0, b=1, col="red")
 #  sum(vi_mix$cop_vec_new == datagen$family)
 #  

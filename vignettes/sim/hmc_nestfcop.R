@@ -107,7 +107,6 @@ init <- list(copula_type = datagen$family,
              latent_copula_type = datagen$family_latent)
 other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
 hmc_joe <- vifcopula::hmcfcop(data,init,other)
-comparefcop(datagen, vi_joe)
 
 #################################################################################
 copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)

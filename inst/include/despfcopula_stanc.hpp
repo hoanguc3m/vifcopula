@@ -153,7 +153,7 @@ public:
     int get_t_max(void){
         return t_max;
     }
-    double calc_log_over_v( Eigen::VectorXd& mean_iv,
+    double calc_log_over_v( Eigen::VectorXd& mean_vi,
                             int eff_num_para){
 
         return 0;

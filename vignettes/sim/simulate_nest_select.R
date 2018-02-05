@@ -34,16 +34,16 @@ other <- list(seed = 126, core = 8, iter = 1000,
 
 vi_gauss <- vifcopula::vifcop(data,init,other)
 vi_gauss$structfactor <- 3
-comparefcop(datagen, vi_gauss)
-tail(vi_gauss$mean_iv,105)
+compare_sim_vi(datagen, vi_gauss)
+tail(vi_gauss$mean_vi,105)
 
-plot(datagen$theta, tail(vi_gauss$mean_iv,100), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-text(datagen$theta, tail(vi_gauss$mean_iv,100), label = gid)
+plot(datagen$theta, tail(vi_gauss$mean_vi,100), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+text(datagen$theta, tail(vi_gauss$mean_vi,100), label = gid)
 abline(a= 0, b=1, col="red")
 
 plot(c(datagen_gauss$theta_latent, datagen_gauss$theta),
-     tail(vi_gauss$mean_iv,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-text(datagen$theta, tail(vi_gauss$mean_iv,100), label = gid)
+     tail(vi_gauss$mean_vi,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+text(datagen$theta, tail(vi_gauss$mean_vi,100), label = gid)
 abline(a= 0, b=1, col="red")
 
 
@@ -89,11 +89,11 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = T, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_clayton <- vifcopula::vifcop(data,init,other)
-plot(datagen_clayton$theta, tail(vi_clayton$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen_clayton$theta, tail(vi_clayton$mean_vi,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 plot(c(datagen_clayton$theta_latent, datagen_clayton$theta),
-     tail(vi_clayton$mean_iv,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+     tail(vi_clayton$mean_vi,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 
@@ -134,11 +134,11 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$theta, tail(vi_gumbel$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta, tail(vi_gumbel$mean_vi,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 plot(c(datagen_gumbel$theta_latent, datagen_gumbel$theta),
-     tail(vi_gumbel$mean_iv,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+     tail(vi_gumbel$mean_vi,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 init <- list(copula_type = gauss_init,
@@ -155,8 +155,8 @@ vi_gumbel <- vifcopula::vifcop(data,init,other)
 sum(vi_gumbel$cop_type == datagen$family)
 sum(vi_gumbel$latent_copula_type == datagen$family_latent)
 
-plot(datagen$theta, tail(vi_gumbel$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-plot(datagen$theta_latent, head(tail(vi_gumbel$mean_iv,n_max+k_max-1),k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta, tail(vi_gumbel$mean_vi,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta_latent, head(tail(vi_gumbel$mean_vi,n_max+k_max-1),k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 #################################################################################
@@ -182,11 +182,11 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$theta, tail(vi_frank$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta, tail(vi_frank$mean_vi,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 plot(c(datagen_frank$theta_latent, datagen_frank$theta),
-     tail(vi_frank$mean_iv,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+     tail(vi_frank$mean_vi,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 
@@ -227,12 +227,12 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_joe <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$theta, tail(vi_joe$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta, tail(vi_joe$mean_vi,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 
 plot(c(datagen_joe$theta_latent, datagen_joe$theta),
-     tail(vi_joe$mean_iv,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+     tail(vi_joe$mean_vi,n_max+k_max-1), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 
@@ -278,7 +278,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
 vi_mix <- vifcopula::vifcop(data,init,other)
 
 
-plot(datagen$theta, tail(vi_mix$mean_iv,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta, tail(vi_mix$mean_vi,n_max), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
 abline(a= 0, b=1, col="red")
 
 init <- list(copula_type = copfamily1,
@@ -319,10 +319,10 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$theta, abs(tail(vi_student$mean_iv,2*n_max)[seq(1,200, by = 2)]), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-plot(datagen$theta2, tail(vi_student$mean_iv,2*n_max)[seq(2,200, by = 2)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-plot(datagen$theta_latent, vi_student$mean_iv[seq(t_max*k_max+1,t_max*k_max+k_max*2-2,by = 2)])
-plot(datagen$theta2_latent, vi_student$mean_iv[seq(t_max*k_max+2,t_max*k_max+k_max*2-1,by = 2)])
+plot(datagen$theta, abs(tail(vi_student$mean_vi,2*n_max)[seq(1,200, by = 2)]), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta2, tail(vi_student$mean_vi,2*n_max)[seq(2,200, by = 2)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta_latent, vi_student$mean_vi[seq(t_max*k_max+1,t_max*k_max+k_max*2-2,by = 2)])
+plot(datagen$theta2_latent, vi_student$mean_vi[seq(t_max*k_max+2,t_max*k_max+k_max*2-1,by = 2)])
 
 
 abline(a= 0, b=1, col="red")

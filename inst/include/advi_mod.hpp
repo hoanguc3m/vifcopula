@@ -518,8 +518,8 @@ namespace stan {
 
 
         int write(Q vi_save,
-                  Eigen::Matrix<double,Eigen::Dynamic,1>& mean_iv,
-                  Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_iv,
+                  Eigen::Matrix<double,Eigen::Dynamic,1>& mean_vi,
+                  Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>& sample_vi,
                   std::vector<double>& ELBO,
                   bool modelselect,
                   callbacks::logger& logger)
@@ -539,7 +539,7 @@ namespace stan {
 
 
             // From unconstrain to constrain domain
-            model_.write_array(rng_, cont_params_, mean_iv);
+            // model_.write_array(rng_, cont_params_, mean_vi);
 
             int dim = vi_save.dimension(); // Number of v + theta params
             int eff_num_para = model_.get_eff_para(); // Number of theta params
@@ -554,11 +554,13 @@ namespace stan {
                 vi_save.sample(rng_, cont_params_);
 
                 model_.write_array(rng_, cont_params_, cont_params_eigen); // From unconstrain to constrain domain
-                sample_iv.row(n) = cont_params_eigen;
+                sample_vi.row(n) = cont_params_eigen;
             }
+            mean_vi = sample_vi.colwise().mean();
+
             if (modelselect) {
                 std::cout << "Calculating ELBO/AIC/BIC/log_prob " << std::endl;
-                ELBO[3] = model_.calc_log_over_v(mean_iv, eff_num_para);    // log_prob
+                ELBO[3] = model_.calc_log_over_v(mean_vi, eff_num_para);    // log_prob
                 ELBO[1] = - 2 * ELBO[3] + 2 * eff_num_para;     // AIC
                 ELBO[2] = - 2 * ELBO[3] + log(model_.get_t_max()) * eff_num_para; // BIC
             }
@@ -570,10 +572,10 @@ namespace stan {
         }
 
         int get_mean(Q vi_save,
-                     Eigen::Matrix<double,Eigen::Dynamic,1>& mean_iv)
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& mean_vi)
         const {
             cont_params_ = vi_save.mean();
-            model_.write_array(rng_, cont_params_, mean_iv);
+            model_.write_array(rng_, cont_params_, mean_vi);
             return stan::services::error_codes::OK;
         }
 

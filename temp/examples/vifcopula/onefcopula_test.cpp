@@ -137,8 +137,8 @@ TEST(advi_test, one_factor_cop_constraint_meanfield)
 
 
 //    int max_param = layer_n1.num_params_r();
-//    matrix_d sample_iv(iter,max_param);
-//    vector_d mean_iv(max_param);
+//    matrix_d sample_vi(iter,max_param);
+//    vector_d mean_vi(max_param);
 //
 //    std::string token;
 //    std::getline(out_parameter_writer, token);
@@ -152,11 +152,11 @@ TEST(advi_test, one_factor_cop_constraint_meanfield)
 //        {
 //            std::getline(out_parameter_writer, token, ',');
 //            boost::trim(token);
-//            mean_iv(j) = boost::lexical_cast<double>(token);
+//            mean_vi(j) = boost::lexical_cast<double>(token);
 //        }
 //        std::getline(out_parameter_writer, token);
 //        boost::trim(token);
-//        mean_iv(max_param-1) = boost::lexical_cast<double>(token);
+//        mean_vi(max_param-1) = boost::lexical_cast<double>(token);
 //
 //        for (int i = 0; i < iter; i++)
 //        {
@@ -165,11 +165,11 @@ TEST(advi_test, one_factor_cop_constraint_meanfield)
 //            {
 //                std::getline(out_parameter_writer, token, ',');
 //                boost::trim(token);
-//                sample_iv(i,j) = boost::lexical_cast<double>(token);
+//                sample_vi(i,j) = boost::lexical_cast<double>(token);
 //            }
 //            std::getline(out_parameter_writer, token);
 //            boost::trim(token);
-//            sample_iv(i,max_param-1) = boost::lexical_cast<double>(token);
+//            sample_vi(i,max_param-1) = boost::lexical_cast<double>(token);
 //        }
 //
 //    }

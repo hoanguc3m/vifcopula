@@ -94,12 +94,12 @@ other <- list(seed = 126, core = 8, iter = 1000, n_monte_carlo_grad = 1, n_monte
               adapt_bool = F, adapt_val = 1, adapt_iterations = 50, tol_rel_obj = 0.1)
 out <- vifcopula::vifcop(data,init,other)
 
-plot(datagen$v, out$mean_iv[1:t_max])
+plot(datagen$v, out$mean_vi[1:t_max])
 abline(a= 0, b=1, col="red")
-plot(datagen$theta, out$mean_iv[(t_max+1):(t_max+n_max)])
+plot(datagen$theta, out$mean_vi[(t_max+1):(t_max+n_max)])
 abline(a= 0, b=1, col="red")
-hist(out$sample_iv[,100])
-hist(out$sample_iv[,1050])
+hist(out$sample_vi[,100])
+hist(out$sample_vi[,1050])
 
 BiCopPar2Tau(family = c(3), par = c(50,75,100))
 BiCopPar2Tau(family = c(4), par = c(30,50,100))

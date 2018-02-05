@@ -357,13 +357,13 @@ print(ELBO_rng, digits = 1)
 pdf(file='img/OnefactorCompare1.pdf', width = 7, height = 2.5)
 par(mfrow =c(3,6))
 par(mar=c(5,5,3,1))
-comparefcop(datagen_mix,vi_mix)
+compare_sim_vi(datagen_mix,vi_mix)
 dev.off()
 
 pdf(file='img/OnefactorCompare2.pdf', width = 7, height = 2.5)
 par(mfrow =c(3,6))
 par(mar=c(5,5,3,1))
-comparefcop(datagen_mix,vi_mix_rng)
+compare_sim_vi(datagen_mix,vi_mix_rng)
 dev.off()
 
 

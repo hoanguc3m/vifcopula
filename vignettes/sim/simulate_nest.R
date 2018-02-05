@@ -33,7 +33,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F, modelselect = T)
 
 vi_gauss <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_gauss)
+compare_sim_vi(datagen, vi_gauss)
 
 init <- list(copula_type = copfamily_init,
              latent_copula_type = copfamily_latent_init)
@@ -45,7 +45,7 @@ vi_gauss_rng <- vifcopula::vifcop(data,init,other)
 
 sum(vi_gauss_rng$cop_type == datagen_gauss$family)
 sum(vi_gauss_rng$latent_copula_type == datagen_gauss$family_latent)
-comparefcop(datagen, vi_gauss_rng)
+compare_sim_vi(datagen, vi_gauss_rng)
 
 #save.image("/media/hoanguc3m/Data/wp2/simnf_gauss.Rdata")
 
@@ -68,12 +68,12 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_student)
+compare_sim_vi(datagen, vi_student)
 plot.vifcop(vi_student)
-plot(datagen$theta, abs(tail(vi_student$mean_iv,2*n_max)[seq(1,200, by = 2)]), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-plot(datagen$theta2, tail(vi_student$mean_iv,2*n_max)[seq(2,200, by = 2)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
-plot(datagen$theta_latent, vi_student$mean_iv[seq(t_max*k_max+1,t_max*k_max+k_max*2-2,by = 2)])
-plot(datagen$theta2_latent, vi_student$mean_iv[seq(t_max*k_max+2,t_max*k_max+k_max*2-1,by = 2)])
+plot(datagen$theta, abs(tail(vi_student$mean_vi,2*n_max)[seq(1,200, by = 2)]), xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta2, tail(vi_student$mean_vi,2*n_max)[seq(2,200, by = 2)], xlab = expression(theta[t]), ylab = expression(theta[approximated]))
+plot(datagen$theta_latent, vi_student$mean_vi[seq(t_max*k_max+1,t_max*k_max+k_max*2-2,by = 2)])
+plot(datagen$theta2_latent, vi_student$mean_vi[seq(t_max*k_max+2,t_max*k_max+k_max*2-1,by = 2)])
 
 
 abline(a= 0, b=1, col="red")
@@ -86,7 +86,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_student_rng <- vifcopula::vifcop(data,init,other)
 plot.vifcop(vi_student_rng)
-comparefcop(datagen, vi_student_rng)
+compare_sim_vi(datagen, vi_student_rng)
 sum(vi_student_rng$cop_type == datagen_Student$family)
 sum(vi_student_rng$latent_copula_type == datagen_Student$family_latent)
 #save.image("/media/hoanguc3m/Data/wp2/simnf_student.Rdata")
@@ -110,7 +110,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_clayton <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_clayton)
+compare_sim_vi(datagen, vi_clayton)
 
 init <- list(copula_type = copfamily_init,
              latent_copula_type = copfamily_latent_init)
@@ -119,7 +119,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_clayton_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_clayton_rng)
+compare_sim_vi(datagen, vi_clayton_rng)
 
 sum(vi_clayton_rng$cop_type == datagen_clayton$family)
 sum(vi_clayton_rng$latent_copula_type == datagen_clayton$family_latent)
@@ -143,7 +143,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_gumbel)
+compare_sim_vi(datagen, vi_gumbel)
 
 init <- list(copula_type = copfamily_init,
              latent_copula_type = copfamily_latent_init)
@@ -152,7 +152,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_gumbel_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_gumbel_rng)
+compare_sim_vi(datagen, vi_gumbel_rng)
 
 sum(vi_gumbel_rng$cop_type == datagen$family)
 sum(vi_gumbel_rng$latent_copula_type == datagen_gumbel$family_latent)
@@ -177,7 +177,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_frank)
+compare_sim_vi(datagen, vi_frank)
 
 init <- list(copula_type = copfamily_init,
              latent_copula_type = copfamily_latent_init)
@@ -189,7 +189,7 @@ vi_frank_rng <- vifcopula::vifcop(data,init,other)
 
 sum(vi_frank_rng$cop_type == datagen$family)
 sum(vi_frank_rng$latent_copula_type == datagen$family_latent)
-comparefcop(datagen, vi_frank_rng)
+compare_sim_vi(datagen, vi_frank_rng)
 #save.image("/media/hoanguc3m/Data/wp2/simnf_frank.Rdata")
 
 #################################################################################
@@ -210,7 +210,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_joe <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_joe)
+compare_sim_vi(datagen, vi_joe)
 
 init <- list(copula_type = copfamily_init,
              latent_copula_type = copfamily_latent_init)
@@ -219,7 +219,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_joe_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_joe_rng)
+compare_sim_vi(datagen, vi_joe_rng)
 sum(vi_joe_rng$cop_type == datagen$family)
 sum(vi_joe_rng$latent_copula_type == datagen$family_latent)
 #save.image("/media/hoanguc3m/Data/wp2/simnf_joe.Rdata")
@@ -244,7 +244,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = F)
 vi_mix <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_mix)
+compare_sim_vi(datagen, vi_mix)
 
 
 init <- list(copula_type = copfamily_init,
@@ -254,7 +254,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.1, copselect = T)
 vi_mix_rng <- vifcopula::vifcop(data,init,other)
-comparefcop(datagen, vi_mix_rng)
+compare_sim_vi(datagen, vi_mix_rng)
 
 sum(vi_mix_rng$cop_type == datagen$family)
 sum(vi_mix_rng$latent_copula_type == datagen$family_latent)

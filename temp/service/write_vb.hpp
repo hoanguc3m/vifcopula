@@ -30,35 +30,35 @@ inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
 }
 
 
-void write_vb (std::stringstream& out_parameter_writer, vector_d& mean_iv, matrix_d& sample_iv){
+void write_vb (std::stringstream& out_parameter_writer, vector_d& mean_vi, matrix_d& sample_vi){
 
     std::string token;
     // std::getline(out_parameter_writer, token);
     // std::getline(out_parameter_writer, token);
-    int iter = sample_iv.rows();
-    int max_param = sample_iv.cols();
+    int iter = sample_vi.rows();
+    int max_param = sample_vi.cols();
     int i,j;
     try{
         std::getline(out_parameter_writer, token, ',');
         for (j = 0; j < max_param-1;j++){
             std::getline(out_parameter_writer, token, ',');
             boost::trim(token);
-            mean_iv(j) = boost::lexical_cast<double>(token);
+            mean_vi(j) = boost::lexical_cast<double>(token);
         }
         std::getline(out_parameter_writer, token);
         boost::trim(token);
-        mean_iv(max_param-1) = boost::lexical_cast<double>(token);
+        mean_vi(max_param-1) = boost::lexical_cast<double>(token);
 
         for (i = 0; i < iter;i++){
             std::getline(out_parameter_writer, token, ',');
             for (j = 0; j < max_param-1;j++){
                 std::getline(out_parameter_writer, token, ',');
                 boost::trim(token);
-                sample_iv(i,j) = boost::lexical_cast<double>(token);
+                sample_vi(i,j) = boost::lexical_cast<double>(token);
             }
             std::getline(out_parameter_writer, token);
             boost::trim(token);
-            sample_iv(i,max_param-1) = boost::lexical_cast<double>(token);
+            sample_vi(i,max_param-1) = boost::lexical_cast<double>(token);
         }
 
     } catch (...){
