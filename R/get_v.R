@@ -1,10 +1,26 @@
 #' @export
-get_v0 <- function(vi) {
+get_v0 <- function(x) UseMethod("get_v0",x)
+#' @export
+get_v  <- function(x) UseMethod("get_v",x)
+#' @export
+get_theta <- function(x) UseMethod("get_theta",x)
+#' @export
+get_theta2  <- function(x) UseMethod("get_theta2",x)
+#' @export
+get_latent_theta  <- function(x) UseMethod("get_latent_theta",x)
+#' @export
+get_latent_theta2  <- function(x) UseMethod("get_latent_theta2",x)
+#' @export
+num_param  <- function(x) UseMethod("num_param",x)
+
+
+#' @export
+get_v0.vifcop <- function(vi) {
     head(vi$mean_iv,vi$t_max)
 }
 
 #' @export
-get_v <- function(vi) {
+get_v.vifcop <- function(vi) {
     v_out <- NULL
     if (vi$structfactor > 1){
         t_max <- vi$t_max
@@ -17,7 +33,7 @@ get_v <- function(vi) {
 }
 
 #' @export
-get_theta <- function(vi) {
+get_theta.vifcop <- function(vi) {
     t_max <- vi$t_max
     n_max <- vi$n_max
     k_max <- vi$k_max
@@ -66,7 +82,7 @@ get_theta <- function(vi) {
     theta
 }
 #' @export
-get_theta2 <- function(vi) {
+get_theta2.vifcop <- function(vi) {
     t_max <- vi$t_max
     n_max <- vi$n_max
     k_max <- vi$k_max
@@ -115,7 +131,7 @@ get_theta2 <- function(vi) {
     theta2
 }
 #' @export
-get_latent_theta <- function(vi) {
+get_latent_theta.vifcop <- function(vi) {
     t_max <- vi$t_max
     n_max <- vi$n_max
     k_max <- vi$k_max
@@ -159,7 +175,7 @@ get_latent_theta <- function(vi) {
     latent_theta
 }
 #' @export
-get_latent_theta2 <- function(vi) {
+get_latent_theta2.vifcop <- function(vi) {
     t_max <- vi$t_max
     n_max <- vi$n_max
     k_max <- vi$k_max
@@ -202,7 +218,7 @@ get_latent_theta2 <- function(vi) {
     latent_theta2
 }
 #' @export
-num_param <- function(vi) {
+num_param.vifcop <- function(vi) {
     t_max <- vi$t_max
     n_max <- vi$n_max
     k_max <- vi$k_max

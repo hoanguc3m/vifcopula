@@ -7,12 +7,12 @@
 hmcfcop(data_, init_, other_)
 }
 \description{
-\code{vifcop} returns variational estimations.
+\code{vifcop} returns NUTS estimations.
 }
 \examples{
-vifcop(data, init, other)
+hmcfcop(data, init, other)
 
 \dontrun{
-vifcop(data, init, other)
+hmcfcop(data, init, other)
 }
 }
