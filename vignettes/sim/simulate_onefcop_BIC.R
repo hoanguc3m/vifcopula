@@ -1,6 +1,6 @@
-library(devtools)
-install_github("hoanguc3m/vifcopula")
-#setwd("/home/hoanguc3m/Dropbox/WP2/")
+# library(devtools)
+# install_github("hoanguc3m/vifcopula")
+setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
 set.seed(0)
 t_max = 1000
@@ -20,18 +20,18 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Gaussian1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_gauss),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_gauss) ,
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -40,7 +40,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
                 n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
                 eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-                adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+                adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_gauss_rng <- vifcopula::vifcop(data,init,other)
 sum(vi_gauss_rng$cop_type == datagen_gauss$family)
 #save.image("/media/hoanguc3m/Data/wp2/sim1f_gauss.Rdata")
@@ -59,7 +59,7 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_student <- vifcopula::vifcop(data,init,other)
 
 
@@ -67,7 +67,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_student_rng <- vifcopula::vifcop(data,init,other)
 sum(vi_student_rng$cop_type == datagen_student$family)
 plot.vifcop(vi_student_rng)
@@ -76,17 +76,17 @@ par(mfrow =c(1,3))
 par(mar=c(5,5,3,1))
 
 plot(datagen$v, get_v0(vi_student),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen$theta, get_theta(vi_student), xlim = c(0.2,1),ylim = c(0.2,1),
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-     xlab = expression(nu[t]), ylab = expression(nu[approx]),
+     xlab = expression(nu[gen]), ylab = expression(nu[vi]),
      main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -106,19 +106,19 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_clayton <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Clayton1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_clayton),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Clayton one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_clayton),
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Clayton one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -127,7 +127,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_clayton_rng <- vifcopula::vifcop(data,init,other)
 
 sum(vi_clayton_rng$cop_type == datagen_clayton$family)
@@ -146,19 +146,19 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Gumbel1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_gumbel),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Gumbel one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_gumbel),
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Gumbel one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -167,7 +167,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_gumbel_rng <- vifcopula::vifcop(data,init,other)
 sum(vi_gumbel_rng$cop_type == datagen_gumbel$family)
 #save.image("/media/hoanguc3m/Data/wp2/sim1f_gumbel.Rdata")
@@ -186,19 +186,19 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_frank <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Frank1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_frank),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Frank one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_frank),
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Frank one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -207,7 +207,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_frank_rng <- vifcopula::vifcop(data,init,other)
 sum(vi_frank_rng$cop_type == datagen_frank$family)
 #save.image("/media/hoanguc3m/Data/wp2/sim1f_frank.Rdata")
@@ -226,19 +226,19 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_joe <- vifcopula::vifcop(data,init,other)
 
 pdf(file='img/Joe1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_joe),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Joe one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_joe),
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Joe one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -247,7 +247,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_joe_rng <- vifcopula::vifcop(data,init,other)
 sum(vi_joe_rng$cop_type == datagen_joe$family)
 #save.image("/media/hoanguc3m/Data/wp2/sim1f_joe.Rdata")
@@ -269,7 +269,7 @@ init <- list(copula_type = datagen_mix$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_mix <- vifcopula::vifcop(data,init,other)
 
 sum(vi_mix$cop_type == datagen_mix$family)
@@ -278,12 +278,12 @@ pdf(file='img/Mix1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_mix),
-     xlab = expression(v[t]), ylab = expression(v[approx]),
+     xlab = expression(v[gen]), ylab = expression(v[vi]),
      main = " Mixed one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_mix),
-     xlab = expression(theta[t]), ylab = expression(theta[approx]),
+     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
      main = " Mixed one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -292,7 +292,7 @@ init <- list(copula_type = copfamily_init)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_mix_rng <- vifcopula::vifcop(data,init,other)
 
 sum(vi_mix_rng$cop_type == datagen_mix$family)
@@ -312,18 +312,18 @@ init <- list(copula_type = datagen$family)
 other <- list(seed = 126, core = 8, iter = 1000,
     n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
     eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-    adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+    adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 datagen_rotate <- vifcopula::vifcop(data,init,other)
 
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(datagen_rotate),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Rotated one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(datagen_rotate),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Rotated one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -333,8 +333,15 @@ dev.off()
 time <- c(vi_gauss$time, vi_student$time, vi_clayton$time, vi_gumbel$time, vi_frank$time, vi_joe$time, vi_mix$time)
 print(time, digits = 0)
 
-ELBO_init <- c(vi_gauss$ELBO, vi_student$ELBO, vi_clayton$ELBO, vi_gumbel$ELBO, vi_frank$ELBO, vi_joe$ELBO, vi_mix$ELBO)
+ELBO_init <- c(vi_gauss$criteria[1], vi_student$criteria[1], vi_clayton$criteria[1], vi_gumbel$criteria[1], vi_frank$criteria[1], vi_joe$criteria[1], vi_mix$criteria[1])
 print(ELBO_init, digits = 1)
+
+AIC_init <- c(vi_gauss$criteria[2], vi_student$criteria[2], vi_clayton$criteria[2], vi_gumbel$criteria[2], vi_frank$criteria[2], vi_joe$criteria[2], vi_mix$criteria[2])
+BIC_init <- c(vi_gauss$criteria[3], vi_student$criteria[3], vi_clayton$criteria[3], vi_gumbel$criteria[3], vi_frank$criteria[3], vi_joe$criteria[3], vi_mix$criteria[3])
+logP_init <- c(vi_gauss$criteria[4], vi_student$criteria[4], vi_clayton$criteria[4], vi_gumbel$criteria[4], vi_frank$criteria[4], vi_joe$criteria[4], vi_mix$criteria[4])
+
+init_tab <- rbind(ELBO_init, AIC_init, BIC_init, logP_init)
+print(xtable(init_tab, digits = 0))
 
 iter_num <- c(vi_gauss_rng$iteration, vi_student_rng$iteration, vi_clayton_rng$iteration, vi_gumbel_rng$iteration, vi_frank_rng$iteration, vi_joe_rng$iteration, vi_mix_rng$iteration)
 print(iter_num, digits = 0)
@@ -351,9 +358,19 @@ print(correct_percent, digits = 0)
 time_rng <- c(vi_gauss_rng$time, vi_student_rng$time, vi_clayton_rng$time, vi_gumbel_rng$time, vi_frank_rng$time, vi_joe_rng$time, vi_mix_rng$time)
 print(time_rng, digits = 0)
 
-ELBO_rng <- c(vi_gauss_rng$ELBO, vi_student_rng$ELBO, vi_clayton_rng$ELBO, vi_gumbel_rng$ELBO, vi_frank_rng$ELBO, vi_joe_rng$ELBO, vi_mix_rng$ELBO)
-print(ELBO_rng, digits = 1)
+ELBO_rng <- c(vi_gauss_rng$criteria[1], vi_student_rng$criteria[1], vi_clayton_rng$criteria[1], vi_gumbel_rng$criteria[1], vi_frank_rng$criteria[1], vi_joe_rng$criteria[1], vi_mix_rng$criteria[1])
+AIC_rng <- c(vi_gauss_rng$criteria[2], vi_student_rng$criteria[2], vi_clayton_rng$criteria[2], vi_gumbel_rng$criteria[2], vi_frank_rng$criteria[2], vi_joe_rng$criteria[2], vi_mix_rng$criteria[2])
+BIC_rng <- c(vi_gauss_rng$criteria[3], vi_student_rng$criteria[3], vi_clayton_rng$criteria[3], vi_gumbel_rng$criteria[3], vi_frank_rng$criteria[3], vi_joe_rng$criteria[3], vi_mix_rng$criteria[3])
+logP_rng <- c(vi_gauss_rng$criteria[4], vi_student_rng$criteria[4], vi_clayton_rng$criteria[4], vi_gumbel_rng$criteria[4], vi_frank_rng$criteria[4], vi_joe_rng$criteria[4], vi_mix_rng$criteria[4])
 
+
+rng_tab <- rbind(iter_num, correct_percent, ELBO_rng, AIC_rng, BIC_rng, logP_rng)
+
+#print(ELBO_rng, digits = 1)
+print(xtable(rng_tab, digits = 0))
+
+
+#######################################################################################
 pdf(file='img/OnefactorCompare1.pdf', width = 7, height = 2.5)
 par(mfrow =c(3,6))
 par(mar=c(5,5,3,1))
@@ -374,32 +391,32 @@ par(mfrow =c(3,6))
 par(mar=c(5,5,3,1))
 
 plot(datagen_gauss$v, get_v0(vi_gauss),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v, get_v0(vi_student),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v, get_v0(vi_clayton),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Clayton one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v, get_v0(vi_gumbel),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Gumbel one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v, get_v0(vi_frank),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Frank one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v, get_v0(vi_joe),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
     main = " Joe one factor copula")
 abline(a= 0, b=1, col="red")
 
@@ -408,39 +425,39 @@ abline(a= 0, b=1, col="red")
 
 
 plot(datagen_gauss$theta, get_theta(vi_gauss) ,
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta, get_theta(vi_student),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta, get_theta(vi_clayton),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Clayton one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta, get_theta(vi_gumbel),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Gumbel one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta, get_theta(vi_frank),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Frank one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta, get_theta(vi_joe),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
     main = " Joe one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 
 plot(datagen_student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-    xlab = expression(nu[t]), ylab = expression(nu[approx]),
+    xlab = expression(nu[gen]), ylab = expression(nu[vi]),
     main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 

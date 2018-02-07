@@ -173,18 +173,19 @@ public:
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
                     count_select++;
-                    stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
-                    ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
-                    if (ELBO[0] < ELBO_max){
-                        if( abs(ELBO[0] / ELBO_max - 1) < 0.01 ) { // stop until convergence
-                            keepfindcop = false;
-                        } else {
-                            ELBO_max = ELBO[0];
-                        }
-
-                    } else{
-                        ELBO_max = ELBO[0];
-                    }
+                    if (count_select > 10) keepfindcop = false;
+                    // stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
+                    // ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
+                    // if (ELBO[0] < ELBO_max){
+                    //     if( abs(ELBO[0] / ELBO_max - 1) < 0.01 ) { // stop until convergence
+                    //         keepfindcop = false;
+                    //     } else {
+                    //         ELBO_max = ELBO[0];
+                    //     }
+                    //
+                    // } else{
+                    //     ELBO_max = ELBO[0];
+                    // }
 
                 } else {
                     keepfindcop = false;

@@ -92,7 +92,7 @@ public:
                     std::vector<int>& cop_new,
                     std::vector<int>& latent_cop_new,
                     std::vector<double>& ELBO,
-                    int& count_iter)
+                    int& count_select)
         {
 
             // Initiate model
@@ -200,19 +200,21 @@ public:
 
                         advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                      message_writer, parameter_writer, diagnostic_writer, vi_store);
-                        count_iter++;
-                        stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
-                        ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
-                        if (ELBO[0] < ELBO_max){
-                            if( abs(ELBO[0] / ELBO_max - 1) < 0.01 ) { // stop until convergence
-                                keepfindcop = false;
-                            } else {
-                                ELBO_max = ELBO[0];
-                            }
+                        count_select++;
+                        if (count_select > 10) keepfindcop = false;
 
-                        } else{
-                            ELBO_max = ELBO[0];
-                        }
+                        // stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
+                        // ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
+                        // if (ELBO[0] < ELBO_max){
+                        //     if( abs(ELBO[0] / ELBO_max - 1) < 0.01 ) { // stop until convergence
+                        //         keepfindcop = false;
+                        //     } else {
+                        //         ELBO_max = ELBO[0];
+                        //     }
+                        //
+                        // } else{
+                        //     ELBO_max = ELBO[0];
+                        // }
                     } else {
                         keepfindcop = false;
                     }

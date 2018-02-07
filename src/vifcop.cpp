@@ -174,12 +174,12 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     int core  = 1;
     int iter  = 1000;   // Number of iterations after converge
     int n_monte_carlo_grad  = 1; //number of samples for gradient computation
-    int n_monte_carlo_elbo  = 10; //number of samples for ELBO computation
+    int n_monte_carlo_elbo  = 100; //number of samples for ELBO computation
     int eval_elbo  = 100;      //evaluate ELBO at every "eval_elbo" iters
     bool adapt_bool  = FALSE;      // Using adaptation
     double adapt_val  = 1;      // adaptation value
     int adapt_iterations  = 50;      // number of iterations for eta adaptation
-    double tol_rel_obj = 0.1;      // relative tolerance parameter for convergence
+    double tol_rel_obj = 0.01;      // relative tolerance parameter for convergence
     int max_iterations = 2e4;      // max number of iterations to run algorithm
     bool copselect  = FALSE;      // Automated copula selection
     bool modelselect  = FALSE;      // Automated copula selection

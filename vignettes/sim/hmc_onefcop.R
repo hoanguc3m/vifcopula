@@ -32,7 +32,7 @@ other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
 hmc_student <- vifcopula::hmcfcop(data,init,other)
 
 ################################################################################
-
+compare
 datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, family = 3, seed_num = 0)
 datagen <- datagen_clayton
 data <- list(u = datagen$u,
@@ -100,3 +100,6 @@ data <- list(u = datagen$u,
 init <- list(copula_type = datagen_mix$family)
 other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
 hmc_mix <- vifcopula::hmcfcop(data,init,other)
+
+
+###############################################################################
