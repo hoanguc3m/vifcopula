@@ -26,10 +26,10 @@ data <- list(u = datagen$u,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family,
              latent_copula_type = datagen$family_latent)
-other <- list(seed = 100909, core = 8, iter = 1000,
+other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_gauss, vi_gauss)
 
@@ -39,7 +39,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 
 vi_gauss_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_gauss, vi_gauss_rng)
@@ -66,7 +66,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_student <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_student, vi_student)
 plot.vifcop(vi_student)
@@ -76,7 +76,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_student_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_student, vi_student_rng)
 
@@ -102,7 +102,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_clayton <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_clayton, vi_clayton)
 
@@ -111,7 +111,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_clayton_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_clayton, vi_clayton_rng)
 sum(vi_clayton_rng$cop_type == datagen_clayton$family)
@@ -134,7 +134,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_gumbel, vi_gumbel)
 
@@ -143,7 +143,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_gumbel_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_gumbel, vi_gumbel_rng)
 
@@ -169,7 +169,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_frank <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_frank, vi_frank)
 
@@ -178,7 +178,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 112321, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_frank_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_frank, vi_frank_rng)
 
@@ -202,7 +202,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_joe <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_joe, vi_joe)
 
@@ -211,7 +211,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_joe_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_joe, vi_joe_rng)
 
@@ -239,7 +239,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_mix <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_mix, vi_mix)
 
@@ -250,7 +250,7 @@ init <- list(copula_type = copfamily_rng,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.05, copselect = T, selectmodel = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
 vi_mix_rng <- vifcopula::vifcop(data,init,other)
 
 sum(vi_mix_rng$cop_type == datagen$family)
@@ -306,7 +306,7 @@ BIC_rng <- c(vi_gauss_rng$criteria[3], vi_student_rng$criteria[3], vi_clayton_rn
 logP_rng <- c(vi_gauss_rng$criteria[4], vi_student_rng$criteria[4], vi_clayton_rng$criteria[4], vi_gumbel_rng$criteria[4], vi_frank_rng$criteria[4], vi_joe_rng$criteria[4], vi_mix_rng$criteria[4])
 
 
-rng_tab <- rbind(iter_num, correct_percent, ELBO_rng, AIC_rng, BIC_rng, logP_rng)
+rng_tab <- rbind(iter_num, correct_percent, correct_latent_percent, ELBO_rng, AIC_rng, BIC_rng, logP_rng)
 
 #print(ELBO_rng, digits = 1)
 print(xtable(rng_tab, digits = 0))

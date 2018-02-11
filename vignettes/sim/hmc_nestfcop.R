@@ -128,3 +128,120 @@ other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
 hmc_mix <- vifcopula::hmcfcop(data,init,other)
 
 #################################################################################
+
+#############################################################################
+
+time_vi <- c(vi_gauss$time, vi_student$time, vi_clayton$time, vi_gumbel$time, vi_frank$time, vi_joe$time, vi_mix$time)
+time_hmc <- c(hmc_gauss$time, hmc_student$time, hmc_clayton$time, hmc_gumbel$time, hmc_frank$time, hmc_joe$time, hmc_mix$time)
+
+time_tab <- rbind(time_vi, time_hmc)
+print(xtable(time_tab, digits = 0))
+
+#############################################################################
+
+pdf(file='img/VIHMCnestfcop.pdf', width = 18, height = 12)
+par(mfrow =c(4,6))
+par(mar=c(5,5,3,1))
+
+plot(get_v0_sd(hmc_gauss), get_v0_sd(vi_gauss),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " Gaussian one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0_sd(hmc_student), get_v0_sd(vi_student),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " Student one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0_sd(hmc_clayton), get_v0_sd(vi_clayton),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " Clayton one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0_sd(hmc_gumbel), get_v0_sd(vi_gumbel),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " Gumbel one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0_sd(hmc_frank), get_v0_sd(vi_frank),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " Frank one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0_sd(hmc_joe), get_v0_sd(vi_joe),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " Joe one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_gauss), get_v_sd(vi_gauss),
+     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
+     main = " Gaussian one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_student), get_v_sd(vi_student),
+     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
+     main = " Student one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_clayton), get_v_sd(vi_clayton),
+     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
+     main = " Clayton one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_gumbel), get_v_sd(vi_gumbel),
+     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
+     main = " Gumbel one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_frank), get_v_sd(vi_frank),
+     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
+     main = " Frank one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_joe), get_v_sd(vi_joe),
+     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
+     main = " Joe one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_gauss), get_theta_sd(vi_gauss),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = " Gaussian one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_student), get_theta_sd(vi_student),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = " Student one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_clayton), get_theta_sd(vi_clayton),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = " Clayton one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_gumbel), get_theta_sd(vi_gumbel),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = " Gumbel one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_frank), get_theta_sd(vi_frank),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = " Frank one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_joe), get_theta_sd(vi_joe),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = " Joe one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot.new()
+
+plot(get_theta2_sd(hmc_student), get_theta2_sd(vi_student),
+     xlab = expression(sd(theta2[hmc]) ), ylab = expression(sd (theta2[vi])),
+     main = " Student one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot.new()
+plot.new()
+plot.new()
+plot.new()
+dev.off()

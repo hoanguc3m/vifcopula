@@ -539,7 +539,8 @@ namespace stan {
 
 
             // From unconstrain to constrain domain
-            // model_.write_array(rng_, cont_params_, mean_vi);
+            Eigen::Matrix<double,Eigen::Dynamic,1> mode_vi;
+            model_.write_array(rng_, cont_params_, mode_vi);
 
             int dim = vi_save.dimension(); // Number of v + theta params
             int eff_num_para = model_.get_eff_para(); // Number of theta params
@@ -560,6 +561,7 @@ namespace stan {
 
             if (modelselect) {
                 std::cout << "Calculating ELBO/AIC/BIC/log_prob " << std::endl;
+                std::cout << "Effective parameters: " << eff_num_para << std::endl;
                 ELBO[3] = model_.calc_log_over_v(mean_vi, eff_num_para);    // log_prob
                 ELBO[1] = - 2 * ELBO[3] + 2 * eff_num_para;     // AIC
                 ELBO[2] = - 2 * ELBO[3] + log(model_.get_t_max()) * eff_num_para; // BIC

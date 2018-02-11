@@ -1,3 +1,4 @@
+library(vifcopula)
 set.seed(0)
 t_max = 1000
 n_max = 100

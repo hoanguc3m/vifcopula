@@ -198,7 +198,6 @@ public:
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
                     count_select++;
-                    if (count_select > 10) keepfindcop = false;
                     // stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
                     // ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
                     // if (ELBO[0] < ELBO_max){
@@ -215,8 +214,9 @@ public:
                 } else {
                     keepfindcop = false;
                 }
+                if (count_select == 10) keepfindcop = false;
 
-            }
+            }   // end while
 
         }
 

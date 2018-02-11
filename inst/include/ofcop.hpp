@@ -149,18 +149,14 @@ public:
                 VectorXd::Map(&v_temp[0], t_max) = mean_vi.head(t_max);
 
                 std::vector<double> params_out(2);
-                matrix_d u_omp(u) ;
-                int t_max_omp = t_max;
-                int n_max_omp = n_max;
-                rng_t base_rng_omp(0);
 
                 // omp_set_num_threads(1);
 
-                // #pragma omp parallel for default(none) firstprivate(u_temp,v_temp,params_out,t_max_omp, base_rng_omp) shared(n_max_omp,cop_vec_new,u_omp)
-                    for (int j = 0; j < n_max_omp; j++){
+                // #pragma omp parallel for default(none) firstprivate(u_temp,v_temp,params_out,t_max, base_rng) shared(n_max,cop_vec_new,u)
+                    for (int j = 0; j < n_max; j++){
                         //u_temp = u.col(j);
-                        VectorXd::Map(&u_temp[0], t_max_omp) = u_omp.col(j);
-                        cop_vec_new[j] = bicop_select(u_temp, v_temp, t_max_omp,params_out, base_rng_omp);
+                        VectorXd::Map(&u_temp[0], t_max) = u.col(j);
+                        cop_vec_new[j] = bicop_select(u_temp, v_temp, t_max,params_out, base_rng);
                     }
 
                 if (cop_vec_new != copula_type_vec){
@@ -173,7 +169,6 @@ public:
                     advi_cop.run(adapt_val, adapt_bool, adapt_iterations, tol_rel_obj, 2e4,
                                  message_writer, parameter_writer, diagnostic_writer, vi_store);
                     count_select++;
-                    if (count_select > 10) keepfindcop = false;
                     // stan::variational::normal_meanfield vi_save(vi_store.mu_, vi_store.omega_);
                     // ELBO[0] = advi_cop.calc_ELBO(vi_save, message_writer);
                     // if (ELBO[0] < ELBO_max){
@@ -190,8 +185,9 @@ public:
                 } else {
                     keepfindcop = false;
                 }
+                if (count_select == 10) keepfindcop = false;
 
-            }
+            }   // end while
 
         }
 

@@ -460,7 +460,7 @@ public:
                 Eigen::VectorXd ucond_t = (Eigen::VectorXd::Random(n_max)).array().abs() ; // range [-1,1]
 
                 for (int i = 0; i < n_max; i++) {
-                    ucond_t(i) = hfunc_trans(latent_copula_type[i],  u(t,i), v1_t(j),  theta[i], theta2[i]);
+                    ucond_t(i) = hfunc_trans(copula_type[i],  u(t,i), v1_t(j),  theta[i], theta2[i]);
                     logc_jt(j) += bicop_log_double(latent_copula_type[i], ucond_t(i), v2g_t(j,gid[i]), theta_latent[i], theta2_latent[i] )   ;
                 }
 
