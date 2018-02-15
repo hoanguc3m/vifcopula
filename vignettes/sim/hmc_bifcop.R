@@ -27,25 +27,26 @@ other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
 hmc_gauss <- vifcopula::hmcfcop(data,init,other)
 ################################################################################
 
-# datagen_student <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max, gid = gid,
-#                            family = 2, seed_num = 100,
-#                            structfactor = 2, tau_range = c(0.2,0.8),
-#                            tau_latent_range = c(0.2,0.8), family_latent = sample(c(1,3,4,5,6),size = n_max, replace = T))
-# datagen <- datagen_student
-# data <- list(u = datagen$u,
-#              n_max = datagen$n_max,
-#              t_max = datagen$t_max,
-#              k_max = datagen$k_max,
-#              gid = datagen$gid,
-#              structfactor = datagen$structfactor)
-# init <- list(copula_type = datagen$family,
-#              latent_copula_type = datagen$family_latent)
-# hmc_student <- vifcopula::hmcfcop(data,init,other)
+datagen_student <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max, gid = gid,
+                           family = 2, seed_num = 100,
+                           structfactor = 2, tau_range = c(0.2,0.8),
+                           tau_latent_range = c(0.2,0.8), family_latent = sample(c(1,3,4,5,6),size = n_max, replace = T))
+datagen <- datagen_student
+data <- list(u = datagen$u,
+             n_max = datagen$n_max,
+             t_max = datagen$t_max,
+             k_max = datagen$k_max,
+             gid = datagen$gid,
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family,
+             latent_copula_type = datagen$family_latent)
+hmc_student <- vifcopula::hmcfcop(data,init,other)
 
 ################################################################################
 
 datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                            family = 3, family_latent = 3, seed_num = 0,
+                           tau_range = c(0.2,0.7), tau_latent_range = c(0.2,0.7),
                            structfactor = 2)
 datagen <- datagen_clayton
 data <- list(u = datagen$u,

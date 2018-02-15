@@ -73,7 +73,7 @@ plot.vifcop(vi_student)
 
 init <- list(copula_type = copfamily_rng,
              latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 126, core = 8, iter = 1000,
+other <- list(seed = 0, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
@@ -108,7 +108,7 @@ compare_sim_vi(datagen_clayton, vi_clayton)
 
 init <- list(copula_type = copfamily_rng,
             latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 126, core = 8, iter = 1000,
+other <- list(seed = 0, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
@@ -215,7 +215,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
 vi_joe_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_joe, vi_joe_rng)
 
-sum(vi_joe_rng$cop_type == datagen_joe$family)
+sum(vi_joe_rng$cop_type == datagen_joe$family)v
 sum(vi_joe_rng$latent_copula_type == datagen_joe$family_latent)
 
 # save.image("/media/hoanguc3m/Data/wp2/simbf_joe.Rdata")
@@ -225,7 +225,7 @@ latentcopfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
 
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                        family = copfamily, family_latent = latentcopfamily,
-                       seed_num = 100, structfactor = 2)
+                       seed_num = 126, structfactor = 2)
 
 datagen <- datagen_mix
 data <- list(u = datagen$u,
@@ -236,7 +236,7 @@ data <- list(u = datagen$u,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family,
              latent_copula_type = datagen$family_latent)
-other <- list(seed = 126, core = 8, iter = 1000,
+other <- list(seed = 0, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
@@ -289,7 +289,7 @@ correct_percent <- c(sum(vi_gauss_rng$cop_type == 1),
 print(correct_percent, digits = 0)
 
 correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1),
-                            sum(vi_student_rng$latent_copula_type == 2),
+                            sum(vi_student_rng$latent_copula_type == datagen_student$family_latent),
                             sum(vi_clayton_rng$latent_copula_type == 3),
                             sum(vi_gumbel_rng$latent_copula_type == 4),
                             sum(vi_frank_rng$latent_copula_type == 5),
