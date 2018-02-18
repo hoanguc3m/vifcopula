@@ -1,5 +1,7 @@
 # library(devtools)
 # install_github("hoanguc3m/vifcopula")
+num_rep = 4
+
 setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
 set.seed(0)
@@ -11,7 +13,6 @@ require(doParallel)
 # require(multicore); require(doMC) # alternative to parallel/doParallel
 # require(Rmpi); require(doMPI) # to use Rmpi as the back-end
 library(foreach)
-num_rep = 100
 seed_collection <- sample(1:1000000, num_rep, replace=F)
 
 task_onefcop <- function(seed_num, family){
@@ -58,7 +59,7 @@ registerDoParallel(nCores)
 # cl <- startMPIcluster(nCores); registerDoMPI(cl) # when using Rmpi as the
 
 library(doRNG, quietly = TRUE)
-        
+
 Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_onefcop(seed_collection[i], family = 1)
@@ -102,7 +103,7 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
 }
 
 
-Data_Mix <- foreach(i = 1:4, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     copfamily = sample(c(1,2,3,4,5,6),size = 100, replace = T)
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_onefcop(seed_collection[i], family = copfamily)
@@ -115,7 +116,7 @@ Data_Mix <- foreach(i = 1:4, .combine= 'cbind', .options.RNG = list(seed = 0)) %
 
 #############################################################################
 # correct        iteration          time_vi         time_rng     vi_criteria1     vi_criteria2     vi_criteria3     vi_criteria4
-# vi_rng_criteria1  vi_rng_criteria2    vi_rng_criteria3    vi_rng_criteria4 
+# vi_rng_criteria1  vi_rng_criteria2    vi_rng_criteria3    vi_rng_criteria4
 vi_gauss <- apply(Data_Gauss, MARGIN = 1, FUN = mean)
 vi_student <- apply(Data_Student, MARGIN = 1, FUN = mean)
 vi_clayton <- apply(Data_Clayton, MARGIN = 1, FUN = mean)

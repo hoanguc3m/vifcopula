@@ -159,6 +159,10 @@ public:
                         cop_vec_new[j] = bicop_select(u_temp, v_temp, t_max,params_out, base_rng);
                     }
 
+                    std::cout << " cop_new " << std::endl;
+                    PRINT_ELEMENTS(cop_vec_new);
+
+
                 if (cop_vec_new != copula_type_vec){
                     copula_type_vec = cop_vec_new;
                     ObjOnefcop.set_copula_type(copula_type_vec);

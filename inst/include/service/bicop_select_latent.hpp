@@ -99,9 +99,9 @@ double bicop_select_latent(std::vector<double>& u,
     }
     params_out.resize(2); // For theta, theta2 even we dont use it.
 
-    std::cout << " Select cop latent " << return_cop << " Lp " << lpmax << " "
-              << " BIC " << BICmin << " " << params_out[0] << " "
-                << params_out[1] << std::endl;
+    // std::cout << " Select cop latent " << return_cop << " Lp " << lpmax << " "
+    //           << " BIC " << BICmin << " " << params_out[0] << " "
+    //             << params_out[1] << std::endl;
     return return_cop;
 }   // end func
 

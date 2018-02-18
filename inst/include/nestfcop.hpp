@@ -183,6 +183,12 @@ public:
                     std::vector<double> params_out(2);
                     cop_new[j] = bicop_select(u_temp, v2g_temp, t_max, params_out, base_rng);
                 }
+                
+                    std::cout << " cop_new " << std::endl;
+                    PRINT_ELEMENTS(cop_new);
+
+                    std::cout << " latent_cop_new " << std::endl;
+                    PRINT_ELEMENTS(latent_cop_new);
 
 
                 if ((cop_new != copula_type) || (latent_cop_new != latent_copula_type)){

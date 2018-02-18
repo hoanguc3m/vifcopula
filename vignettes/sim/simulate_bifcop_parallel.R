@@ -114,7 +114,7 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
 }
 
 
-Data_Mix <- foreach(i = 1:4, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
     latentcopfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
     
