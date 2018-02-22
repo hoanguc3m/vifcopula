@@ -17,14 +17,14 @@ seed_collection <- sample(1:1000000, num_rep, replace=F)
 
 task_nestfcop <- function(seed_num, family, family_latent){
     set.seed(seed_num)
-    
+
     gid = sample(1:(k_max-1),n_max,replace = T)
     # gauss_init <- matrix(1, nrow = n_max, ncol = 1)
     # gauss_latent_init <- matrix(1, nrow = k_max-1, ncol = 1)
-    
+
     copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
     copfamily_latent_init <- sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
-    
+
     datagen <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                        family = family, family_latent = family_latent,
                        gid = gid, structfactor = 3, seed_num = seed_num)
@@ -42,24 +42,25 @@ task_nestfcop <- function(seed_num, family, family_latent){
                   eval_elbo = 100, adapt_bool = F, adapt_val = 1,
                   adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
     vi <- vifcopula::vifcop(data,init,other)
-    
-    
+
+
     init <- list(copula_type = copfamily_init,
                  latent_copula_type = copfamily_latent_init)
-    
+
     other <- list(seed = seed_num, core = 8, iter = 1000,
                   n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
                   eval_elbo = 100, adapt_bool = F, adapt_val = 1,
                   adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
     vi_rng <- vifcopula::vifcop(data,init,other)
-    
+
     c( correct = sum(vi_rng$cop_type == datagen$family),
        iteration = vi_rng$iteration,
        time_vi = vi$time,
        time_rng = vi_rng$time,
        vi_criteria = vi$criteria,
        vi_rng_criteria = vi_rng$criteria,
-       correct_latent = sum(vi_rng$latent_copula_type == datagen$family_latent) )
+       correct_latent = sum(vi_rng$latent_copula_type == datagen$family_latent),
+       seed_num = seed_num)
 }
 
 nCores <- 4
@@ -114,7 +115,7 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
 Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
     latentcopfamily = sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
-    
+
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_nestfcop(seed_collection[i], family = copfamily, family_latent = latentcopfamily)
     cat('Finishing ', i, 'th job.\n', sep = '')
@@ -128,7 +129,7 @@ Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
 
 #############################################################################
 # correct        iteration          time_vi         time_rng     vi_criteria1     vi_criteria2     vi_criteria3     vi_criteria4
-# vi_rng_criteria1  vi_rng_criteria2    vi_rng_criteria3    vi_rng_criteria4 
+# vi_rng_criteria1  vi_rng_criteria2    vi_rng_criteria3    vi_rng_criteria4
 vi_gauss <- apply(Data_Gauss, MARGIN = 1, FUN = mean)
 vi_student <- apply(Data_Student, MARGIN = 1, FUN = mean)
 vi_clayton <- apply(Data_Clayton, MARGIN = 1, FUN = mean)

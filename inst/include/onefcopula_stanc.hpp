@@ -295,8 +295,12 @@ public:
     int get_n_max(void){
         return n_max;
     }
-    double calc_log_over_v( Eigen::VectorXd& mean_vi,
+    template <typename RNG>
+    double calc_log_over_v( RNG& base_rng__,
+                            Eigen::VectorXd& mean_vi,
                             int eff_num_para){
+        std::srand(base_rng__());
+
         double logc = 0;
         int MCnum = 1000;
         vector<double> logc_t(t_max,0.0);
@@ -314,7 +318,6 @@ public:
                 theta[i] = theta_12(count); count++;
             }
         }
-
         for (int t = 0; t < t_max; t++) {
             Eigen::VectorXd v_t = (Eigen::VectorXd::Random(MCnum)).array().abs() ; // range [-1,1]
             Eigen::VectorXd logc_jt = Eigen::VectorXd::Zero(MCnum);

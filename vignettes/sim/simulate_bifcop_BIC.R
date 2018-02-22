@@ -313,7 +313,7 @@ print(xtable(rng_tab, digits = 0))
 
 #############################################################################
 
-pdf(file='img/Bifactor.pdf', width = 15, height = 12)
+pdf(file='img/Bifactor.pdf', width = 18, height = 12)
 par(mfrow =c(4,6))
 par(mar=c(5,5,3,1))
 

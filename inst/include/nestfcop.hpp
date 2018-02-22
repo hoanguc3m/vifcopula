@@ -93,6 +93,7 @@ public:
                 int max_iterations,
                 bool copselect,
                 bool modelselect,
+                int max_select,
                 int core,
                 vector_d& mean_vi,
                 matrix_d& sample_vi,
@@ -183,7 +184,7 @@ public:
                     std::vector<double> params_out(2);
                     cop_new[j] = bicop_select(u_temp, v2g_temp, t_max, params_out, base_rng);
                 }
-                
+
                     std::cout << " cop_new " << std::endl;
                     PRINT_ELEMENTS(cop_new);
 
@@ -220,7 +221,7 @@ public:
                 } else {
                     keepfindcop = false;
                 }
-                if (count_select == 10) keepfindcop = false;
+                if (count_select == max_select) keepfindcop = false;
 
             }   // end while
 

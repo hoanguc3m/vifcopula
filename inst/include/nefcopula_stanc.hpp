@@ -406,8 +406,11 @@ public:
         return t_max;
     }
 
-    double calc_log_over_v( Eigen::VectorXd& mean_vi,
+    template <typename RNG>
+    double calc_log_over_v( RNG& base_rng__,
+                            Eigen::VectorXd& mean_vi,
                             int eff_num_para){
+        std::srand(base_rng__());
         double logc = 0;
         int MCnum = 1000;
         vector<double> logc_t(t_max,0.0);

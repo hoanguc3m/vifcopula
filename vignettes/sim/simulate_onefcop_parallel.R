@@ -1,6 +1,6 @@
 # library(devtools)
 # install_github("hoanguc3m/vifcopula")
-num_rep = 4
+num_rep = 100
 
 setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
@@ -48,7 +48,8 @@ task_onefcop <- function(seed_num, family){
        time_vi = vi$time,
        time_rng = vi_rng$time,
        vi_criteria = vi$criteria,
-       vi_rng_criteria = vi_rng$criteria)
+       vi_rng_criteria = vi_rng$criteria,
+       seed_num = seed_num)
 
 }
 

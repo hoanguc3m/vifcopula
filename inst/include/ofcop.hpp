@@ -81,6 +81,7 @@ public:
                 int max_iterations,
                 bool copselect,
                 bool modelselect,
+                int max_select,
                 int core,
                 vector_d& mean_vi,
                 matrix_d& sample_vi,
@@ -189,7 +190,7 @@ public:
                 } else {
                     keepfindcop = false;
                 }
-                if (count_select == 10) keepfindcop = false;
+                if (count_select == max_select) keepfindcop = false;
 
             }   // end while
 

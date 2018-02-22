@@ -37,44 +37,44 @@ void write_theta(int id, int copula_type,
         // }
 
         theta = in__.scalar_lub_constrain(0,1);
-        theta2 = in__.scalar_lub_constrain(2.1,40);
+        theta2 = in__.scalar_lub_constrain(2.001,30);
         vars__.push_back(theta);
         vars__.push_back(theta2);
         break;
     case 3:
         // Clayon copula
-        theta = in__.scalar_lub_constrain(0.001,30);
+        theta = in__.scalar_lub_constrain(0.001,20);
         vars__.push_back(theta);
         break;
     case 4:
         // Gumbel copula
-        theta = in__.scalar_lub_constrain(1,15);
+        theta = in__.scalar_lub_constrain(1,10);
         vars__.push_back(theta);
         break;
     case 5:
         // Frank copula
-        theta = in__.scalar_lub_constrain(0.1,100);
+        theta = in__.scalar_lub_constrain(0.1,40);
         vars__.push_back(theta);
         break;
     case 6:
         // Joe copula
-        theta = in__.scalar_lub_constrain(1,30);
+        theta = in__.scalar_lub_constrain(1,20);
         vars__.push_back(theta);
         break;
 
     case 13:
         // Survial Clayon copula
-        theta = in__.scalar_lub_constrain(0.001,30);
+        theta = in__.scalar_lub_constrain(0.001,20);
         vars__.push_back(theta);
         break;
     case 14:
         // Survial Gumbel copula
-        theta = in__.scalar_lub_constrain(1,15);
+        theta = in__.scalar_lub_constrain(1,10);
         vars__.push_back(theta);
         break;
     case 16:
         // Survial Joe copula
-        theta = in__.scalar_lub_constrain(1,30);
+        theta = in__.scalar_lub_constrain(1,20);
         vars__.push_back(theta);
         break;
 
@@ -87,45 +87,45 @@ void write_theta(int id, int copula_type,
     case 22:
 
         theta = in__.scalar_lub_constrain(-1,0);
-        theta2 = in__.scalar_lub_constrain(2.1,40);
+        theta2 = in__.scalar_lub_constrain(2.001,30);
         vars__.push_back(theta);
         vars__.push_back(theta2);
         break;
 
     case 23:
         // rotated 90 degree Clayon copula
-        theta = in__.scalar_lub_constrain(-30,-0.001);
+        theta = in__.scalar_lub_constrain(-20,-0.001);
         vars__.push_back(theta);
         break;
     case 24:
         // rotated 90 degree Gumbel copula
-        theta = in__.scalar_lub_constrain(-15,-1);
+        theta = in__.scalar_lub_constrain(-10,-1);
         vars__.push_back(theta);
         break;
     case 25:
         // Frank copula
-        theta = in__.scalar_lub_constrain(-100,-0.1);
+        theta = in__.scalar_lub_constrain(-40,-0.1);
         vars__.push_back(theta);
         break;
     case 26:
         // rotated 90 degree Joe copula
-        theta = in__.scalar_lub_constrain(-30,-1);
+        theta = in__.scalar_lub_constrain(-20,-1);
         vars__.push_back(theta);
         break;
 
     case 33:
         // rotated 270 degree Clayon copula
-        theta = in__.scalar_lub_constrain(-30,-0.001);
+        theta = in__.scalar_lub_constrain(-20,-0.001);
         vars__.push_back(theta);
         break;
     case 34:
         // rotated 270 degree Gumbel copula
-        theta = in__.scalar_lub_constrain(-15,-1);
+        theta = in__.scalar_lub_constrain(-10,-1);
         vars__.push_back(theta);
         break;
     case 36:
         // rotated 270 degree Joe copula
-        theta = in__.scalar_lub_constrain(-30,-1);
+        theta = in__.scalar_lub_constrain(-20,-1);
         vars__.push_back(theta);
         break;
     default:

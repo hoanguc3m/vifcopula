@@ -183,6 +183,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     int max_iterations = 2e4;      // max number of iterations to run algorithm
     bool copselect  = FALSE;      // Automated copula selection
     bool modelselect  = FALSE;      // Automated copula selection
+    int max_select  = 10;      // maximum loop of model selection
 
     if ( other.containsElementNamed("seed") ) seed = as<int>(other["seed"]);
     rng_t base_rng(seed);
@@ -207,6 +208,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     if ( other.containsElementNamed("tol_rel_obj") ) tol_rel_obj = as<double>(other["tol_rel_obj"]);
     if ( other.containsElementNamed("copselect") ) copselect  = as<bool>(other["copselect"]);      // Automated copula selection
     if ( other.containsElementNamed("modelselect") ) modelselect  = as<bool>(other["modelselect"]);      // Automated copula selection
+    if ( other.containsElementNamed("max_select") ) max_select  = as<int>(other["max_select"]);      // Automated number of selection
 
     Rcpp::Rcout << " Core set : " << core << std::endl;
     Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
@@ -270,7 +272,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             ofcop Objfcop(u, copula_type_vec, t_max, n_max, k_max-1, base_rng);
             Objfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-                          copselect, modelselect, core,
+                          copselect, modelselect, max_select, core,
                           mean_vi, sample_vi, cop_vec_new, ELBO_save, count_select);
 
             save_vi(model_pars, mean_vi_save, sample_vi_save,
@@ -300,7 +302,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
         Objbifcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                         adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-                        copselect, modelselect, core,
+                        copselect, modelselect, max_select, core,
                         mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
 
         save_vi(model_pars, mean_vi_save, sample_vi_save,
@@ -326,7 +328,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         nestfcop Objnestfcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng);
         Objnestfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
                           adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
-                          copselect, modelselect, core,
+                          copselect, modelselect, max_select, core,
                           mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
 
         save_vi(model_pars, mean_vi_save, sample_vi_save,

@@ -5,8 +5,8 @@ library(vifcopula)
 set.seed(0)
 t_max = 1000
 n_max = 100
-gauss_init <- matrix(1, nrow = n_max, ncol = 1)
-copfamily_init <- matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
+gauss_init <- rep(1, n_max)
+copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
 
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1, seed_num = 0)
 datagen <- datagen_gauss

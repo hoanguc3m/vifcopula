@@ -297,7 +297,7 @@ print(ELBO_rng, digits = 2)
 
 #############################################################################
 
-pdf(file='img/Bifactor.pdf', width = 15, height = 10)
+pdf(file='img/Bifactor.pdf', width = 18, height = 10)
 par(mfrow =c(4,6))
 par(mar=c(5,5,3,1))
 

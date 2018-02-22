@@ -562,7 +562,7 @@ namespace stan {
             if (modelselect) {
                 std::cout << "Calculating ELBO/AIC/BIC/log_prob " << std::endl;
                 std::cout << "Effective parameters: " << eff_num_para << std::endl;
-                ELBO[3] = model_.calc_log_over_v(mean_vi, eff_num_para);    // log_prob
+                ELBO[3] = model_.calc_log_over_v(rng_, mean_vi, eff_num_para);    // log_prob
                 ELBO[1] = - 2 * ELBO[3] + 2 * eff_num_para;     // AIC
                 ELBO[2] = - 2 * ELBO[3] + log(model_.get_t_max()) * eff_num_para; // BIC
             }
