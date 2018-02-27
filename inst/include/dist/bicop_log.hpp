@@ -59,9 +59,9 @@ void bicop_log_add(int i,
 
         if (jacobian__)
 
-            theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+            theta[i] = in__.scalar_lub_constrain(0,0.99,lp__);
         else
-            theta[i] = in__.scalar_lub_constrain(0,1);
+            theta[i] = in__.scalar_lub_constrain(0,0.99);
 
         lp_accum__.add(bicop_normal_log<propto__>(u,
             v,
@@ -72,9 +72,9 @@ void bicop_log_add(int i,
         // Student copula
 
         if (jacobian__)
-            theta[i] = in__.scalar_lub_constrain(0,1,lp__);
+            theta[i] = in__.scalar_lub_constrain(0,0.99,lp__);
         else
-            theta[i] = in__.scalar_lub_constrain(0,1);
+            theta[i] = in__.scalar_lub_constrain(0,0.99);
 
 
         if (jacobian__)
@@ -192,9 +192,9 @@ void bicop_log_add(int i,
 
         if (jacobian__)
 
-            theta[i] = in__.scalar_lub_constrain(-1,0,lp__);
+            theta[i] = in__.scalar_lub_constrain(-0.99,0,lp__);
         else
-            theta[i] = in__.scalar_lub_constrain(-1,0);
+            theta[i] = in__.scalar_lub_constrain(-0.99,0);
 
         lp_accum__.add(bicop_normal_log<propto__>(u,
             v,
@@ -205,9 +205,9 @@ void bicop_log_add(int i,
         // Student copula
 
         if (jacobian__)
-            theta[i] = in__.scalar_lub_constrain(-1,0,lp__);
+            theta[i] = in__.scalar_lub_constrain(-0.99,0,lp__);
         else
-            theta[i] = in__.scalar_lub_constrain(-1,0);
+            theta[i] = in__.scalar_lub_constrain(-0.99,0);
 
         if (jacobian__)
             theta2[i] = in__.scalar_lub_constrain(2.001,30,lp__);

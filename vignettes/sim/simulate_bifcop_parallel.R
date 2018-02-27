@@ -2,7 +2,7 @@
 # install_github("hoanguc3m/vifcopula")
 setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
-set.seed(0)
+set.seed(1234)
 t_max = 1000
 n_max = 100
 k_max = 6
@@ -71,7 +71,7 @@ registerDoParallel(nCores)
 
 library(doRNG, quietly = TRUE)
 
-Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_bifcop(seed_collection[i], family = 1, family_latent = 1)
     cat('Finishing ', i, 'th job.\n', sep = '')

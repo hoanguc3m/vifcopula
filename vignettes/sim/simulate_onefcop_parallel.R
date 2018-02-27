@@ -137,14 +137,16 @@ AIC_init <- c(vi_gauss[6], vi_student[6], vi_clayton[6], vi_gumbel[6], vi_frank[
 BIC_init <- c(vi_gauss[7], vi_student[7], vi_clayton[7], vi_gumbel[7], vi_frank[7], vi_joe[7], vi_mix[7])
 logP_init <- c(vi_gauss[8], vi_student[8], vi_clayton[8], vi_gumbel[8], vi_frank[8], vi_joe[8], vi_mix[8])
 
-init_tab <- rbind(ELBO_init, AIC_init, BIC_init, logP_init)
-print(xtable(init_tab, digits = 0))
+init_tab <- rbind(ELBO_init, AIC_init, BIC_init, logP_init)/t_max
+print(xtable(init_tab, digits = 1))
 
 iter_num <- c(vi_gauss[2], vi_student[2], vi_clayton[2], vi_gumbel[2], vi_frank[2], vi_joe[2], vi_mix[2])
 print(iter_num, digits = 0)
+iter_num <- round(iter_num)
 
 correct_percent <- c(vi_gauss[1], vi_student[1], vi_clayton[1], vi_gumbel[1], vi_frank[1], vi_joe[1], vi_mix[1])
 print(correct_percent, digits = 0)
+correct_percent <- round(correct_percent)
 
 time_rng <- c(vi_gauss[4], vi_student[4], vi_clayton[4], vi_gumbel[4], vi_frank[4], vi_joe[4], vi_mix[4])
 print(time_rng, digits = 0)
@@ -155,7 +157,8 @@ BIC_rng <- c(vi_gauss[11], vi_student[11], vi_clayton[11], vi_gumbel[11], vi_fra
 logP_rng <- c(vi_gauss[12], vi_student[12], vi_clayton[12], vi_gumbel[12], vi_frank[12], vi_joe[12], vi_mix[12])
 
 
-rng_tab <- rbind(iter_num, correct_percent, ELBO_rng, AIC_rng, BIC_rng, logP_rng)
+rng_tab <- rbind(iter_num, correct_percent, rbind(ELBO_rng, AIC_rng, BIC_rng, logP_rng)/t_max)
 
 #print(ELBO_rng, digits = 1)
+print(xtable(rng_tab, digits = 1))
 print(xtable(rng_tab, digits = 0))

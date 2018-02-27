@@ -1,6 +1,6 @@
-library(devtools)
-install_github("hoanguc3m/vifcopula")
-#setwd("/home/hoanguc3m/Dropbox/WP2/")
+# library(devtools)
+# install_github("hoanguc3m/vifcopula")
+setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
 set.seed(0)
 t_max = 1000
@@ -31,21 +31,20 @@ other <- list(seed = 100909, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, selectmodel = F)
 vi_gauss <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_gauss, vi_gauss)
+# compare_sim_vi(datagen_gauss, vi_gauss)
 
-init <- list(copula_type = copfamily_rng,
-             latent_copula_type = latentcopfamily_rng)
-
-other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-
-vi_gauss_rng <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_gauss, vi_gauss_rng)
-sum(vi_gauss_rng$cop_type == datagen_gauss$family)
-sum(vi_gauss_rng$latent_copula_type == datagen_gauss$family_latent)
-#save.image("/media/hoanguc3m/Data/wp2/simbf_gauss.Rdata")
+# init <- list(copula_type = copfamily_rng,
+#              latent_copula_type = latentcopfamily_rng)
+#
+# other <- list(seed = 126, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+#
+# vi_gauss_rng <- vifcopula::vifcop(data,init,other)
+# compare_sim_vi(datagen_gauss, vi_gauss_rng)
+# sum(vi_gauss_rng$cop_type == datagen_gauss$family)
+# sum(vi_gauss_rng$latent_copula_type == datagen_gauss$family_latent)
 
 
 #################################################################################
@@ -68,22 +67,21 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_student <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_student, vi_student)
-plot.vifcop(vi_student)
+# compare_sim_vi(datagen_student, vi_student)
+# plot.vifcop(vi_student)
 
-init <- list(copula_type = copfamily_rng,
-             latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-vi_student_rng <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_student, vi_student_rng)
-
-sum(vi_student_rng$cop_type == datagen_student$family)
-sum(vi_student_rng$latent_copula_type == datagen_student$family_latent)
-
-#save.image("/media/hoanguc3m/Data/wp2/simbf_student.Rdata")
+# init <- list(copula_type = copfamily_rng,
+#              latent_copula_type = latentcopfamily_rng)
+# other <- list(seed = 126, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+# vi_student_rng <- vifcopula::vifcop(data,init,other)
+# compare_sim_vi(datagen_student, vi_student_rng)
+#
+# sum(vi_student_rng$cop_type == datagen_student$family)
+# sum(vi_student_rng$latent_copula_type == datagen_student$family_latent)
+#
 
 #################################################################################
 
@@ -104,19 +102,18 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_clayton <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_clayton, vi_clayton)
+# compare_sim_vi(datagen_clayton, vi_clayton)
 
-init <- list(copula_type = copfamily_rng,
-            latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-vi_clayton_rng <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_clayton, vi_clayton_rng)
-sum(vi_clayton_rng$cop_type == datagen_clayton$family)
-sum(vi_clayton_rng$latent_copula_type == datagen_clayton$family_latent)
-#save.image("/media/hoanguc3m/Data/wp2/simbf_clayton.Rdata")
+# init <- list(copula_type = copfamily_rng,
+#             latent_copula_type = latentcopfamily_rng)
+# other <- list(seed = 126, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+# vi_clayton_rng <- vifcopula::vifcop(data,init,other)
+# compare_sim_vi(datagen_clayton, vi_clayton_rng)
+# sum(vi_clayton_rng$cop_type == datagen_clayton$family)
+# sum(vi_clayton_rng$latent_copula_type == datagen_clayton$family_latent)
 
 #################################################################################
 datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
@@ -136,22 +133,21 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_gumbel <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_gumbel, vi_gumbel)
+# compare_sim_vi(datagen_gumbel, vi_gumbel)
+#
+# init <- list(copula_type = copfamily_rng,
+#              latent_copula_type = latentcopfamily_rng)
+# other <- list(seed = 126, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+# vi_gumbel_rng <- vifcopula::vifcop(data,init,other)
+# compare_sim_vi(datagen_gumbel, vi_gumbel_rng)
+#
+# sum(vi_gumbel_rng$cop_type == datagen_gumbel$family)
+# sum(vi_gumbel_rng$latent_copula_type == datagen_gumbel$family_latent)
 
-init <- list(copula_type = copfamily_rng,
-             latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-vi_gumbel_rng <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_gumbel, vi_gumbel_rng)
 
-sum(vi_gumbel_rng$cop_type == datagen_gumbel$family)
-sum(vi_gumbel_rng$latent_copula_type == datagen_gumbel$family_latent)
-
-
-# save.image("/media/hoanguc3m/Data/wp2/simbf_gumbel.Rdata")
 #################################################################################
 
 datagen_frank <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
@@ -171,20 +167,19 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_frank, vi_frank)
-
-init <- list(copula_type = copfamily_rng,
-             latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 112321, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-vi_frank_rng <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_frank, vi_frank_rng)
-
-sum(vi_frank_rng$cop_type == datagen_frank$family)
-sum(vi_frank_rng$latent_copula_type == datagen_frank$family_latent)
-# save.image("/media/hoanguc3m/Data/wp2/simbf_frank.Rdata")
+# compare_sim_vi(datagen_frank, vi_frank)
+#
+# init <- list(copula_type = copfamily_rng,
+#              latent_copula_type = latentcopfamily_rng)
+# other <- list(seed = 112321, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+# vi_frank_rng <- vifcopula::vifcop(data,init,other)
+# compare_sim_vi(datagen_frank, vi_frank_rng)
+#
+# sum(vi_frank_rng$cop_type == datagen_frank$family)
+# sum(vi_frank_rng$latent_copula_type == datagen_frank$family_latent)
 
 #################################################################################
 datagen_joe <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
@@ -204,21 +199,20 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_joe <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_joe, vi_joe)
+# compare_sim_vi(datagen_joe, vi_joe)
 
-init <- list(copula_type = copfamily_rng,
-             latent_copula_type = latentcopfamily_rng)
-other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-vi_joe_rng <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_joe, vi_joe_rng)
+# init <- list(copula_type = copfamily_rng,
+#              latent_copula_type = latentcopfamily_rng)
+# other <- list(seed = 126, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+# vi_joe_rng <- vifcopula::vifcop(data,init,other)
+# compare_sim_vi(datagen_joe, vi_joe_rng)
+#
+# sum(vi_joe_rng$cop_type == datagen_joe$family)
+# sum(vi_joe_rng$latent_copula_type == datagen_joe$family_latent)
 
-sum(vi_joe_rng$cop_type == datagen_joe$family)
-sum(vi_joe_rng$latent_copula_type == datagen_joe$family_latent)
-
-# save.image("/media/hoanguc3m/Data/wp2/simbf_joe.Rdata")
 #################################################################################
 copfamily = sample(c(1,2,3,4,5,6), size = n_max, replace = T)
 latentcopfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
@@ -241,199 +235,198 @@ other <- list(seed = 126, core = 8, iter = 1000,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_mix <- vifcopula::vifcop(data,init,other)
-compare_sim_vi(datagen_mix, vi_mix)
-
-
-init <- list(copula_type = copfamily_rng,
-             latent_copula_type = latentcopfamily_rng)
-
-other <- list(seed = 126, core = 8, iter = 1000,
-              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
-vi_mix_rng <- vifcopula::vifcop(data,init,other)
-
-sum(vi_mix_rng$cop_type == datagen$family)
-sum(vi_mix_rng$latent_copula_type == datagen$family_latent)
-compare_sim_vi(datagen_mix, vi_mix_rng)
-# save.image("/media/hoanguc3m/Data/wp2/simbf_mix.Rdata")
+# compare_sim_vi(datagen_mix, vi_mix)
+#
+#
+# init <- list(copula_type = copfamily_rng,
+#              latent_copula_type = latentcopfamily_rng)
+#
+# other <- list(seed = 126, core = 8, iter = 1000,
+#               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T)
+# vi_mix_rng <- vifcopula::vifcop(data,init,other)
+#
+# sum(vi_mix_rng$cop_type == datagen$family)
+# sum(vi_mix_rng$latent_copula_type == datagen$family_latent)
+# compare_sim_vi(datagen_mix, vi_mix_rng)
 
 #################################################################################
 #################################################################################
 #################################################################################
-
-time <- c(vi_gauss$time, vi_student$time, vi_clayton$time, vi_gumbel$time, vi_frank$time, vi_joe$time, vi_mix$time)
-print(time, digits = 0)
-
-ELBO_init <- c(vi_gauss$ELBO, vi_student$ELBO, vi_clayton$ELBO, vi_gumbel$ELBO, vi_frank$ELBO, vi_joe$ELBO, vi_mix$ELBO)
-print(ELBO_init, digits = 2)
-
-iter_num <- c(vi_gauss_rng$iteration, vi_student_rng$iteration, vi_clayton_rng$iteration, vi_gumbel_rng$iteration, vi_frank_rng$iteration, vi_joe_rng$iteration, vi_mix_rng$iteration)
-print(iter_num, digits = 0)
-
-correct_percent <- c(sum(vi_gauss_rng$cop_type == 1),
-    sum(vi_student_rng$cop_type == 2),
-    sum(vi_clayton_rng$cop_type == 3),
-    sum(vi_gumbel_rng$cop_type == 4),
-    sum(vi_frank_rng$cop_type == 5),
-    sum(vi_joe_rng$cop_type == 6),
-    sum(vi_mix_rng$cop_type == datagen_mix$family))
-print(correct_percent, digits = 0)
-
-correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1),
-    sum(vi_student_rng$latent_copula_type == datagen_student$family_latent),
-    sum(vi_clayton_rng$latent_copula_type == 3),
-    sum(vi_gumbel_rng$latent_copula_type == 4),
-    sum(vi_frank_rng$latent_copula_type == 5),
-    sum(vi_joe_rng$latent_copula_type == 6),
-    sum(vi_mix_rng$latent_copula_type == datagen_mix$family_latent))
-print(correct_latent_percent, digits = 0)
-
-time_rng <- c(vi_gauss_rng$time, vi_student_rng$time, vi_clayton_rng$time, vi_gumbel_rng$time, vi_frank_rng$time, vi_joe_rng$time, vi_mix_rng$time)
-print(time_rng, digits = 0)
-
-ELBO_rng <- c(vi_gauss_rng$ELBO, vi_student_rng$ELBO, vi_clayton_rng$ELBO, vi_gumbel_rng$ELBO, vi_frank_rng$ELBO, vi_joe_rng$ELBO, vi_mix_rng$ELBO)
-print(ELBO_rng, digits = 2)
+#
+# time <- c(vi_gauss$time, vi_student$time, vi_clayton$time, vi_gumbel$time, vi_frank$time, vi_joe$time, vi_mix$time)
+# print(time, digits = 0)
+#
+# ELBO_init <- c(vi_gauss$ELBO, vi_student$ELBO, vi_clayton$ELBO, vi_gumbel$ELBO, vi_frank$ELBO, vi_joe$ELBO, vi_mix$ELBO)
+# print(ELBO_init, digits = 2)
+#
+# iter_num <- c(vi_gauss_rng$iteration, vi_student_rng$iteration, vi_clayton_rng$iteration, vi_gumbel_rng$iteration, vi_frank_rng$iteration, vi_joe_rng$iteration, vi_mix_rng$iteration)
+# print(iter_num, digits = 0)
+#
+# correct_percent <- c(sum(vi_gauss_rng$cop_type == 1),
+#     sum(vi_student_rng$cop_type == 2),
+#     sum(vi_clayton_rng$cop_type == 3),
+#     sum(vi_gumbel_rng$cop_type == 4),
+#     sum(vi_frank_rng$cop_type == 5),
+#     sum(vi_joe_rng$cop_type == 6),
+#     sum(vi_mix_rng$cop_type == datagen_mix$family))
+# print(correct_percent, digits = 0)
+#
+# correct_latent_percent <- c(sum(vi_gauss_rng$latent_copula_type == 1),
+#     sum(vi_student_rng$latent_copula_type == datagen_student$family_latent),
+#     sum(vi_clayton_rng$latent_copula_type == 3),
+#     sum(vi_gumbel_rng$latent_copula_type == 4),
+#     sum(vi_frank_rng$latent_copula_type == 5),
+#     sum(vi_joe_rng$latent_copula_type == 6),
+#     sum(vi_mix_rng$latent_copula_type == datagen_mix$family_latent))
+# print(correct_latent_percent, digits = 0)
+#
+# time_rng <- c(vi_gauss_rng$time, vi_student_rng$time, vi_clayton_rng$time, vi_gumbel_rng$time, vi_frank_rng$time, vi_joe_rng$time, vi_mix_rng$time)
+# print(time_rng, digits = 0)
+#
+# ELBO_rng <- c(vi_gauss_rng$ELBO, vi_student_rng$ELBO, vi_clayton_rng$ELBO, vi_gumbel_rng$ELBO, vi_frank_rng$ELBO, vi_joe_rng$ELBO, vi_mix_rng$ELBO)
+# print(ELBO_rng, digits = 2)
 
 #############################################################################
 
-pdf(file='img/Bifactor.pdf', width = 18, height = 10)
+pdf(file='img/Bifactor.pdf', width = 18, height = 12)
 par(mfrow =c(4,6))
 par(mar=c(5,5,3,1))
 
 plot(datagen_gauss$v[,1], get_v0(vi_gauss),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Gaussian factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v[,1], get_v0(vi_student),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Student factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v[,1], get_v0(vi_clayton),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Clayton factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v[,1], get_v0(vi_gumbel),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Gumbel factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v[,1], get_v0(vi_frank),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Frank factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v[,1], get_v0(vi_joe),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Joe factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 
 
 
 plot(datagen_gauss$v[,2:k_max], get_v(vi_gauss),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Gaussian factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v[,2:k_max], get_v(vi_student),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Student factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v[,2:k_max], get_v(vi_clayton),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Clayton factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v[,2:k_max], get_v(vi_gumbel),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Gumbel factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v[,2:k_max], get_v(vi_frank),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Frank factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v[,2:k_max], get_v(vi_joe),
-    xlab = expression(v[t]), ylab = expression(v[approx]),
-    main = " Joe factor copula")
+    xlab = expression(v[gen]), ylab = expression(v[vi]),
+    main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 
 
 plot(datagen_gauss$theta, get_theta(vi_gauss) ,
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Gaussian factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta, get_theta(vi_student),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Student factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta, get_theta(vi_clayton),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Clayton factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta, get_theta(vi_gumbel),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Gumbel factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta, get_theta(vi_frank),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Frank factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta, get_theta(vi_joe),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Joe factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 
 
 plot(datagen_gauss$theta_latent, get_latent_theta(vi_gauss) ,
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Gaussian factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta_latent, get_latent_theta(vi_student),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Student factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta_latent, get_latent_theta(vi_clayton),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Clayton factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta_latent, get_latent_theta(vi_gumbel),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Gumbel factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta_latent, get_latent_theta(vi_frank),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Frank factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta_latent, get_latent_theta(vi_joe),
-    xlab = expression(theta[t]), ylab = expression(theta[approx]),
-    main = " Joe factor copula")
+    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+    main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 
 # plot.new()
 #
 # plot(datagen_student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-#     xlab = expression(nu[t]), ylab = expression(nu[approx]),
-#     main = " Student factor copula")
+#     xlab = expression(nu[gen]), ylab = expression(nu[vi]),
+#     main = " Student bi-factor copula")
 # abline(a= 0, b=1, col="red")
 #
 # plot.new()
@@ -442,5 +435,7 @@ abline(a= 0, b=1, col="red")
 # plot.new()
 #
 dev.off()
+
+save.image("vi_bifcop_plot.RData")
 
 

@@ -4,7 +4,7 @@
 #include <stan/math.hpp>
 #include <iostream>
 
-void (*difflPDF_nu_tCopula_new) (double* u, double* v, int* n, double* param, int* copula, double* out);    // deriv par2
+//void (*difflPDF_nu_tCopula_new) (double* u, double* v, int* n, double* param, int* copula, double* out);    // deriv par2
 
 namespace vifcopula {
 

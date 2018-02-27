@@ -215,7 +215,7 @@ other <- list(seed = 126, core = 8, iter = 1000,
 vi_joe_rng <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_joe, vi_joe_rng)
 
-sum(vi_joe_rng$cop_type == datagen_joe$family)v
+sum(vi_joe_rng$cop_type == datagen_joe$family)
 sum(vi_joe_rng$latent_copula_type == datagen_joe$family_latent)
 
 # save.image("/media/hoanguc3m/Data/wp2/simbf_joe.Rdata")

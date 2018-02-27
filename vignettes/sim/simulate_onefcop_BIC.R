@@ -5,8 +5,8 @@ library(vifcopula)
 set.seed(0)
 t_max = 1000
 n_max = 100
-gauss_init <- matrix(1, nrow = n_max, ncol = 1)
-copfamily_init <- matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
+gauss_init <- rep(1, n_max)
+copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
 
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1, seed_num = 0)
 datagen <- datagen_gauss
@@ -300,33 +300,33 @@ sum(vi_mix_rng$cop_type == datagen_mix$family)
 
 ###############################################################################
 
-datagen_rotate <- fcopsim(t_max = 1000, n_max = 100, family = 36)
-datagen <- datagen_rotate
-data <- list(u = datagen$u,
-    n_max = datagen$n_max,
-    t_max = datagen$t_max,
-    k_max = datagen$k_max,
-    gid = datagen$gid,
-    structfactor = datagen$structfactor)
-init <- list(copula_type = datagen$family)
-other <- list(seed = 126, core = 8, iter = 1000,
-    n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
-    eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-    adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
-datagen_rotate <- vifcopula::vifcop(data,init,other)
-
-par(mfrow =c(1,2))
-par(mar=c(5,5,3,1))
-plot(datagen$v, get_v0(datagen_rotate),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Rotated one factor copula")
-
-abline(a= 0, b=1, col="red")
-plot(datagen$theta, get_theta(datagen_rotate),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Rotated one factor copula")
-abline(a= 0, b=1, col="red")
-dev.off()
+# datagen_rotate <- fcopsim(t_max = 1000, n_max = 100, family = 36)
+# datagen <- datagen_rotate
+# data <- list(u = datagen$u,
+#     n_max = datagen$n_max,
+#     t_max = datagen$t_max,
+#     k_max = datagen$k_max,
+#     gid = datagen$gid,
+#     structfactor = datagen$structfactor)
+# init <- list(copula_type = datagen$family)
+# other <- list(seed = 126, core = 8, iter = 1000,
+#     n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+#     eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+#     adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
+# datagen_rotate <- vifcopula::vifcop(data,init,other)
+#
+# par(mfrow =c(1,2))
+# par(mar=c(5,5,3,1))
+# plot(datagen$v, get_v0(datagen_rotate),
+#     xlab = expression(v[gen]), ylab = expression(v[vi]),
+#     main = " Rotated one factor copula")
+#
+# abline(a= 0, b=1, col="red")
+# plot(datagen$theta, get_theta(datagen_rotate),
+#     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+#     main = " Rotated one factor copula")
+# abline(a= 0, b=1, col="red")
+# dev.off()
 
 #############################################################################
 

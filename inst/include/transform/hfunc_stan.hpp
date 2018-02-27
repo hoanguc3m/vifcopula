@@ -47,6 +47,7 @@ stan::math::var hfunc_trans (int family,
     if (family == 2){
         diffhfunc_rho_tCopula(&u, &v_val, &nn, param, &family, &hfunc2_dtheta);
         diffhfunc_nu_tCopula_new(&u, &v_val, &nn, param, &family, &hfunc2_dtheta2);
+        delete param;
         return (new precomp_vvv_vari(hfunc2_val, v.vi_, theta.vi_,theta2.vi_, hfunc2_dv, hfunc2_dtheta, hfunc2_dtheta2) );
     }
 
@@ -79,6 +80,7 @@ stan::math::var hfunc_trans (int family,
 
     if (family == 2){
         diffhfunc_rho_tCopula(&u, &v_val, &nn, param, &family, &hfunc2_dtheta);
+        delete param;
         return (new precomp_vv_vari(hfunc2_val, v.vi_, theta.vi_,hfunc2_dv, hfunc2_dtheta) );
     }
 
@@ -133,6 +135,7 @@ stan::math::var hfunc_trans (int family,
 
     if (family == 2){
         diffhfunc_rho_tCopula(&u, &v, &nn, param, &family, &hfunc2_dtheta);
+        delete param;
         return (new precomp_v_vari(hfunc2_val, theta.vi_,hfunc2_dtheta) );
     }
 

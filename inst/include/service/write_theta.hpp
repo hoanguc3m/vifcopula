@@ -24,7 +24,7 @@ void write_theta(int id, int copula_type,
         // } else {
         //     theta = in__.scalar_lub_constrain(-0.9,1);
         // }
-        theta = in__.scalar_lub_constrain(0,1);
+        theta = in__.scalar_lub_constrain(0,0.99);
 
         vars__.push_back(theta);
         break;
@@ -36,7 +36,7 @@ void write_theta(int id, int copula_type,
         //     theta = in__.scalar_lub_constrain(-0.9,1);
         // }
 
-        theta = in__.scalar_lub_constrain(0,1);
+        theta = in__.scalar_lub_constrain(0,0.99);
         theta2 = in__.scalar_lub_constrain(2.001,30);
         vars__.push_back(theta);
         vars__.push_back(theta2);
@@ -80,13 +80,13 @@ void write_theta(int id, int copula_type,
 
     case 21:
 
-        theta = in__.scalar_lub_constrain(-1,0);
+        theta = in__.scalar_lub_constrain(-0.99,0);
 
         vars__.push_back(theta);
         break;
     case 22:
 
-        theta = in__.scalar_lub_constrain(-1,0);
+        theta = in__.scalar_lub_constrain(-0.99,0);
         theta2 = in__.scalar_lub_constrain(2.001,30);
         vars__.push_back(theta);
         vars__.push_back(theta2);
