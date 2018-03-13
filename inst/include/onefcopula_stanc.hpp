@@ -404,12 +404,14 @@ public:
         // model parameters
         stan::io::reader<T__> in__(params_r__,params_i__);
 
+        double UMAX = 1-1e-10;
+        double UMIN = 1e-10;
         Eigen::Matrix<T__,Eigen::Dynamic,1>  v;
         (void) v;  // dummy to suppress unused var warning
         if (jacobian__)
-            v = in__.vector_lub_constrain(0,1,t_max,lp__);
+            v = in__.vector_lub_constrain(UMIN,UMAX,t_max,lp__);
         else
-            v = in__.vector_lub_constrain(0,1,t_max);
+            v = in__.vector_lub_constrain(UMIN,UMAX,t_max);
 
         Eigen::Matrix<T__,Eigen::Dynamic,1>  theta(n_max);
         (void) theta;  // dummy to suppress unused var warning
@@ -499,7 +501,9 @@ public:
         static const char* function__ = "vifcopula::write_array";
         (void) function__; // dummy call to supress warning
         // read-transform, write parameters
-        vector_d v = in__.vector_lub_constrain(0,1,t_max);
+        double UMAX = 1-1e-10;
+        double UMIN = 1e-10;
+        vector_d v = in__.vector_lub_constrain(UMIN,UMAX,t_max);
 
         for (int k_0__ = 0; k_0__ < t_max; ++k_0__)
         {

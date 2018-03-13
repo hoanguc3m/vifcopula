@@ -491,19 +491,21 @@ public:
         // model parameters
         stan::io::reader<T__> in__(params_r__,params_i__);
 
+        double UMAX = 1-1e-10;
+        double UMIN = 1e-10;
         Eigen::Matrix<T__,Eigen::Dynamic,1>  v1;
         (void) v1;  // dummy to suppress unused var warning
         if (jacobian__)
-            v1 = in__.vector_lub_constrain(0,1,t_max,lp__);
+            v1 = in__.vector_lub_constrain(UMIN,UMAX,t_max,lp__);
         else
-            v1 = in__.vector_lub_constrain(0,1,t_max);
+            v1 = in__.vector_lub_constrain(UMIN,UMAX,t_max);
 
         Eigen::Matrix<T__,Eigen::Dynamic,Eigen::Dynamic>  v2g;
         (void) v2g;  // dummy to suppress unused var warning
         if (jacobian__)
-            v2g = in__.matrix_lub_constrain(0,1,t_max, k-1,lp__);
+            v2g = in__.matrix_lub_constrain(UMIN,UMAX,t_max, k-1,lp__);
         else
-            v2g = in__.matrix_lub_constrain(0,1,t_max, k-1);
+            v2g = in__.matrix_lub_constrain(UMIN,UMAX,t_max, k-1);
 
         Eigen::Matrix<T__,Eigen::Dynamic,1>  theta_latent(k-1);
         (void) theta_latent;  // dummy to suppress unused var warning
@@ -846,7 +848,9 @@ public:
         static const char* function__ = "vifcopula::write_array";
         (void) function__; // dummy call to supress warning
         // read-transform, write parameters
-        vector_d v = in__.vector_lub_constrain(0,1,t_max*k);
+        double UMAX =  1-1e-10;
+        double UMIN = 1e-10;
+        vector_d v = in__.vector_lub_constrain(UMIN,UMAX,t_max*k);
 
         for (int k_0__ = 0; k_0__ < t_max*k; ++k_0__)
         {

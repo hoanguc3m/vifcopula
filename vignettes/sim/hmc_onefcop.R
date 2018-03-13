@@ -16,8 +16,10 @@ init <- list(copula_type = datagen$family,
              v = datagen$v,
              par = datagen$theta,
              par2 = datagen$theta2)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_gauss <- vifcopula::hmcfcop(data,init,other)
+vi_gauss <- vifcopula::vifcop(data,init,other)
+
 ################################################################################
 
 datagen_student <- fcopsim(t_max = 1000, n_max = 100, family = 2, seed_num = 0)
@@ -29,8 +31,9 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_student <- vifcopula::hmcfcop(data,init,other)
+vi_student <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 compare
@@ -43,8 +46,9 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_clayton <- vifcopula::hmcfcop(data,init,other)
+vi_clayton <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, family = 4, seed_num = 0)
@@ -56,8 +60,9 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_gumbel <- vifcopula::hmcfcop(data,init,other)
+vi_gumbel <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 
@@ -70,8 +75,9 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_frank <- vifcopula::hmcfcop(data,init,other)
+vi_frank <- vifcopula::vifcop(data,init,other)
 
 ###############################################################################
 
@@ -84,8 +90,9 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_joe <- vifcopula::hmcfcop(data,init,other)
+vi_joe <- vifcopula::vifcop(data,init,other)
 
 ###############################################################################
 
@@ -99,8 +106,9 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen_mix$family)
-other <- list(seed = 126, core = 8, iter = 1000, copselect = F)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_mix <- vifcopula::hmcfcop(data,init,other)
+vi_mix <- vifcopula::vifcop(data,init,other)
 
 
 ###############################################################################
