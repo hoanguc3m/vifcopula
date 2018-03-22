@@ -147,6 +147,17 @@ time_hmc <- c(hmc_gauss$time, hmc_student$time, hmc_clayton$time, hmc_gumbel$tim
 time_tab <- rbind(time_vi, time_hmc)
 print(xtable(time_tab, digits = 0))
 
+
+
+
+compare_vi_hmc(vi_gauss, hmc_gauss)
+compare_vi_hmc(vi_student, hmc_student)
+compare_vi_hmc(vi_clayton, hmc_clayton)
+compare_vi_hmc(vi_gumbel, hmc_gumbel)
+compare_vi_hmc(vi_frank, hmc_frank)
+compare_vi_hmc(vi_joe, hmc_joe)
+compare_vi_hmc(vi_mix, hmc_mix)
+
 #############################################################################
 
 pdf(file='img/VIHMCnestfcop.pdf', width = 18, height = 12)

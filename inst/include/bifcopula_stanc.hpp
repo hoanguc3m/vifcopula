@@ -9,6 +9,8 @@
 #include <transform/hfunc_stan.hpp>
 #include <service/write_theta.hpp>
 
+#include <boost/math/quadrature/gauss_kronrod.hpp>
+
 // [[Rcpp::depends(StanHeaders)]]
 // [[Rcpp::depends(rstan)]]
 // [[Rcpp::plugins(cpp11)]]
@@ -406,6 +408,81 @@ public:
         return t_max;
     }
 
+    // template <typename RNG>
+    // double calc_log_over_v( RNG& base_rng__,
+    //                         Eigen::VectorXd& mean_vi,
+    //                         int eff_num_para){
+    //     std::srand(base_rng__());
+    //
+    //     double logc = 0;
+    //     int MCnum = 1000;
+    //     vector<double> logc_t(t_max,0.0);
+    //
+    //     Eigen::VectorXd theta_12 = mean_vi.tail(eff_num_para);
+    //     int count = 0;
+    //
+    //     vector<double> theta(n_max,0.0);
+    //     vector<double> theta2(n_max,0.0);
+    //
+    //     vector<double> theta_latent(n_max,0.0);
+    //     vector<double> theta2_latent(n_max,0.0);
+    //
+    //
+    //     for (int i = 0; i < n_max; i++) {
+    //         if (copula_type[i] == 2) {
+    //             theta[i] = theta_12(count); count++;
+    //             theta2[i] = theta_12(count); count++;
+    //         } else {
+    //             theta[i] = theta_12(count); count++;
+    //         }
+    //     }
+    //
+    //     for (int i = 0; i < n_max; i++)
+    //     {
+    //         if (latent_copula_type[i] == 2) {
+    //             theta_latent[i] = theta_12(count); count++;
+    //             theta2_latent[i] = theta_12(count); count++;
+    //         } else {
+    //             theta_latent[i] = theta_12(count); count++;
+    //         }
+    //
+    //     }
+    //
+    //
+    //     for (int t = 0; t < t_max; t++) {
+    //
+    //         Eigen::VectorXd v0_t = (Eigen::VectorXd::Random(MCnum)).array().abs() ; // range [-1,1]
+    //         Eigen::MatrixXd vg_t = (Eigen::MatrixXd::Random(MCnum, k-1)).array().abs() ; // range [-1,1]
+    //
+    //         Eigen::VectorXd logc_jt = Eigen::VectorXd::Zero(MCnum);
+    //
+    //
+    //
+    //         for (int j = 0; j < MCnum; j++) {
+    //
+    //             for (int i = 0; i < n_max; i++) {
+    //                 logc_jt(j) += bicop_log_double(copula_type[i], u(t,i), v0_t(j), theta[i], theta2[i] )   ;
+    //             }
+    //
+    //             Eigen::VectorXd ucond_t = (Eigen::VectorXd::Random(n_max)).array().abs() ; // range [-1,1]
+    //
+    //             for (int i = 0; i < n_max; i++) {
+    //                 ucond_t(i) = hfunc_trans(copula_type[i],  u(t,i), v0_t(j),  theta[i], theta2[i]);
+    //                 logc_jt(j) += bicop_log_double(latent_copula_type[i], ucond_t(i), vg_t(j,gid[i]), theta_latent[i], theta2_latent[i] )   ;
+    //             }
+    //
+    //         }
+    //
+    //         double max_logct = logc_jt.maxCoeff();
+    //         logc_t[t] = max_logct + log ( (logc_jt.array() - max_logct).array().exp().sum())   ;
+    //         logc_t[t] -= log(MCnum);
+    //     }
+    //
+    //     for (auto& log_val : logc_t)
+    //         logc += log_val;
+    //     return logc;
+    // }
+
     template <typename RNG>
     double calc_log_over_v( RNG& base_rng__,
                             Eigen::VectorXd& mean_vi,
@@ -413,7 +490,27 @@ public:
         std::srand(base_rng__());
 
         double logc = 0;
-        int MCnum = 1000;
+        const int MCnum = 25;
+        const ulong MCnum_n = MCnum / 2 + 1;
+
+        const std::array<double, MCnum_n> ab = boost::math::quadrature::gauss<double, MCnum>::abscissa();
+        const std::array<double, MCnum_n> w = boost::math::quadrature::gauss<double, MCnum>::weights();
+
+        Eigen::VectorXd v0_t(MCnum);
+        Eigen::VectorXd weight_t(MCnum);
+
+        v0_t[0] = ab[0] *0.5 + 0.5; // Tranform from [-1,1]
+        weight_t[0] = w[0];
+
+        for (unsigned i = 1; i < ab.size(); ++i){
+            v0_t[2*i-1] = ab[i] *0.5 + 0.5;
+            v0_t[2*i] = - ab[i] *0.5 + 0.5;
+            weight_t[2*i-1] = w[i];
+            weight_t[2*i] = w[i];
+        }
+
+        Eigen::VectorXd vg_t = v0_t;
+
         vector<double> logc_t(t_max,0.0);
 
         Eigen::VectorXd theta_12 = mean_vi.tail(eff_num_para);
@@ -449,38 +546,50 @@ public:
 
         for (int t = 0; t < t_max; t++) {
 
-            Eigen::VectorXd v1_t = (Eigen::VectorXd::Random(MCnum)).array().abs() ; // range [-1,1]
-            Eigen::MatrixXd v2g_t = (Eigen::MatrixXd::Random(MCnum, k-1)).array().abs() ; // range [-1,1]
 
             Eigen::VectorXd logc_jt = Eigen::VectorXd::Zero(MCnum);
 
 
+            for (int j = 0; j < MCnum; j++) { // Given v0, calculate u_cond(u,v0), j index for v0
 
-            for (int j = 0; j < MCnum; j++) {
+                Eigen::VectorXd ucond_t = Eigen::VectorXd::Zero(n_max);
+                Eigen::MatrixXd logc_ucond_jt = Eigen::MatrixXd::Zero(MCnum, k-1);
 
-                for (int i = 0; i < n_max; i++) {
-                    logc_jt(j) += bicop_log_double(copula_type[i], u(t,i), v1_t(j), theta[i], theta2[i] )   ;
+                for (int i = 0; i < n_max; i++) { // i index for u
+                    ucond_t(i) = hfunc_trans(copula_type[i],  u(t,i), v0_t(j),  theta[i], theta2[i]);
+
+                    for (int h = 0; h < MCnum; h++) { // h index for vg
+                        logc_ucond_jt(h, gid[i]) += bicop_log_double(latent_copula_type[i],
+                                                                    ucond_t(i), vg_t(h), theta_latent[i], theta2_latent[i] );
+                    }
+
+
+                }
+                Eigen::VectorXd  max_logcvg = logc_ucond_jt.colwise().maxCoeff();
+                for (int g = 0; g < k-1; g++){ // g index for group
+                    Eigen::VectorXd exp_logcvg_minus_max = (logc_ucond_jt.col(g).array() - max_logcvg(g)).array().exp();
+                    logc_jt(j) += max_logcvg(g) + log ( (exp_logcvg_minus_max.array() * weight_t.array() ).sum())   ;
                 }
 
-                Eigen::VectorXd ucond_t = (Eigen::VectorXd::Random(n_max)).array().abs() ; // range [-1,1]
+
 
                 for (int i = 0; i < n_max; i++) {
-                    ucond_t(i) = hfunc_trans(copula_type[i],  u(t,i), v1_t(j),  theta[i], theta2[i]);
-                    logc_jt(j) += bicop_log_double(latent_copula_type[i], ucond_t(i), v2g_t(j,gid[i]), theta_latent[i], theta2_latent[i] )   ;
+                    logc_jt(j) += bicop_log_double(copula_type[i], u(t,i), v0_t(j), theta[i], theta2[i] )   ;
                 }
+
+
 
             }
 
             double max_logct = logc_jt.maxCoeff();
-            logc_t[t] = max_logct + log ( (logc_jt.array() - max_logct).array().exp().sum())   ;
-            logc_t[t] -= log(MCnum);
+            Eigen::VectorXd exp_logc_jt_minus_max = (logc_jt.array() - max_logct).array().exp();
+            logc_t[t] = max_logct + log ( (exp_logc_jt_minus_max.array() * weight_t.array() ).sum())   ;
         }
 
         for (auto& log_val : logc_t)
             logc += log_val;
         return logc;
     }
-
 
     template <bool propto__, bool jacobian__, typename T__>
     T__ log_prob(vector<T__>& params_r__,
