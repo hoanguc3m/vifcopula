@@ -24,7 +24,7 @@ task_nestfcop <- function(seed_num, family, family_latent){
     # gauss_latent_init <- matrix(1, nrow = k_max-1, ncol = 1)
 
     copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
-    copfamily_latent_init <- sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
+    copfamily_latent_init <- sample(c(1,3,4,5,6),size = k_max-1, replace = T)
 
     datagen <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                        family = family, family_latent = family_latent,
@@ -78,7 +78,7 @@ Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed
 
 Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
-    latentcopfamily = sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
+    latentcopfamily = sample(c(1,3,4,5,6),size = k_max-1, replace = T)
     outSub <- task_nestfcop(seed_collection[i], family = 2, family_latent = latentcopfamily)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
@@ -115,7 +115,7 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
 
 Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
-    latentcopfamily = sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
+    latentcopfamily = sample(c(1,3,4,5,6),size = k_max-1, replace = T)
 
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_nestfcop(seed_collection[i], family = copfamily, family_latent = latentcopfamily)

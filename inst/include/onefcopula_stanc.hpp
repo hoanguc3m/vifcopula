@@ -358,13 +358,13 @@ public:
         Eigen::VectorXd weight_t(MCnum);
 
         v_t[0] = ab[0] *0.5 + 0.5; // Tranform from [-1,1]
-        weight_t[0] = w[0];
+        weight_t[0] = w[0] * 0.5;// Tranform from [-1,1] to [0,1]
 
         for (unsigned i = 1; i < ab.size(); ++i){
             v_t[2*i-1] = ab[i] *0.5 + 0.5;
             v_t[2*i] = - ab[i] *0.5 + 0.5;
-            weight_t[2*i-1] = w[i];
-            weight_t[2*i] = w[i];
+            weight_t[2*i-1] = w[i] * 0.5;
+            weight_t[2*i] = w[i] * 0.5;
         }
 
 
@@ -380,7 +380,10 @@ public:
                 theta[i] = theta_12(count); count++;
                 theta2[i] = theta_12(count); count++;
             } else {
-                theta[i] = theta_12(count); count++;
+                if (copula_type[i] != 0) {
+                    theta[i] = theta_12(count); count++;
+                }
+
             }
         }
         for (int t = 0; t < t_max; t++) {
@@ -394,14 +397,14 @@ public:
 
             double max_logct = logc_jt.maxCoeff();
             Eigen::VectorXd exp_logc_jt_minus_max = (logc_jt.array() - max_logct).array().exp();
-
-
             logc_t[t] = max_logct + log ( (exp_logc_jt_minus_max.array() * weight_t.array() ).sum())   ;
-            //logc_t[t] -= log(MCnum);
+
         }
 
-        for (auto& log_val : logc_t)
+        for (auto& log_val : logc_t){
             logc += log_val;
+        }
+
         return logc;
     }
 
