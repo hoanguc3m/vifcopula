@@ -122,7 +122,7 @@ public:
     bool check_Ind(void){
 
         double tau = kendall();
-        double f_stat = sqrt((9 * t_max * (t_max - 1))/(2 * (2 * t_max + 5))) * abs(tau);
+        double f_stat = std::sqrt((9 * t_max * (t_max - 1))/(2 * (2 * t_max + 5))) * std::abs(tau);
         boost::math::normal s;
         double p_value = 2 * (1 - cdf(s,f_stat));
         return( (p_value > 0.05) );

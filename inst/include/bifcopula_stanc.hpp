@@ -500,13 +500,13 @@ public:
         Eigen::VectorXd weight_t(MCnum);
 
         v0_t[0] = ab[0] *0.5 + 0.5; // Tranform from [-1,1]
-        weight_t[0] = w[0];
+        weight_t[0] = w[0] * 0.5;// Tranform from [-1,1] to [0,1]
 
         for (unsigned i = 1; i < ab.size(); ++i){
             v0_t[2*i-1] = ab[i] *0.5 + 0.5;
             v0_t[2*i] = - ab[i] *0.5 + 0.5;
-            weight_t[2*i-1] = w[i];
-            weight_t[2*i] = w[i];
+            weight_t[2*i-1] = w[i] * 0.5;
+            weight_t[2*i] = w[i] * 0.5;
         }
 
         Eigen::VectorXd vg_t = v0_t;
@@ -540,39 +540,28 @@ public:
                 theta_latent[i] = theta_12(count); count++;
                 theta2_latent[i] = theta_12(count); count++;
             } else {
-                if (theta_latent[i] != 0) {
+                if (latent_copula_type[i] != 0) {
                     theta_latent[i] = theta_12(count); count++;
                 }
             }
 
         }
 
-        // std::cout << "Begin t from 1 to t_max " << std::endl;
-
         for (int t = 0; t < t_max; t++) {
 
 
             Eigen::VectorXd logc_jt = Eigen::VectorXd::Zero(MCnum);
 
-            // std::cout << "Begin j from 1 to Mcnum, t =  " << t << std::endl;
-
             for (int j = 0; j < MCnum; j++) { // Given v0, calculate u_cond(u,v0), j index for v0
-
-                // std::cout << "Begin i from 1 to n_max, j =  " << j << std::endl;
 
                 Eigen::VectorXd ucond_t = Eigen::VectorXd::Zero(n_max);
                 Eigen::MatrixXd logc_ucond_jt = Eigen::MatrixXd::Zero(MCnum, k-1);
 
                 for (int i = 0; i < n_max; i++) { // i index for u
-                    // std::cout << "Begin h from 1 to Mncnum, i =  " << i << " u(t,i) " << u(t,i) << std::endl;
 
                     ucond_t(i) = hfunc_trans(copula_type[i],  u(t,i), v0_t(j),  theta[i], theta2[i]);
 
                     for (int h = 0; h < MCnum; h++) { // h index for vg
-                        // std::cout << "copula_type[i] " << copula_type[i] << " ucond_t(i) " << ucond_t(i) <<
-                        //     " v0_t(j) " << v0_t(j) << " theta[i] " << theta[i] << " theta2[i] " << theta2[i] <<
-                        //     " vg_t(h) " << vg_t(h) << " theta_latent[i] " << theta_latent[i] <<
-                        //     " latent_copula_type[i]" << latent_copula_type[i] << std::endl;
 
                         logc_ucond_jt(h, gid[i]) += bicop_log_double(latent_copula_type[i],
                                                                     ucond_t(i), vg_t(h), theta_latent[i], theta2_latent[i] );
@@ -590,9 +579,6 @@ public:
 
 
                 for (int i = 0; i < n_max; i++) {
-
-                    // std::cout << "Layer 1, i =  " << i << " " << copula_type[i] << " " << u(t,i) << " " << v0_t(j) << " " << theta[i] << " " << theta2[i] << std::endl;
-
                     logc_jt(j) += bicop_log_double(copula_type[i], u(t,i), v0_t(j), theta[i], theta2[i] )   ;
                 }
 
