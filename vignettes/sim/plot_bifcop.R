@@ -29,7 +29,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 100909, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = F)
 vi_gauss <- vifcopula::vifcop(data,init,other)
 # compare_sim_vi(datagen_gauss, vi_gauss)
 
@@ -165,7 +165,7 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
 vi_frank <- vifcopula::vifcop(data,init,other)
 # compare_sim_vi(datagen_frank, vi_frank)
 #

@@ -33,7 +33,6 @@ using namespace stan;
         T_partials_return;
 
       using std::log;
-      using std::abs;
       using std::pow;
       using std::exp;
 

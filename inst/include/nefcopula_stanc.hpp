@@ -518,7 +518,7 @@ public:
                 theta_latent[i] = theta_12(count); count++;
                 theta2_latent[i] = theta_12(count); count++;
             } else {
-                if (latent_copula_type[i] != 0) {
+                if (theta_latent[i] != 0) {
                     theta_latent[i] = theta_12(count); count++;
                 }
 
@@ -549,16 +549,12 @@ public:
                 for (int h = 0; h < MCnum; h++) { // h index for group
 
                     for (int g = 0; g < k-1; g++) {
-                        logc_group_jt(h,g) += bicop_log_double(latent_copula_type[g],
-                                     v_t(j), vg_t(h), theta_latent[g], theta2_latent[g] )   ;
-                        // std::cout << " latent_copula_type[g] " << latent_copula_type[g] << " " << v_t(j) << " " <<  vg_t(h) << " " <<  theta_latent[g] << " " <<  theta2_latent[g] << std::endl;
-                        // std::cout << " logc_group_jt(h,g) " << logc_group_jt(h,g) << " g " << g << std::endl;
-
+                        //logc_group_jt(h,g) += bicop_log_double(latent_copula_type[g],
+                        //              v_t(j), vg_t(h), theta_latent[g], theta2_latent[g] )   ;
                     }
 
                     for (int i = 0; i < n_max; i++) { // i index for u
-                        logc_group_jt(h,gid[i]) += bicop_log_double(copula_type[i], u(t,i), vg_t(h), theta[i], theta2[i] )   ;
-                        //std::cout << " logc_group_jt(h,gid[i]) " << logc_group_jt(h,gid[i]) << " i " << i << std::endl;
+                        // logc_group_jt(h,gid[i]) += bicop_log_double(copula_type[i], u(t,i), vg_t(h), theta[i], theta2[i] )   ;
                     }
 
                 }
@@ -568,16 +564,12 @@ public:
                 for (int g = 0; g < k-1; g++){ // g index for group
                     Eigen::VectorXd exp_logcvgroup_minus_max = (logc_group_jt.col(g).array() - max_logcvgroup(g)).array().exp();
                     logc_jt(j) += max_logcvgroup(g) + log ( (exp_logcvgroup_minus_max.array() * weight_t.array() ).sum())   ;
-                    //std::cout << " logc_jt(j) " << logc_jt(j) << " g " << g << std::endl;
                 }
 
             }
 
             double max_logct = logc_jt.maxCoeff();
-
-            Eigen::VectorXd exp_logc_jt_minus_max = (logc_jt.array() - max_logct).array().exp();
-            logc_t[t] = max_logct + log ( (exp_logc_jt_minus_max.array() * weight_t.array() ).sum())   ;
-            //std::cout << " logc_t[t] " << logc_t[t] << " t " << t << std::endl;
+            logc_t[t] = max_logct + log ( (logc_jt.array() - max_logct).array().exp().sum())   ;
         }
 
         for (auto& log_val : logc_t)
