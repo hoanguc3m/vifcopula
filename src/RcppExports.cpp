@@ -11,7 +11,7 @@ using namespace Rcpp;
 
 // vifcop
 List vifcop(SEXP data_, SEXP init_, SEXP other_);
-static SEXP vifcopula_vifcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+static SEXP _vifcopula_vifcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type data_(data_SEXP);
@@ -21,16 +21,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP vifcopula_vifcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+RcppExport SEXP _vifcopula_vifcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(vifcopula_vifcop_try(data_SEXP, init_SEXP, other_SEXP));
+        rcpp_result_gen = PROTECT(_vifcopula_vifcop_try(data_SEXP, init_SEXP, other_SEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -43,7 +47,7 @@ RcppExport SEXP vifcopula_vifcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP
 }
 // hmcfcop
 List hmcfcop(SEXP data_, SEXP init_, SEXP other_);
-static SEXP vifcopula_hmcfcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+static SEXP _vifcopula_hmcfcop_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type data_(data_SEXP);
@@ -53,16 +57,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP vifcopula_hmcfcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+RcppExport SEXP _vifcopula_hmcfcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(vifcopula_hmcfcop_try(data_SEXP, init_SEXP, other_SEXP));
+        rcpp_result_gen = PROTECT(_vifcopula_hmcfcop_try(data_SEXP, init_SEXP, other_SEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -75,7 +83,7 @@ RcppExport SEXP vifcopula_hmcfcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEX
 }
 
 // validate (ensure exported C++ functions exist before calling them)
-static int vifcopula_RcppExport_validate(const char* sig) { 
+static int _vifcopula_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("List(*vifcop)(SEXP,SEXP,SEXP)");
@@ -85,9 +93,9 @@ static int vifcopula_RcppExport_validate(const char* sig) {
 }
 
 // registerCCallable (register entry points for exported C++ functions)
-RcppExport SEXP vifcopula_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("vifcopula", "vifcopula_vifcop", (DL_FUNC)vifcopula_vifcop_try);
-    R_RegisterCCallable("vifcopula", "vifcopula_hmcfcop", (DL_FUNC)vifcopula_hmcfcop_try);
-    R_RegisterCCallable("vifcopula", "vifcopula_RcppExport_validate", (DL_FUNC)vifcopula_RcppExport_validate);
+RcppExport SEXP _vifcopula_RcppExport_registerCCallable() { 
+    R_RegisterCCallable("vifcopula", "_vifcopula_vifcop", (DL_FUNC)_vifcopula_vifcop_try);
+    R_RegisterCCallable("vifcopula", "_vifcopula_hmcfcop", (DL_FUNC)_vifcopula_hmcfcop_try);
+    R_RegisterCCallable("vifcopula", "_vifcopula_RcppExport_validate", (DL_FUNC)_vifcopula_RcppExport_validate);
     return R_NilValue;
 }

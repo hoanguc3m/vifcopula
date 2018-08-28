@@ -162,3 +162,21 @@ rng_tab <- rbind(iter_num, correct_percent, rbind(ELBO_rng, AIC_rng, BIC_rng, lo
 #print(ELBO_rng, digits = 1)
 print(xtable(rng_tab, digits = 1))
 print(xtable(rng_tab, digits = 0))
+
+
+
+plot(Data_Gauss[8,], Data_Gauss[12,])
+abline(a= 0, b= 1)
+plot(Data_Student[8,], Data_Student[12,])
+abline(a= 0, b= 1)
+plot(Data_Clayton[8,], Data_Clayton[12,])
+abline(a= 0, b= 1)
+plot(Data_Gumbel[8,], Data_Gumbel[12,])
+abline(a= 0, b= 1)
+plot(Data_Frank[8,], Data_Frank[12,])
+abline(a= 0, b= 1)
+plot(Data_Joe[8,], Data_Joe[12,])
+abline(a= 0, b= 1)
+plot(Data_Mix[8,], Data_Mix[12,])
+abline(a= 0, b= 1)
+

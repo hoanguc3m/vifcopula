@@ -330,6 +330,117 @@ void bicop_log_add(int i,
 }
 
 
+template <bool propto__, bool jacobian__,
+          typename Tu__, typename Tv__,typename Tt__, typename T__>
+void bicop_log_latent(int i,
+                   const std::vector<int>& copula_type,
+                   Eigen::Matrix<double,Eigen::Dynamic,1>& u,
+                   Eigen::Matrix<Tv__,Eigen::Dynamic,1>&  v,
+                   Eigen::Matrix<double,Eigen::Dynamic,1>& theta,
+                   Eigen::Matrix<double,Eigen::Dynamic,1>& theta2,
+                   T__& lp__,
+                   stan::math::accumulator<T__>& lp_accum__,
+                   stan::io::reader<T__>& in__
+) {
+    static const char* function("vifcopula::bicop_log_latent");
+    using stan::math::square;
+    using stan::math::log;
+
+    switch ( copula_type[i] ) {
+    case 0:
+        // Independence copula
+        lp_accum__.add(bicop_independence_log<propto__>(u,v));
+        break;
+    case 1:
+        // Gaussian copula
+        lp_accum__.add(bicop_normal_log<propto__>(u,v,theta[i]));
+        break;
+    case 2:
+        // Student copula
+        lp_accum__.add(bicop_student_log<propto__>(u,v,theta[i],theta2[i]));
+        break;
+    case 3:
+        // Clayton copula
+        lp_accum__.add(bicop_clayton_log<propto__>(u,v,theta[i]));
+        break;
+    case 4:
+        // Gumbel copula
+        lp_accum__.add(bicop_gumbel_log<propto__>(u,v,theta[i]));
+        break;
+    case 5:
+        // Frank copula
+        lp_accum__.add(bicop_frank_log<propto__>(u,v,theta[i]));
+        break;
+    case 6:
+        // Joe copula
+        lp_accum__.add(bicop_joe_log<propto__>(u,v,theta[i]));
+        break;
+
+    case 13:
+        // survival Clayton copula
+        lp_accum__.add(bicop_survival_clayton_log<propto__>(u,v,theta[i]));
+        break;
+    case 14:
+        // survival Gumbel copula
+        lp_accum__.add(bicop_survival_gumbel_log<propto__>(u,v,theta[i]));
+        break;
+    case 16:
+        // survival Joe copula
+        lp_accum__.add(bicop_survival_joe_log<propto__>(u,v,theta[i]));
+        break;
+
+    case 21:
+        // Negative Guassian Copula
+        lp_accum__.add(bicop_normal_log<propto__>(u,v,theta[i]));
+        break;
+    case 22:
+        // Student copula
+        lp_accum__.add(bicop_student_log<propto__>(u,v,theta[i],theta2[i]));
+        break;
+
+    case 23:
+        // rotated 90 degree Clayton copula
+        lp_accum__.add(bicop_r90_clayton_log<propto__>(u,v,theta[i]));
+        break;
+    case 24:
+        // rotated 90 degree Gumbel copula
+        lp_accum__.add(bicop_r90_gumbel_log<propto__>(u,v,theta[i]));
+        break;
+
+    case 25:
+        // Frank copula
+        lp_accum__.add(bicop_frank_log<propto__>(u,v,theta[i]));
+        break;
+
+    case 26:
+        // rotated 90 degree Joe copula
+        lp_accum__.add(bicop_r90_joe_log<propto__>(u,v,theta[i]));
+        break;
+
+    case 33:
+        // rotated 270 degree Clayton copula
+        lp_accum__.add(bicop_r270_clayton_log<propto__>(u,v,theta[i]));
+        break;
+    case 34:
+        // rotated 270 degree Gumbel copula
+        lp_accum__.add(bicop_r270_gumbel_log<propto__>(u,v,theta[i]));
+        break;
+    case 36:
+        // rotated 270 degree Joe copula
+        lp_accum__.add(bicop_r270_joe_log<propto__>(u,v,theta[i]));
+        break;
+
+    default:
+        // Code to execute if <variable> does not equal the value following any of the cases
+        // Send a break message.
+        break;
+    }
+
+
+
+}
+
+
 double bicop_log_double( const int copula_type,
                    double u,
                    double  v,

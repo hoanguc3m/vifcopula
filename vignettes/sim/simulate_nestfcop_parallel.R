@@ -192,3 +192,4 @@ plot(Data_Joe[8,], Data_Joe[12,])
 abline(a= 0, b= 1)
 plot(Data_Mix[8,], Data_Mix[12,])
 abline(a= 0, b= 1)
+

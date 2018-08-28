@@ -160,7 +160,6 @@ compare_vi_hmc <- function(vi,hmc){
     theta2_vi = get_theta2(vi)
 
     v0_vi_sd = get_v0_sd(vi)
-    v_vi_sd = get_v_sd(vi)
     theta_vi_sd = get_theta_sd(vi)
     theta2_vi_sd = get_theta2_sd(vi)
 
@@ -171,7 +170,6 @@ compare_vi_hmc <- function(vi,hmc){
     theta2_hmc = get_theta2(hmc)
 
     v0_hmc_sd = get_v0_sd(hmc)
-    v_hmc_sd = get_v_sd(hmc)
     theta_hmc_sd = get_theta_sd(hmc)
     theta2_hmc_sd = get_theta2_sd(hmc)
 
@@ -200,7 +198,9 @@ compare_vi_hmc <- function(vi,hmc){
     abline(a= 0, b=1, col="red")
 
     if (vi$structfactor > 1) {
-
+        v_vi_sd = get_v_sd(vi)
+        v_hmc_sd = get_v_sd(hmc)
+        
         latent_theta_vi = get_latent_theta(vi)
         latent_theta2_vi = get_latent_theta2(vi)
         latent_theta_vi_sd = get_latent_theta_sd(vi)

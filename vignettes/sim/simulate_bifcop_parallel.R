@@ -77,8 +77,9 @@ Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
+save.image("/home/hoanguc3m/MEGA/Doc/Prior/task_bifcop_sim.RData")
 
-Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
     outSub <- task_bifcop(seed_collection[i], family = 2, family_latent = latentcopfamily)
@@ -86,28 +87,28 @@ Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(se
     outSub # this will become part of the out object
 }
 
-Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_bifcop(seed_collection[i], family = 3, family_latent = 3)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
 
-Data_Gumbel <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Gumbel <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_bifcop(seed_collection[i], family = 4, family_latent = 4)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
 
-Data_Frank <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Frank <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_bifcop(seed_collection[i], family = 5, family_latent = 5)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
 
-Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_bifcop(seed_collection[i], family = 6, family_latent = 6)
     cat('Finishing ', i, 'th job.\n', sep = '')
@@ -115,7 +116,7 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
 }
 
 
-Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
     latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
@@ -149,8 +150,8 @@ AIC_init <- c(vi_gauss[6], vi_student[6], vi_clayton[6], vi_gumbel[6], vi_frank[
 BIC_init <- c(vi_gauss[7], vi_student[7], vi_clayton[7], vi_gumbel[7], vi_frank[7], vi_joe[7], vi_mix[7])
 logP_init <- c(vi_gauss[8], vi_student[8], vi_clayton[8], vi_gumbel[8], vi_frank[8], vi_joe[8], vi_mix[8])
 
-init_tab <- rbind(ELBO_init, AIC_init, BIC_init, logP_init)
-print(xtable(init_tab, digits = 0))
+init_tab <- rbind(ELBO_init, AIC_init, BIC_init, logP_init)/t_max
+print(xtable(init_tab, digits = 1))
 
 iter_num <- c(vi_gauss[2], vi_student[2], vi_clayton[2], vi_gumbel[2], vi_frank[2], vi_joe[2], vi_mix[2])
 print(iter_num, digits = 0)
@@ -161,10 +162,10 @@ print(correct_percent, digits = 0)
 time_rng <- c(vi_gauss[4], vi_student[4], vi_clayton[4], vi_gumbel[4], vi_frank[4], vi_joe[4], vi_mix[4])
 print(time_rng, digits = 0)
 
-ELBO_rng <- c(vi_gauss[9], vi_student[9], vi_clayton[9], vi_gumbel[9], vi_frank[9], vi_joe[9], vi_mix[9])
-AIC_rng <- c(vi_gauss[10], vi_student[10], vi_clayton[10], vi_gumbel[10], vi_frank[10], vi_joe[10], vi_mix[10])
-BIC_rng <- c(vi_gauss[11], vi_student[11], vi_clayton[11], vi_gumbel[11], vi_frank[11], vi_joe[11], vi_mix[11])
-logP_rng <- c(vi_gauss[12], vi_student[12], vi_clayton[12], vi_gumbel[12], vi_frank[12], vi_joe[12], vi_mix[12])
+ELBO_rng <- c(vi_gauss[9], vi_student[9], vi_clayton[9], vi_gumbel[9], vi_frank[9], vi_joe[9], vi_mix[9])/t_max
+AIC_rng <- c(vi_gauss[10], vi_student[10], vi_clayton[10], vi_gumbel[10], vi_frank[10], vi_joe[10], vi_mix[10])/t_max
+BIC_rng <- c(vi_gauss[11], vi_student[11], vi_clayton[11], vi_gumbel[11], vi_frank[11], vi_joe[11], vi_mix[11])/t_max
+logP_rng <- c(vi_gauss[12], vi_student[12], vi_clayton[12], vi_gumbel[12], vi_frank[12], vi_joe[12], vi_mix[12])/t_max
 
 correct_latent_percent <- c(vi_gauss[13], vi_student[13], vi_clayton[13], vi_gumbel[13], vi_frank[13], vi_joe[13], vi_mix[13])
 print(correct_latent_percent, digits = 0)
@@ -173,5 +174,19 @@ rng_tab <- rbind(iter_num, correct_percent, correct_latent_percent, ELBO_rng, AI
 
 #print(ELBO_rng, digits = 1)
 print(xtable(rng_tab, digits = 0))
+print(xtable(rng_tab, digits = 1))
 
-
+plot(Data_Gauss[8,], Data_Gauss[12,])
+abline(a= 0, b= 1)
+plot(Data_Student[8,], Data_Student[12,])
+abline(a= 0, b= 1)
+plot(Data_Clayton[8,], Data_Clayton[12,])
+abline(a= 0, b= 1)
+plot(Data_Gumbel[8,], Data_Gumbel[12,])
+abline(a= 0, b= 1)
+plot(Data_Frank[8,], Data_Frank[12,])
+abline(a= 0, b= 1)
+plot(Data_Joe[8,], Data_Joe[12,])
+abline(a= 0, b= 1)
+plot(Data_Mix[8,], Data_Mix[12,])
+abline(a= 0, b= 1)

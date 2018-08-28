@@ -7,10 +7,11 @@
 #include <ctime>
 #include <stan/math.hpp>
 #include <ofcop.hpp>
-#include <nestfcop.hpp>
-//#include <nestselefcop.hpp>
 #include <bifcop.hpp>
+#include <nestfcop.hpp>
+
 //#include <despfcop.hpp>
+//#include <nestselefcop.hpp>
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(StanHeaders)]]
@@ -65,45 +66,71 @@ void save_vi( std::vector<string>& model_pars,
     std::string v_name;
     std::string theta_name;
 
-    if (structfactor == 1)
-    {
-        v_name = "v";
-        theta_name = "theta";
-    }
-    else
-    {
-        v_name = "vg";
-        v_name = "thetag";
-    }
-
-    for (int i = 0; i < t_max; i++)
-    {
-        model_pars.push_back("v" + std::to_string(k+1) + "." + std::to_string(i+1));
-        mean_vi_save.push_back(mean_vi[i]);
-    }
-    for (int i = t_max; i < length(mean_vi); i++)
-    {
-        model_pars.push_back("theta" + std::to_string(k+1) + "." + std::to_string(i+1-t_max));
-        mean_vi_save.push_back(mean_vi[i]);
-    }
-    sample_vi_save.conservativeResize(NoChange, sample_vi_save.cols()+sample_vi.cols());
-    sample_vi_save.block(0,sample_vi_save.cols()-sample_vi.cols(),iter, sample_vi.cols()) = sample_vi;
-
-    if (copselect)
-    {
-        copula_type = VectorXi::Map(&cop_vec_new[0], n_max);
-        if (structfactor == 2){
-            latent_copula_type = VectorXi::Map(&latent_cop_vec_new[0], n_max);
+    if (structfactor > 10){
+        if (structfactor == 11)
+        {
+            v_name = "v";
         }
-        if (structfactor == 3){
-            latent_copula_type = VectorXi::Map(&latent_cop_vec_new[0], k-1);
+        else
+        {
+            v_name = "vg";
         }
 
-    }
-    else
-    {
+        for (int i = 0; i < t_max; i++)
+        {
+            model_pars.push_back("v" + std::to_string(k+1) + "." + std::to_string(i+1));
+            mean_vi_save.push_back(mean_vi[i]);
+        }
+        sample_vi_save.conservativeResize(NoChange, sample_vi_save.cols()+sample_vi.cols());
+        sample_vi_save.block(0,sample_vi_save.cols()-sample_vi.cols(),iter, sample_vi.cols()) = sample_vi;
+
         cop_vec_new = copula_type_vec;
         latent_cop_vec_new = latent_copula_type_vec;
+
+    } else {
+
+        if (structfactor == 1)
+        {
+            v_name = "v";
+            theta_name = "theta";
+        }
+        else
+        {
+            v_name = "vg";
+            v_name = "thetag";
+        }
+
+        for (int i = 0; i < t_max; i++)
+        {
+            model_pars.push_back("v" + std::to_string(k+1) + "." + std::to_string(i+1));
+            mean_vi_save.push_back(mean_vi[i]);
+        }
+        for (int i = t_max; i < length(mean_vi); i++)
+        {
+            model_pars.push_back("theta" + std::to_string(k+1) + "." + std::to_string(i+1-t_max));
+            mean_vi_save.push_back(mean_vi[i]);
+        }
+        sample_vi_save.conservativeResize(NoChange, sample_vi_save.cols()+sample_vi.cols());
+        sample_vi_save.block(0,sample_vi_save.cols()-sample_vi.cols(),iter, sample_vi.cols()) = sample_vi;
+
+        if (copselect)
+        {
+            copula_type = VectorXi::Map(&cop_vec_new[0], n_max);
+            if (structfactor == 2){
+                latent_copula_type = VectorXi::Map(&latent_cop_vec_new[0], n_max);
+            }
+            if (structfactor == 3){
+                latent_copula_type = VectorXi::Map(&latent_cop_vec_new[0], k-1);
+            }
+
+        }
+        else
+        {
+            cop_vec_new = copula_type_vec;
+            latent_cop_vec_new = latent_copula_type_vec;
+        }
+
+
     }
 }
 //' Variational inference for factor copula models
@@ -266,7 +293,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             latent_cop_vec_new.resize(0);
 
             Rcpp::Rcout << "########################################################" << std::endl;
-            Rcpp::Rcout << " VI Estimating copula layer: " << 1 << std::endl;
+            Rcpp::Rcout << " VI Estimating one factor copula model" << std::endl;
             Rcpp::Rcout << "########################################################" << std::endl;
 
             ofcop Objfcop(u, copula_type_vec, t_max, n_max, k_max-1, base_rng);
@@ -295,7 +322,11 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
 
         Rcpp::Rcout << "########################################################" << std::endl;
-        Rcpp::Rcout << " VI Estimating bifactor copula" << std::endl;
+        if (k_max == 2) {
+            Rcpp::Rcout << " VI Estimating two factor copula model" << std::endl;
+        } else {
+            Rcpp::Rcout << " VI Estimating bifactor copula model " << std::endl;
+        }
         Rcpp::Rcout << "########################################################" << std::endl;
 
         bifcop Objbifcop(u, gid, copula_type_vec, latent_copula_type_vec, t_max, n_max, k, base_rng);
@@ -322,7 +353,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
         VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
 
         Rcpp::Rcout << "########################################################" << std::endl;
-        Rcpp::Rcout << " VI Estimating nested factor copula" << std::endl;
+        Rcpp::Rcout << " VI Estimating nested factor copula model" << std::endl;
         Rcpp::Rcout << "########################################################" << std::endl;
 
         nestfcop Objnestfcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng);
@@ -339,6 +370,95 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     }
     break;
 
+    case 11:
+    {    // One factor copula model
+
+        // copula_type_vec = copula_type;
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type;
+
+        latent_copula_type_vec.resize(0);
+        latent_cop_vec_new.resize(0);
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " VI for latents of one factor copula model" << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+        vector_d theta = Rcpp::as<vector_d>(data["theta"]);
+        vector_d theta2 = Rcpp::as<vector_d>(data["theta2"]);
+
+        ofcopLatent ObjfcopLatent(u, theta, theta2, copula_type_vec, t_max, n_max, k_max-1, base_rng);
+        ObjfcopLatent.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
+                      adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
+                      copselect, modelselect, max_select, core,
+                      mean_vi, sample_vi, cop_vec_new, ELBO_save, count_select); //copselect = F
+
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+                mean_vi, sample_vi,
+                copula_type, copula_type_vec, cop_vec_new,
+                latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
+                t_max, n_max, k_max-1, iter, structfactor, copselect);
+
+    }
+        break;
+
+    case 12: // bifactor copula
+    {
+        int k = k_max;
+        // copula_type_vec = copula_type.col(k);
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        latent_copula_type_vec.resize(n_max);
+        latent_cop_vec_new.resize(n_max);
+        VectorXi::Map(&latent_copula_type_vec[0], n_max) = latent_copula_type.col(0);
+
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        if (k_max == 2) {
+            Rcpp::Rcout << " VI for latents of two factor copula model" << std::endl;
+        } else {
+            Rcpp::Rcout << " VI for latents of bifactor copula model " << std::endl;
+        }
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+        bifcop Objbifcop(u, gid, copula_type_vec, latent_copula_type_vec, t_max, n_max, k, base_rng);
+
+        Objbifcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
+                        adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
+                        copselect, modelselect, max_select, core,
+                        mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
+
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+                mean_vi, sample_vi,
+                copula_type, copula_type_vec, cop_vec_new,
+                latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
+                t_max, n_max, k, iter, structfactor, copselect);
+    }
+        break;
+    case 13: // nest factor copula
+    {
+        int k = k_max;
+        // copula_type_vec = copula_type.col(k);
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        latent_copula_type_vec.resize(k-1);
+        latent_cop_vec_new.resize(k-1);
+        VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " VI for latents of nested factor copula model" << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+        nestfcop Objnestfcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng);
+        Objnestfcop.runvi(iter, n_monte_carlo_grad, n_monte_carlo_elbo, eval_elbo,
+                          adapt_bool, adapt_val, adapt_iterations, tol_rel_obj, max_iterations,
+                          copselect, modelselect, max_select, core,
+                          mean_vi, sample_vi, cop_vec_new, latent_cop_vec_new, ELBO_save, count_select);
+
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+                mean_vi, sample_vi,
+                copula_type, copula_type_vec, cop_vec_new,
+                latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
+                t_max, n_max, k, iter, structfactor, copselect);
+    }
+        break;
     // case 4: // nest factor copula
     // {
     //     int k = k_max;
@@ -721,6 +841,82 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     }
     break;
 
+
+    case 11:
+    {       // One factor copula model
+
+        // copula_type_vec = copula_type;
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type;
+
+        latent_copula_type_vec.resize(0);
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " HMC Estimating the latent of copula layer: " << 1 << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+
+        vector_d theta = Rcpp::as<vector_d>(data["theta"]);
+        vector_d theta2 = Rcpp::as<vector_d>(data["theta2"]);
+
+        ofcopLatent ObjfcopLatent(u, theta, theta2, copula_type_vec, t_max, n_max, k_max-1, base_rng);
+        ObjfcopLatent.runhmc(num_warmup, num_samples, num_thin, save_warmup, refresh,
+                             chain, init_radius,
+                             stepsize, stepsize_jitter, max_depth, delta, gamma, kappa, t0,
+                             init_buffer, term_buffer, window, parameter_names, parameter_values);
+
+        save_hmc(parameter_names, parameter_values,
+                 model_pars, sample_hmc, mean_hmc);
+
+    }
+        break;
+
+    case 12: // bifactor copula
+    {
+        int k = k_max;
+        // copula_type_vec = copula_type.col(k);
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        latent_copula_type_vec.resize(n_max);
+        VectorXi::Map(&latent_copula_type_vec[0], n_max) = latent_copula_type.col(0);
+
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " HMC Estimating bifactor copula" << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+        bifcop Objbifcop(u, gid, copula_type_vec, latent_copula_type_vec, t_max, n_max, k, base_rng);
+
+        Objbifcop.runhmc(num_warmup, num_samples, num_thin, save_warmup, refresh,
+                         chain, init_radius,
+                         stepsize, stepsize_jitter, max_depth, delta, gamma, kappa, t0,
+                         init_buffer, term_buffer, window, parameter_names, parameter_values);
+
+        save_hmc(parameter_names, parameter_values,
+                 model_pars, sample_hmc, mean_hmc);
+    }
+        break;
+    case 13: // nest factor copula
+    {
+        int k = k_max;
+        // copula_type_vec = copula_type.col(k);
+        VectorXi::Map(&copula_type_vec[0], n_max) = copula_type.col(0);
+        latent_copula_type_vec.resize(k-1);
+        VectorXi::Map(&latent_copula_type_vec[0], k-1) = latent_copula_type.col(0);
+
+        Rcpp::Rcout << "########################################################" << std::endl;
+        Rcpp::Rcout << " HMC Estimating nested factor copula" << std::endl;
+        Rcpp::Rcout << "########################################################" << std::endl;
+
+        nestfcop Objnestfcop(u, gid, copula_type_vec,latent_copula_type_vec, t_max, n_max, k, base_rng);
+        Objnestfcop.runhmc(num_warmup, num_samples, num_thin, save_warmup, refresh,
+                           chain, init_radius,
+                           stepsize, stepsize_jitter, max_depth, delta, gamma, kappa, t0,
+                           init_buffer, term_buffer, window, parameter_names, parameter_values);
+
+
+        save_hmc(parameter_names, parameter_values,
+                 model_pars, sample_hmc, mean_hmc);
+    }
+        break;
         } // end switch
 
 
