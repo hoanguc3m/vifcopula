@@ -334,7 +334,7 @@ template <bool propto__, bool jacobian__,
           typename Tu__, typename Tv__,typename Tt__, typename T__>
 void bicop_log_latent(int i,
                    const std::vector<int>& copula_type,
-                   Eigen::Matrix<double,Eigen::Dynamic,1>& u,
+                   Eigen::Matrix<Tu__,Eigen::Dynamic,1>& u,
                    Eigen::Matrix<Tv__,Eigen::Dynamic,1>&  v,
                    Eigen::Matrix<double,Eigen::Dynamic,1>& theta,
                    Eigen::Matrix<double,Eigen::Dynamic,1>& theta2,
