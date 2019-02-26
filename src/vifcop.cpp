@@ -373,11 +373,11 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                        copselect, modelselect, max_select, core,
                        mean_vi, sample_vi, cop_vec_new, vine_cop_vec_new, edges_new, ELBO_save, count_select);
 
-        // save_vi(model_pars, mean_vi_save, sample_vi_save,
-        //     mean_vi, sample_vi,
-        //     copula_type, copula_type_vec, cop_vec_new,
-        //     latent_copula_type, latent_copula_type_vec, latent_cop_vec_new,
-        //     t_max, n_max, k, iter, structfactor, copselect);
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+            mean_vi, sample_vi,
+            copula_type, cop_vec_new,
+            vine_copula_type, vine_cop_vec_new,
+            t_max, n_max, k, iter, structfactor, copselect);
 
     }
         break;
@@ -403,11 +403,11 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                                 copselect, modelselect, max_select, core,
                                 mean_vi, sample_vi, cop_vec_new, vine_cop_vec_new, edges_new, ELBO_save, count_select);
 
-        // save_vi(model_pars, mean_vi_save, sample_vi_save,
-        //         mean_vi, sample_vi,
-        //         copula_type, cop_vec_new,
-        //         latent_copula_type, latent_cop_vec_new,
-        //         t_max, n_max, k, iter, structfactor, copselect);
+        save_vi(model_pars, mean_vi_save, sample_vi_save,
+                mean_vi, sample_vi,
+                copula_type, cop_vec_new,
+                vine_copula_type, vine_cop_vec_new,
+                t_max, n_max, k, iter, structfactor, copselect);
     }
         break;
 

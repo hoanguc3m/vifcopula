@@ -192,7 +192,7 @@ public:
 
                                 VectorXd::Map(&u2_temp[0], t_max) = u_cond.col(j);
                                 bicopula biuv(1,u1_temp,u2_temp,t_max,base_rng);
-                                tau(i,j) = biuv.kendall();
+                                tau(i,j) = std::abs(biuv.kendall());
                                 if (biuv.check_Ind()){
                                     tau(i,j) = 0;
                                 } else{

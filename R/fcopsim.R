@@ -95,7 +95,7 @@ rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8) {
 #' sum("a")
 #' }
 #' @export
-fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid = rep(1,n_max),
+fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = NULL, family_vine = NULL, gid = rep(1,n_max),
                     tau_range = c(0.2,0.8), tau_latent_range = c(0.2,0.8),
                     structfactor = 1, seed_num = 0) {
     set.seed(seed_num)
@@ -115,6 +115,8 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
 
     if ( (structfactor == 1) && (k_max > 1))
         stop("Only support one factor model, for two factor model try: structfactor = 2 ")
+    if ( (structfactor == 4) && (k_max > 1))
+        stop("Only support one factor + one truncated vine model")
 
     # Check copula family
     if (!(length(family) %in% c(1, n_max)))
@@ -148,7 +150,18 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
         if ( k_max != max(gid)+1)
             stop("'k_max' has to be max(gid)+1")
     }
+    if (structfactor == 4) {
+        family_vine = as.vector(family_vine)
 
+        if (length(family_vine) == 1){
+            family_vine = rep(family_vine, n_max - max(gid))
+        } else {
+            if (length(family_vine) > n_max - max(gid) )
+                stop("'family_vine' has to be a single number or a size n_max - max(gid) vector")
+        }
+        if ( k_max != 1)
+            stop("'k_max' has to be 1")
+    }
 
     u <- matrix(runif(t_max*n_max),nrow=t_max, ncol = n_max)
     theta <- matrix(0,nrow = n_max, ncol = 2)
@@ -221,6 +234,70 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
         tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta[,1], par2 = theta[,2] )
     }
 
+    egdes = NULL
+    theta_vine = NULL
+    if (structfactor == 4)
+    {
+        u <- matrix(0, ncol = n_max, nrow = t_max)
+        group_tabulate <- tabulate(gid)
+        group_count <- max(gid)
+        n_vine <- n_max - group_count
+        egdes <- matrix(0, nrow = n_vine, ncol = 2)
+        theta_vine <- matrix(0, nrow = n_vine, ncol = 2)
+        egdes_index_u <- cumsum(group_tabulate) - c(1:group_count)
+        egdes_index_l <- c(1, egdes_index_u[1:(group_count-1)]+1)[1:group_count]
+
+        # Gen Tree 1
+        for (g in c(1:group_count)){
+            member_id = c(1:n_max)[gid == g]
+            n_group = group_tabulate[g]
+            Matrix <- RVineMatrixSample(n_group, size = 1, naturalOrder = T)[[1]]
+            family_matrix <- matrix(0, n_group, n_group)
+            family_group <- family_vine[c(egdes_index_l[g]:egdes_index_u[g])]
+            family_matrix[n_group, c(1:(n_group-1))] <- family_group
+
+            theta_group <- matrix(0,nrow = length(family_group), ncol = 2)
+            for (i in 1:length(family_group)){
+                theta_group[i,] <- rtheta(family_group[i],tau_latent_range[1], tau_latent_range[2])
+            }
+            par <- matrix(0, n_group, n_group)
+            par2 <-  matrix(0, n_group, n_group)
+            par[n_group, c(1:(n_group-1))] <- theta_group[,1]
+            par2[n_group, c(1:(n_group-1))] <- theta_group[,2]
+            RVM <- RVineMatrix(Matrix = Matrix, family = family_matrix,
+                               par = par, par2 = par2)
+            u_sim <- RVineSim(t_max, RVM, U = NULL)
+            u[,gid == g] <- u_sim
+            egdes[c(egdes_index_l[g]:egdes_index_u[g]), 1] = member_id[Matrix[n_group, 1:(n_group-1)]]
+            egdes[c(egdes_index_l[g]:egdes_index_u[g]), 2] = member_id[diag(Matrix)[1:(n_group-1)]]
+            theta_vine[c(egdes_index_l[g]:egdes_index_u[g]), 1] = theta_group[,1]
+            theta_vine[c(egdes_index_l[g]:egdes_index_u[g]), 2] = theta_group[,2]
+        }
+
+        #tau_mat[,2] <- BiCopPar2Tau(family = family_latent, par = theta_latent[,1], par2 = theta_latent[,2] )
+        # Gen tree 0
+        v <- matrix(runif(t_max*1), nrow = t_max, ncol = 1)
+        for (i in 1:n_max){
+            theta[i,] <- rtheta(family[i], tau_range[1], tau_range[2])
+            # group factor
+            obj <- BiCop(family = family[i], par = theta[i,1], par2 = theta[i,2])
+            u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
+
+        }
+        #tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta[,1], par2 = theta[,2] )
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 
     list( u = u,
           v = v,
@@ -231,8 +308,12 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = family, gid
           theta = theta[,1],
           theta2 = theta[,2],
           family_latent = family_latent,
+          family_vine = family_vine,
+          egdes = egdes,
           theta_latent = theta_latent[,1],
           theta2_latent = theta_latent[,2],
+          theta_vine = theta_vine[,1],
+          theta2_vine = theta_vine[,2],
           gid = gid,
           structfactor = structfactor)
 }

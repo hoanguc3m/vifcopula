@@ -51,7 +51,7 @@ void save_vi( std::vector<string>& model_pars,
     // save model_pars, mean_vi_save, sample_vi_save,
     // copula_type, latent_copula_type
     if (structfactor > 10){     // Only infer v
-        if (structfactor == 11){
+        if (structfactor == 11 || structfactor == 14){
             v_name = "v";
         } else {
             v_name = "vg";
@@ -67,7 +67,7 @@ void save_vi( std::vector<string>& model_pars,
         cop_vec_new = copula_type; // no need
         latent_cop_vec_new = latent_copula_type; // no need
     } else {            // Infer v and theta
-        if (structfactor == 1) {
+        if (structfactor == 1 || structfactor == 4) {
             v_name = "v";
             theta_name = "theta";
         } else {
@@ -88,12 +88,13 @@ void save_vi( std::vector<string>& model_pars,
 
         if (copselect) {
             copula_type = cop_vec_new;
-            if (structfactor == 2){
-                latent_copula_type = latent_cop_vec_new;
-            }
-            if (structfactor == 3){
-                latent_copula_type = latent_cop_vec_new;
-            }
+            latent_copula_type = latent_cop_vec_new;
+            // if (structfactor == 2){
+            //     latent_copula_type = latent_cop_vec_new;
+            // }
+            // if (structfactor == 3){
+            //     latent_copula_type = latent_cop_vec_new;
+            // }
 
         } else {
             cop_vec_new = copula_type;  // no need
