@@ -18,7 +18,8 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 // a structure to represent a weighted edge in graph
 struct Edge
 {
-    int src, dest, weight;
+    int src, dest;
+    double weight;
 };
 
 // a structure to represent a connected, undirected
@@ -99,8 +100,10 @@ int myComp(const void* a, const void* b)
 }
 
 // The main function to construct MST using Kruskal's algorithm
-matrix_int KruskalMST(struct Graph* graph,
-                                               int n_group)
+void KruskalMST(struct Graph* graph,
+                      int n_group,
+                      matrix_int& spaning_edges // output
+)
 {
     int V = graph->V;
     struct Edge result[V]; // Tnis will store the resultant MST
@@ -150,21 +153,22 @@ matrix_int KruskalMST(struct Graph* graph,
     // built MST
     printf("Following are the edges in the constructed MST\n");
     for (int j = 0; j < e; ++j){
-        printf("%d -- %d == %d\n", result[j].src, result[j].dest,
+        printf("%d -- %d == %.3f\n", result[j].src, result[j].dest,
                result[j].weight);
         result_eigen(j,0) = result[j].src;
         result_eigen(j,1) = result[j].dest;
     }
-    result_eigen.resize(e,2);
-    return result_eigen;
+    spaning_edges = result_eigen.topRows(e);
+    // TODO: check for zero weight edges.
 }
 
 // Driver program to test above functions
-matrix_int KruskalSTree(int V, // Number of vertices in graph
+void KruskalSTree(int V, // Number of vertices in graph
                int E, // Number of edges in graph
                matrix_int& Edges, // Number of edges in graph
                vector_d& weight, // Number of edges in graph
-               int n_group // number of groups
+               int n_group,
+               matrix_int& spaning_edges // output
 )
 {
 
@@ -174,10 +178,8 @@ matrix_int KruskalSTree(int V, // Number of vertices in graph
         graph->edge[i].src = Edges(i,0);
         graph->edge[i].dest = Edges(i,1);
         graph->edge[i].weight = weight(i);
-
     }
-    matrix_int MinSTree = KruskalMST(graph, n_group);
-    return MinSTree;
+    KruskalMST(graph, n_group, spaning_edges);
 }
 
 #endif /* _KRUSKAL_MST_H_ */

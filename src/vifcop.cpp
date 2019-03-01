@@ -169,12 +169,14 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                     latent_copula_type = Rcpp::as<std::vector<int>>(init["latent_copula_type"]);
                     break;
                 }
-        case 4: {   // factor vine
+        case 4:
+        case 14: {   // factor vine
                     vine_copula_type = Rcpp::as<std::vector<int>>(init["vine_copula_type"]);
                     edges = Rcpp::as<matrix_int>(init["vine_edges"]);
                     stan::math::check_greater_or_equal(function, "edges.cols()", edges.cols(), 2);
                     stan::math::check_less_or_equal(function, "edges.cols()", edges.cols(), 2);
-                    Rcpp::Rcout << " Edges " << edges << std::endl;
+                    // Rcpp::Rcout << " Edges " << edges << std::endl;
+                    edges = edges - Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
                     break;
                 }
 
@@ -378,7 +380,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             copula_type, cop_vec_new,
             vine_copula_type, vine_cop_vec_new,
             t_max, n_max, k, iter, structfactor, copselect);
-
+        edges_new = edges_new + Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
     }
         break;
 
@@ -408,6 +410,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                 copula_type, cop_vec_new,
                 vine_copula_type, vine_cop_vec_new,
                 t_max, n_max, k, iter, structfactor, copselect);
+        edges_new = edges_new + Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
     }
         break;
 
@@ -433,13 +436,18 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             latent_copula_type[i] -= 20;
         }
     }
-
+    for (int i = 0; i < vine_copula_type.size(); i++){
+        if ((vine_copula_type[i] == 21) || (vine_copula_type[i] == 22) || (vine_copula_type[i] == 25) ) {
+            vine_copula_type[i] -= 20;
+        }
+    }
 
     Rcpp::List holder = List::create(Rcpp::Named("mean_vi") = mean_vi_save,
                                     Rcpp::Named("sample_vi") = sample_vi_save,//not sample_vi?
                                     Rcpp::Named("cop_type") = copula_type,
                                     Rcpp::Named("latent_copula_type") = latent_copula_type,
                                     Rcpp::Named("vine_copula_type") = vine_copula_type,
+                                    Rcpp::Named("edges") = edges_new,
                                     Rcpp::Named("u") = u,
                                     Rcpp::Named("t_max") = t_max,
                                     Rcpp::Named("n_max") = n_max,
@@ -602,12 +610,14 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
         latent_copula_type = Rcpp::as<std::vector<int>>(init["latent_copula_type"]);
         break;
     }
-    case 4: {   // factor vine
+    case 4:
+    case 14: {   // factor vine
         vine_copula_type = Rcpp::as<std::vector<int>>(init["vine_copula_type"]);
         edges = Rcpp::as<matrix_int>(init["vine_edges"]);
         stan::math::check_greater_or_equal(function, "edges.cols()", edges.cols(), 2);
         stan::math::check_less_or_equal (function, "edges.cols()", edges.cols(), 2);
-        Rcpp::Rcout << " Edges " << edges << std::endl;
+        edges = edges - Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
+        // Rcpp::Rcout << " Edges " << edges << std::endl;
 
         break;
     }
@@ -783,6 +793,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
 
         save_hmc(parameter_names, parameter_values,
                  model_pars, sample_hmc, mean_hmc);
+        edges = edges + Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
     }
         break;
 
@@ -811,6 +822,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
 
         save_hmc(parameter_names, parameter_values,
                  model_pars, sample_hmc, mean_hmc);
+        edges = edges + Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
     }
         break;
 
@@ -830,6 +842,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
                                         Rcpp::Named("cop_type") = copula_type,
                                         Rcpp::Named("latent_copula_type") = latent_copula_type,
                                         Rcpp::Named("vine_copula_type") = vine_copula_type,
+                                        Rcpp::Named("edges") = edges,
                                         Rcpp::Named("u") = u,
                                         Rcpp::Named("t_max") = t_max,
                                         Rcpp::Named("n_max") = n_max,

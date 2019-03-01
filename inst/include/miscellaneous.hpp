@@ -89,12 +89,6 @@ void save_vi( std::vector<string>& model_pars,
         if (copselect) {
             copula_type = cop_vec_new;
             latent_copula_type = latent_cop_vec_new;
-            // if (structfactor == 2){
-            //     latent_copula_type = latent_cop_vec_new;
-            // }
-            // if (structfactor == 3){
-            //     latent_copula_type = latent_cop_vec_new;
-            // }
 
         } else {
             cop_vec_new = copula_type;  // no need

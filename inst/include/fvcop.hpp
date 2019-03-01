@@ -179,6 +179,9 @@ public:
                             }
                         }
 
+                    std::cout << " cop_new " << std::endl;
+                    PRINT_ELEMENTS(cop_new);
+
                     // // Search for spaning tree here
                     matrix_d tau = MatrixXd::Zero(n_max,n_max);
                     int count_edges = 0;
@@ -192,7 +195,7 @@ public:
 
                                 VectorXd::Map(&u2_temp[0], t_max) = u_cond.col(j);
                                 bicopula biuv(1,u1_temp,u2_temp,t_max,base_rng);
-                                tau(i,j) = std::abs(biuv.kendall());
+                                tau(i,j) = - std::abs(biuv.kendall());
                                 if (biuv.check_Ind()){
                                     tau(i,j) = 0;
                                 } else{
@@ -202,6 +205,8 @@ public:
                             }
                         }
                     }
+                    std::cout << " count_edges " << count_edges << std::endl;
+                    //std::cout << " tau " << tau << std::endl;
 
                     matrix_int full_edges(count_edges,2);
                     matrix_int spaning_edges(n_max,2);
@@ -209,20 +214,25 @@ public:
                     int edges_id = 0;
                     for (int i = 0; i < n_max-1; i++){
                         for (int j = i+1; j < n_max; j++){
-                            full_edges(edges_id,0) = i;
-                            full_edges(edges_id,1) = j;
-                            weights(edges_id) = tau(i,j);
-                            edges_id ++;
+                            if (tau(i,j) != 0) {
+                                full_edges(edges_id,0) = i;
+                                full_edges(edges_id,1) = j;
+                                weights(edges_id) = tau(i,j);
+                                edges_id ++;
+                            }
                         }
                     }
+                    //std::cout << " full_edges " << full_edges << std::endl;
+                    //std::cout << " weights " << weights << std::endl;
 
                     int n_group = *std::max_element(gid.begin(), gid.end()) + 1;
-                    spaning_edges = KruskalSTree(n_max, count_edges, full_edges, weights, n_group);
+                    KruskalSTree(n_max, count_edges, full_edges, weights, n_group, spaning_edges);
                     vine_cop_new.resize(spaning_edges.rows());
+                    // std::cout << " spaning_edges " << spaning_edges << std::endl;
 
                     // Bicopselect vine
 
-                    for (int j = 0; j < spaning_edges.size(); j++){
+                    for (int j = 0; j < spaning_edges.rows(); j++){
                         //u1_temp = u_cond.col(j);
                         VectorXd::Map(&u1_temp[0], t_max) = u_cond.col(spaning_edges(j,0));
                         VectorXd::Map(&u2_temp[0], t_max) = u_cond.col(spaning_edges(j,1));
@@ -230,12 +240,9 @@ public:
                         vine_cop_new[j] = bicop_select_latent(u1_temp, u2_temp, t_max, params_out, base_rng);
                         }
 
-
-                    std::cout << " cop_new " << std::endl;
-                    PRINT_ELEMENTS(cop_new);
-
                     std::cout << " vine_cop_new " << std::endl;
                     PRINT_ELEMENTS(vine_cop_new);
+
 
 
                     // TODO add check edges
@@ -243,7 +250,7 @@ public:
                     if ((cop_new != copula_type) || (vine_cop_new != vine_copula_type) ){
                         copula_type = cop_new;
                         vine_copula_type = vine_cop_new;
-                        //edges_new = spaning_edges;
+                        edges_new = spaning_edges;
 
                         Objfvcop.set_copula_type(copula_type);
                         Objfvcop.set_vine_copula_type(vine_copula_type, edges_new);
