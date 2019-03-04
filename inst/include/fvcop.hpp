@@ -506,6 +506,7 @@ public:
         max_param = ObjfvcopLatent.num_params_r();
         mean_vi.resize(max_param);
         sample_vi.resize(iter,max_param);
+        modelselect = false; // no calculation for Latent infer only
         advi_cop.write(vi_save, mean_vi, sample_vi, ELBO, modelselect, message_writer);
         out_parameter_writer.clear(); // Clear state flags.
         std::cout << " Done ! " << std::endl;

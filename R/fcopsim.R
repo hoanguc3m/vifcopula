@@ -422,13 +422,19 @@ fcoppar2tau <- function(vi){
     latent_tau_vi = NULL
 
 
-    if (vi$structfactor > 1) {
+    if ((vi$structfactor == 2) | (vi$structfactor == 3))  {
         latent_theta_vi = get_latent_theta(vi)
         latent_theta2_vi = get_latent_theta2(vi)
         latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
                                      par = latent_theta_vi, par2 = latent_theta2_vi)
 
     }
-
-    return(list(tau_vi = tau_vi, latent_tau_vi = latent_tau_vi))
+    vine_tau_vi = NULL
+    if (vi$structfactor == 4)  {
+        vine_theta_vi = get_vine_theta(vi)
+        vine_theta2_vi = get_vine_theta2(vi)
+        vine_tau_vi = BiCopPar2Tau(family = vi$vine_copula_type,
+                                     par = vine_theta_vi, par2 = vine_theta2_vi)
+    }
+    return(list(tau_vi = tau_vi, latent_tau_vi = latent_tau_vi, vine_tau_vi = vine_tau_vi))
 }

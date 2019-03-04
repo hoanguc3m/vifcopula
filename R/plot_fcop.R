@@ -200,7 +200,7 @@ compare_vi_hmc <- function(vi,hmc){
     if (vi$structfactor > 1) {
         v_vi_sd = get_v_sd(vi)
         v_hmc_sd = get_v_sd(hmc)
-        
+
         latent_theta_vi = get_latent_theta(vi)
         latent_theta2_vi = get_latent_theta2(vi)
         latent_theta_vi_sd = get_latent_theta_sd(vi)
@@ -226,3 +226,13 @@ compare_vi_hmc <- function(vi,hmc){
     }
 }
 
+#' @export
+check_edges <- function(vi, vi_rng){
+    accurate = 0
+    len = nrow(vi$edges) # vi is the accurate structure
+    for (i in c(1:len)){
+        id = (1:nrow(vi_rng$edges))[(vi_rng$edges[,1] == vi$edges[i,1]) & (vi_rng$edges[,2] == vi$edges[i,2])]
+        accurate = accurate + sum( vi_rng$vine_copula_type[id] == vi$vine_copula_type[i] )
+    }
+    return(accurate)
+}

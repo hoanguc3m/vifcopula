@@ -36,7 +36,9 @@ get_v0.vifcop <- function(vi) {
 #' @export
 get_v.vifcop <- function(vi) {
     v_out <- NULL
-    if (vi$structfactor > 1){
+    if (vi$structfactor == 1 | vi$structfactor == 11 | vi$structfactor == 4 | vi$structfactor == 14){
+        v_out <- head(vi$mean_vi,vi$t_max)
+    } else {
         t_max <- vi$t_max
         n_max <- vi$n_max
         k_max <- vi$k_max
@@ -56,43 +58,23 @@ get_theta.vifcop <- function(vi) {
     all_theta <- vi$mean_vi[(t_max * k_max +1):length(vi$mean_vi)]
     theta <- rep(0,n_max)
     count <- 0
-    if (structfactor == 1){
-        for (i in 1:n_max){
-            if (vi$cop_type[i] > 0){
-                count = count + 1
-                theta[i] <- all_theta[count]
-                if (vi$cop_type[i] == 2){
-                    count = count + 1
-                }
-            }
+    if (structfactor == 1 | structfactor == 4 | structfactor == 2){
+        count <- 0
+    } else {
+        if (structfactor == 3){
+            count = k_max - 1 + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0)
         }
     }
 
-    if (structfactor == 2){
-        for (i in 1:n_max){
-            if (vi$cop_type[i] > 0){
+    for (i in 1:n_max){
+        if (vi$cop_type[i] > 0){
+            count = count + 1
+            theta[i] <- all_theta[count]
+            if (vi$cop_type[i] == 2){
                 count = count + 1
-                theta[i] <- all_theta[count]
-                if (vi$cop_type[i] == 2){
-                    count = count + 1
-                }
             }
         }
     }
-
-    if (structfactor == 3){
-        count = k_max - 1 + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0)
-        for (i in 1:n_max){
-            if (vi$cop_type[i] > 0){
-                count = count + 1
-                theta[i] <- all_theta[count]
-                if (vi$cop_type[i] == 2){
-                    count = count + 1
-                }
-            }
-        }
-    }
-
     theta
 }
 #' @export
@@ -105,40 +87,20 @@ get_theta2.vifcop <- function(vi) {
     all_theta <- vi$mean_vi[(t_max * k_max +1):length(vi$mean_vi)]
     theta2 <- rep(0,n_max)
     count <- 0
-    if (structfactor == 1){
-        for (i in 1:n_max){
-            if (vi$cop_type[i] > 0){
-                count = count + 1
-                if (vi$cop_type[i] == 2){
-                    count = count + 1
-                    theta2[i] <- all_theta[count]
-                }
-            }
+    if (structfactor == 1 | structfactor == 4 | structfactor == 2){
+        count <- 0
+    } else {
+        if (structfactor == 3){
+            count = k_max - 1 + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0)
         }
     }
 
-    if (structfactor == 2){
-        for (i in 1:n_max){
-            if (vi$cop_type[i] > 0){
+    for (i in 1:n_max){
+        if (vi$cop_type[i] > 0){
+            count = count + 1
+            if (vi$cop_type[i] == 2){
                 count = count + 1
-                if (vi$cop_type[i] == 2){
-                    count = count + 1
-	            theta2[i] <- all_theta[count]
-                }
-            }
-        }
-    }
-
-    if (structfactor == 3){
-        count = k_max - 1 + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0)
-        for (i in 1:n_max){
-            if (vi$cop_type[i] > 0){
-                count = count + 1
-
-                if (vi$cop_type[i] == 2){
-                    count = count + 1
-                    theta2[i] <- all_theta[count]
-                }
+                theta2[i] <- all_theta[count]
             }
         }
     }
@@ -232,6 +194,69 @@ get_latent_theta2.vifcop <- function(vi) {
     latent_theta2
 }
 #' @export
+get_vine_theta.vifcop <- function(vi) {
+    t_max <- vi$t_max
+    n_max <- vi$n_max
+    k_max <- vi$k_max
+    g_max <- vi$g_max
+    structfactor <- vi$structfactor
+
+
+    all_theta <- vi$mean_vi[(t_max * k_max +1):length(vi$mean_vi)]
+    vine_theta <- NULL
+    count <- 0
+    if (structfactor != 4){
+        vine_theta = NULL
+    }
+
+    vine_theta <- rep(0,n_max - g_max)
+    count = n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
+    for (i in 1:n_max){
+        if (vi$vine_copula_type[i] > 0){
+            count = count + 1
+            vine_theta[i] <- all_theta[count]
+
+            if (vi$vine_copula_type[i] == 2){
+                count = count + 1
+            }
+        }
+    }
+
+    vine_theta
+}
+#' @export
+get_vine_theta2.vifcop <- function(vi) {
+    t_max <- vi$t_max
+    n_max <- vi$n_max
+    k_max <- vi$k_max
+    g_max <- vi$g_max
+    structfactor <- vi$structfactor
+
+
+    all_theta <- vi$mean_vi[(t_max * k_max +1):length(vi$mean_vi)]
+    vine_theta2 <- NULL
+
+    count <- 0
+    if (structfactor != 4){
+        vine_theta2 <- NULL
+    }
+
+    if (structfactor == 4){
+        vine_theta2 <- rep(0,n_max)
+        count = n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
+        for (i in 1:n_max){
+            if (vi$vine_copula_type[i] > 0){
+                count = count + 1
+                if (vi$vine_copula_type[i] == 2){
+                    count = count + 1
+                    vine_theta2[i] <- all_theta[count]
+                }
+            }
+        }
+    }
+    vine_theta2
+}
+#' @export
 num_param.vifcop <- function(vi) {
     t_max <- vi$t_max
     n_max <- vi$n_max
@@ -252,6 +277,11 @@ num_param.vifcop <- function(vi) {
 	count = t_max*k_max + (k_max - 1) + sum(vi$latent_copula_type == 2) - sum(vi$latent_copula_type == 0) +
 		 		n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
     }
+    if (structfactor == 4){
+        g_max <- vi$g_max
+        count = t_max*k_max + sum(vi$vine_copula_type > 0) + sum(vi$vine_copula_type == 2) - sum(vi$vine_copula_type == 0) +
+            n_max + sum(vi$cop_type == 2) - sum(vi$cop_type == 0)
+    }
     count
 }
 
@@ -267,7 +297,9 @@ get_v0.hmcfcop <- function(hmc) {
 #' @export
 get_v.hmcfcop <- function(hmc) {
     v_out <- NULL
-    if (hmc$structfactor > 1){
+    if (vi$structfactor == 1 | vi$structfactor == 11 | vi$structfactor == 4 | vi$structfactor == 14){
+        v_out <- get_v0(hmc)
+    } else {
         t_max <- hmc$t_max
         n_max <- hmc$n_max
         k_max <- hmc$k_max

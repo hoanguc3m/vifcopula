@@ -380,7 +380,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             copula_type, cop_vec_new,
             vine_copula_type, vine_cop_vec_new,
             t_max, n_max, k, iter, structfactor, copselect);
-        edges_new = edges_new + Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
+        edges = edges_new + Eigen::MatrixXi::Ones(edges_new.rows(),edges_new.cols());
     }
         break;
 
@@ -410,7 +410,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                 copula_type, cop_vec_new,
                 vine_copula_type, vine_cop_vec_new,
                 t_max, n_max, k, iter, structfactor, copselect);
-        edges_new = edges_new + Eigen::MatrixXi::Ones(edges.rows(),edges.cols());
+        edges = edges_new + Eigen::MatrixXi::Ones(edges_new.rows(),edges_new.cols());
     }
         break;
 
@@ -447,7 +447,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                                     Rcpp::Named("cop_type") = copula_type,
                                     Rcpp::Named("latent_copula_type") = latent_copula_type,
                                     Rcpp::Named("vine_copula_type") = vine_copula_type,
-                                    Rcpp::Named("edges") = edges_new,
+                                    Rcpp::Named("edges") = edges,
                                     Rcpp::Named("u") = u,
                                     Rcpp::Named("t_max") = t_max,
                                     Rcpp::Named("n_max") = n_max,
