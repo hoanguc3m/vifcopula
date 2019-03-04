@@ -17,9 +17,6 @@ compare_sim_vi <- function(datagen,vi){
     tau = BiCopPar2Tau(family = datagen$family, par = datagen$theta, par2 = datagen$theta2)
 
 
-    latent_theta_vi = get_latent_theta(vi)
-    latent_theta2_vi = get_latent_theta2(vi)
-
     if (vi$structfactor == 1) {
         par(mfrow =c(1,3))
     } else {
@@ -37,25 +34,42 @@ compare_sim_vi <- function(datagen,vi){
     plot(datagen$theta, theta_vi, xlab = expression(theta[gen]), ylab = expression(theta[vi]))
     abline(a= 0, b=1, col="red")
 
+    if (vi$structfactor == 2 | vi$structfactor == 3){
+        latent_theta_vi = get_latent_theta(vi)
+        latent_theta2_vi = get_latent_theta2(vi)
 
-    if (vi$structfactor > 1) {
         plot(datagen$v[,2:vi$k_max], v_vi, xlab = expression(v[gen]), ylab = expression(v[vi]))
         abline(a= 0, b=1, col="red")
-
         latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
                                      par = latent_theta_vi, par2 = latent_theta2_vi)
         latent_tau = BiCopPar2Tau(family = datagen$family_latent,
                                   par = datagen$theta_latent, par2 = datagen$theta2_latent)
-
-
         plot(latent_tau, latent_tau_vi, xlab = expression(tau_latent[gen]), ylab = expression(tau_latent[vi]))
         abline(a= 0, b=1, col="red")
 
         plot(datagen$theta_latent, latent_theta_vi, xlab = expression(theta_latent[gen]), ylab = expression(theta_latent[vi]))
         abline(a= 0, b=1, col="red")
-
-
     }
+
+    if (vi$structfactor == 4) {
+        plot(datagen$theta2, theta2_vi, xlab = expression(theta2[gen]), ylab = expression(theta2[vi]))
+        abline(a= 0, b=1, col="red")
+
+        vine_theta_vi = get_vine_theta(vi)
+        vine_theta2_vi = get_vine_theta2(vi)
+
+        vine_tau_vi = BiCopPar2Tau(family = vi$vine_copula_type,
+                                   par = vine_theta_vi, par2 = vine_theta2_vi)
+        vine_tau = BiCopPar2Tau(family = datagen$family_vine,
+                                par = datagen$theta_vine, par2 = datagen$theta2_vine)
+        plot(vine_tau, vine_tau_vi, xlab = expression(tau_vine[gen]), ylab = expression(tau_vine[vi]))
+        abline(a= 0, b=1, col="red")
+
+        plot(datagen$theta_vine, vine_theta_vi, xlab = expression(theta_vine[gen]), ylab = expression(theta_vine[vi]))
+        abline(a= 0, b=1, col="red")
+
+        }
+
 }
 
 #' @export
@@ -72,8 +86,6 @@ plot.vifcop <- function(vi) {
     tau_vi = BiCopPar2Tau(family = vi$cop_type, par = theta_vi, par2 = theta2_vi)
 
 
-    latent_theta_vi = get_latent_theta(vi)
-    latent_theta2_vi = get_latent_theta2(vi)
 
     if (vi$structfactor == 1) {
         par(mfrow =c(1,3))
@@ -89,7 +101,10 @@ plot.vifcop <- function(vi) {
 
     hist(theta2_vi, xlab = expression(theta_2[t]))
 
-    if (vi$structfactor > 1) {
+    if (vi$structfactor == 2 | vi$structfactor == 3){
+        latent_theta_vi = get_latent_theta(vi)
+        latent_theta2_vi = get_latent_theta2(vi)
+
         hist(v_vi, xlab = expression(v[t]))
 
         latent_tau_vi = BiCopPar2Tau(family = vi$latent_copula_type,
@@ -98,6 +113,16 @@ plot.vifcop <- function(vi) {
         hist(latent_tau_vi, xlab = expression(tau_latent[t]) )
 
         hist(latent_theta2_vi, xlab = expression(theta_latent2[t]))
+    }
+    if (vi$structfactor == 4) {
+        vine_theta_vi = get_vine_theta(vi)
+        vine_theta2_vi = get_vine_theta2(vi)
+        vine_tau_vi = BiCopPar2Tau(family = vi$vine_copula_type,
+                                   par = vine_theta_vi, par2 = vine_theta2_vi)
+
+        hist(vine_tau_vi, xlab = expression(tau_vine[t]) )
+
+        hist(vine_theta2_vi, xlab = expression(theta_vine2[t]))
     }
 }
 
@@ -114,10 +139,6 @@ plot.hmcfcop <- function(hmc) {
 
     tau_hmc = BiCopPar2Tau(family = hmc$cop_type, par = theta_hmc, par2 = theta2_hmc)
 
-
-    latent_theta_hmc = get_latent_theta(hmc)
-    latent_theta2_hmc = get_latent_theta2(hmc)
-
     if (hmc$structfactor == 1) {
         par(mfrow =c(1,3))
     } else {
@@ -132,15 +153,27 @@ plot.hmcfcop <- function(hmc) {
 
     hist(theta2_hmc, xlab = expression(theta_2[t]))
 
-    if (hmc$structfactor > 1) {
+    if (vi$structfactor == 2 | vi$structfactor == 3){
+        latent_theta_hmc = get_latent_theta(hmc)
+        latent_theta2_hmc = get_latent_theta2(hmc)
+
         hist(v_hmc, xlab = expression(v[t]))
 
-        latent_tau_hmc = BiCopPar2Tau(family = hmc$latent_copula_type,
-                                      par = latent_theta_hmc, par2 = latent_theta2_hmc)
+        vine_tau_hmc = BiCopPar2Tau(family = hmc$vine_copula_type,
+                                    par = vine_theta_hmc, par2 = vine_theta2_hmc)
 
-        hist(latent_tau_hmc, xlab = expression(tau_latent[t]) )
+        hist(vine_tau_hmc, xlab = expression(tau_vine[t]) )
 
-        hist(latent_theta2_hmc, xlab = expression(theta_latent2[t]))
+        hist(vine_theta2_hmc, xlab = expression(theta_vine2[t]))
+    }
+    if (hmc$structfactor == 4) {
+        vine_theta_hmc = get_vine_theta(hmc)
+        vine_theta2_hmc = get_vine_theta2(hmc)
+
+        vine_tau_hmc = BiCopPar2Tau(family = hmc$vine_copula_type,
+                                    par = vine_theta_hmc, par2 = vine_theta2_hmc)
+        hist(vine_tau_hmc, xlab = expression(tau_vine[t]) )
+        hist(vine_theta2_hmc, xlab = expression(theta_vine2[t]))
     }
 }
 
@@ -197,7 +230,7 @@ compare_vi_hmc <- function(vi,hmc){
     plot(theta_hmc_sd, theta_vi_sd, xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])))
     abline(a= 0, b=1, col="red")
 
-    if (vi$structfactor > 1) {
+    if (vi$structfactor == 2 | vi$structfactor == 3){
         v_vi_sd = get_v_sd(vi)
         v_hmc_sd = get_v_sd(hmc)
 
@@ -222,6 +255,31 @@ compare_vi_hmc <- function(vi,hmc){
         abline(a= 0, b=1, col="red")
 
         plot(latent_theta_hmc_sd, latent_theta_vi_sd, xlab = expression(sd(theta_latent[hmc]) ), ylab = expression(sd (theta_latent[vi])))
+        abline(a= 0, b=1, col="red")
+    }
+    if (vi$structfactor == 4) {
+
+        vine_theta_vi = get_vine_theta(vi)
+        vine_theta2_vi = get_vine_theta2(vi)
+        vine_theta_vi_sd = get_vine_theta_sd(vi)
+        vine_theta2_vi = get_vine_theta2_sd(vi)
+
+
+        vine_theta_hmc = get_vine_theta(hmc)
+        vine_theta2_hmc = get_vine_theta2(hmc)
+        vine_theta_hmc_sd = get_vine_theta_sd(hmc)
+        vine_theta2_hmc_sd = get_vine_theta2_sd(hmc)
+
+        plot(theta2_hmc, theta2_vi, xlab = expression(theta2[hmc]), ylab = expression(theta2[vi]))
+        abline(a= 0, b=1, col="red")
+
+        plot(theta2_hmc_sd, theta2_vi_sd, xlab = expression(sd(theta2[hmc]) ), ylab = expression(sd (theta2[vi])))
+        abline(a= 0, b=1, col="red")
+
+        plot(vine_theta_hmc, vine_theta_vi, xlab = expression(theta_vine[hmc]), ylab = expression(theta_vine[vi]))
+        abline(a= 0, b=1, col="red")
+
+        plot(vine_theta_hmc_sd, vine_theta_vi_sd, xlab = expression(sd(theta_vine[hmc]) ), ylab = expression(sd (theta_vine[vi])))
         abline(a= 0, b=1, col="red")
     }
 }

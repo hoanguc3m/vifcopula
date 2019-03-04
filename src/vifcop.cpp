@@ -834,7 +834,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     double delta_t = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 
     std::cout << "It took " << delta_t << " seconds.\n"  <<  std::endl;
-
+    transform(gid.begin(), gid.end(), gid.begin(),bind2nd(std::plus<int>(), 1));
 
     Rcpp::List holder = List::create(   Rcpp::Named("model_pars") = model_pars,
                                         Rcpp::Named("sample_hmc") = sample_hmc,

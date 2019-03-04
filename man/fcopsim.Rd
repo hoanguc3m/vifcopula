@@ -4,9 +4,9 @@
 \alias{fcopsim}
 \title{Sum of vector elements.}
 \usage{
-fcopsim(t_max, n_max, k_max = 1, family, family_latent = family,
-  gid = rep(1, n_max), tau_range = c(0.2, 0.8), tau_latent_range = c(0.2,
-  0.8), structfactor = 1, seed_num = 0)
+fcopsim(t_max, n_max, k_max = 1, family, family_latent = NULL,
+  family_vine = NULL, gid = rep(1, n_max), tau_range = c(0.2, 0.8),
+  tau_latent_range = c(0.2, 0.8), structfactor = 1, seed_num = 0)
 }
 \arguments{
 \item{...}{Numeric, complex, or logical vectors.}

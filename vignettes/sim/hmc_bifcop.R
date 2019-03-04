@@ -26,6 +26,8 @@ init <- list(copula_type = datagen$family,
              latent_copula_type = datagen$family_latent)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_gauss <- vifcopula::hmcfcop(data,init,other)
+plot(hmc_gauss)
+compare_vi_hmc(vi_gauss, hmc_gauss)
 ################################################################################
 
 datagen_student <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max, gid = gid,

@@ -30,6 +30,9 @@ init <- list(copula_type = datagen$family,
              vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_gauss <- vifcopula::hmcfcop(data,init,other)
+plot(hmc_gauss)
+vi_gauss <- vifcopula::vifcop(data,init,other)
+
 ################################################################################
 
 datagen_student <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max, gid = gid,
@@ -238,7 +241,7 @@ plot.new()
 dev.off()
 
 ###############################################################################
-pdf(file='img/VIvsHMCbifcop.pdf', width = 18, height = 6)
+pdf(file='img/VIvsHMCfvcop.pdf', width = 18, height = 6)
 par(mfrow =c(2,6))
 par(mar=c(5,5,3,1))
 

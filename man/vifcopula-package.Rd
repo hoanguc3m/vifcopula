@@ -5,6 +5,9 @@
 \alias{vifcopula-package}
 \alias{vifcopula}
 \title{Variational Inference of factor copulas}
+\description{
+Variational Inference of factor copulas
+}
 \details{
 \tabular{ll}{
 Package: \tab vifcopula\cr

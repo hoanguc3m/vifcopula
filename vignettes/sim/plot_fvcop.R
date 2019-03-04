@@ -28,14 +28,7 @@ other <- list(seed = 100909, core = 8, iter = 1000,
               adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_gauss <- vifcopula::vifcop(data,init,other)
 compare_sim_vi(datagen_gauss, vi_gauss)
-
-plot(datagen$v, head(vi_gauss$mean_vi,t_max))
-abline(a = 0, b = 1, col = "red")
-plot(datagen$theta, vi_gauss$mean_vi[(t_max+1):(t_max+n_max)])
-abline(a = 0, b = 1, col = "red")
-plot(datagen$theta_vine, tail(vi_gauss$mean_vi,n_max - max(gid)))
-abline(a = 0, b = 1, col = "red")
-
+plot(vi_gauss)
 #############################################################################
 
 datagen_student <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max, gid = gid,
