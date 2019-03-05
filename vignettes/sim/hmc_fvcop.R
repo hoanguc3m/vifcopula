@@ -31,6 +31,8 @@ init <- list(copula_type = datagen$family,
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_gauss <- vifcopula::hmcfcop(data,init,other)
 plot(hmc_gauss)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
 vi_gauss <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
@@ -51,6 +53,9 @@ init <- list(copula_type = datagen$family,
              vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_student <- vifcopula::hmcfcop(data,init,other)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
+vi_student <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
@@ -68,6 +73,9 @@ init <- list(copula_type = datagen$family,
              vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_clayton <- vifcopula::hmcfcop(data,init,other)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
+vi_clayton <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
@@ -85,6 +93,9 @@ init <- list(copula_type = datagen$family,
              vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_gumbel <- vifcopula::hmcfcop(data,init,other)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
+vi_gumbel <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 
@@ -103,6 +114,9 @@ init <- list(copula_type = datagen$family,
              vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_frank <- vifcopula::hmcfcop(data,init,other)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
+vi_frank <- vifcopula::vifcop(data,init,other)
 
 ###############################################################################
 
@@ -121,11 +135,14 @@ init <- list(copula_type = datagen$family,
              vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_joe <- vifcopula::hmcfcop(data,init,other)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
+vi_joe <- vifcopula::vifcop(data,init,other)
 
 ###############################################################################
 
 copfamily = sample(c(1,2,3,4,5,6), size = n_max, replace = T)
-latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
+latentcopfamily = sample(c(1,3,4,5,6),size = n_max - max(gid), replace = T)
 
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                        family = copfamily, family_vine = latentcopfamily,
@@ -139,9 +156,13 @@ data <- list(u = datagen$u,
              gid = datagen$gid,
              structfactor = datagen$structfactor)
 init <- list(copula_type = datagen$family,
-             latent_copula_type = datagen$family_vine)
+             vine_copula_type = datagen$family_vine,
+             vine_edges = datagen$egdes)
 other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
 hmc_mix <- vifcopula::hmcfcop(data,init,other)
+other <- list(seed = 126, core = 8, iter = 1000,
+              tol_rel_obj = 0.01, copselect = F, modelselect = F)
+vi_mix <- vifcopula::vifcop(data,init,other)
 
 
 ###############################################################################

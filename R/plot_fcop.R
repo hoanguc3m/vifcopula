@@ -69,7 +69,7 @@ compare_sim_vi <- function(datagen,vi){
         abline(a= 0, b=1, col="red")
 
         }
-
+    par(mfrow =c(1,1))
 }
 
 #' @export
@@ -124,6 +124,7 @@ plot.vifcop <- function(vi) {
 
         hist(vine_theta2_vi, xlab = expression(theta_vine2[t]))
     }
+    par(mfrow =c(1,1))
 }
 
 #' @export
@@ -175,6 +176,7 @@ plot.hmcfcop <- function(hmc) {
         hist(vine_tau_hmc, xlab = expression(tau_vine[t]) )
         hist(vine_theta2_hmc, xlab = expression(theta_vine2[t]))
     }
+    par(mfrow =c(1,1))
 }
 
 
@@ -282,6 +284,7 @@ compare_vi_hmc <- function(vi,hmc){
         plot(vine_theta_hmc_sd, vine_theta_vi_sd, xlab = expression(sd(theta_vine[hmc]) ), ylab = expression(sd (theta_vine[vi])))
         abline(a= 0, b=1, col="red")
     }
+    par(mfrow =c(1,1))
 }
 
 #' @export

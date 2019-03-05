@@ -305,7 +305,7 @@ get_v0.hmcfcop <- function(hmc) {
 #' @export
 get_v.hmcfcop <- function(hmc) {
     v_out <- NULL
-    if (vi$structfactor == 1 | vi$structfactor == 11 | vi$structfactor == 4 | vi$structfactor == 14){
+    if (hmc$structfactor == 1 | hmc$structfactor == 11 | hmc$structfactor == 4 | hmc$structfactor == 14){
         v_out <- get_v0(hmc)
     } else {
         t_max <- hmc$t_max
