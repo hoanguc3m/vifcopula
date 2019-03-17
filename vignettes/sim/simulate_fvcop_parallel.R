@@ -72,7 +72,7 @@ task_fvcop <- function(seed_num, family, family_vine){
        vi_criteria = vi$criteria,
        vi_rng_criteria = vi_rng$criteria,
        correct_vine = sum(vi_rng$vine_copula_type == datagen$family_vine) / (n_max - g_max) * 100,
-       correct_edges = check_edges(vi, vi_rng)/ (n_max - g_max),
+       correct_edges = check_edges(vi, vi_rng)/ (n_max - g_max) * 100,
        seed_num = seed_num)
 }
 
@@ -98,6 +98,7 @@ Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(se
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
+
 
 Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
@@ -179,7 +180,7 @@ AIC_rng <- c(vi_gauss[10], vi_student[10], vi_clayton[10], vi_gumbel[10], vi_fra
 BIC_rng <- c(vi_gauss[11], vi_student[11], vi_clayton[11], vi_gumbel[11], vi_frank[11], vi_joe[11], vi_mix[11])/t_max
 logP_rng <- c(vi_gauss[12], vi_student[12], vi_clayton[12], vi_gumbel[12], vi_frank[12], vi_joe[12], vi_mix[12])/t_max
 
-correct_vine_percent <- c(vi_gauss[13], vi_student[13], vi_clayton[13], vi_gumbel[13], vi_frank[13], vi_joe[13], vi_mix[13])
+correct_vine_percent <- c(vi_gauss[14], vi_student[14], vi_clayton[14], vi_gumbel[14], vi_frank[14], vi_joe[14], vi_mix[14])
 print(correct_vine_percent, digits = 0)
 
 rng_tab <- rbind(iter_num, correct_percent, correct_vine_percent, ELBO_rng, AIC_rng, BIC_rng, logP_rng)

@@ -59,7 +59,8 @@ vi_student <- vifcopula::vifcop(data,init,other)
 
 ################################################################################
 datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                           family = 3, family_vine = 3, seed_num = 0,
+                           tau_range = c(0.2,0.8), tau_latent_range = c(0.2,0.5),
+                           family = 3, family_vine = 3, seed_num = 84210,
                            structfactor = 4)
 datagen <- datagen_clayton
 data <- list(u = datagen$u,
@@ -121,7 +122,8 @@ vi_frank <- vifcopula::vifcop(data,init,other)
 ###############################################################################
 
 datagen_joe <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                       family = 6, family_vine = 6, seed_num = 100,
+                       tau_range = c(0.2,0.8), tau_latent_range = c(0.2,0.5),
+                       family = 6, family_vine = 6, seed_num = 985412,
                        structfactor = 4)
 datagen <- datagen_joe
 data <- list(u = datagen$u,
@@ -182,150 +184,204 @@ compare_vi_hmc(vi_joe, hmc_joe)
 compare_vi_hmc(vi_mix, hmc_mix)
 
 #############################################################################
-
-pdf(file='img/VIHMCfvcop.pdf', width = 18, height = 12)
-par(mfrow =c(4,6))
+setwd("/home/hoanguc3m/Dropbox/Wp4/")
+pdf(file='img/VIHMCfvcop.pdf', width = 21, height = 12)
+par(mfrow =c(4,7))
 par(mar=c(5,5,3,1))
 
-plot(get_v0_sd(hmc_gauss), get_v0_sd(vi_gauss),
-     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+plot(get_v0(hmc_gauss), get_v0(vi_gauss),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
      main = " Gaussian truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0(hmc_student), get_v0(vi_student),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
+     main = " Student truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0(hmc_clayton), get_v0(vi_clayton),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
+     main = " Clayton truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0(hmc_gumbel), get_v0(vi_gumbel),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
+     main = " Gumbel truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0(hmc_frank), get_v0(vi_frank),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
+     main = " Frank truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0(hmc_joe), get_v0(vi_joe),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
+     main = " Joe truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_v0(hmc_mix), get_v0(vi_mix),
+     xlab = expression(v0[hmc] ), ylab = expression(v0[vi]),
+     main = " Mix truncated factor vine copula")
+abline(a= 0, b=1, col="red")
+
+
+##############################
+
+
+plot(get_v0_sd(hmc_gauss), get_v0_sd(vi_gauss),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_student), get_v0_sd(vi_student),
-     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Student truncated factor vine copula")
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_clayton), get_v0_sd(vi_clayton),
-     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Clayton truncated factor vine copula")
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_gumbel), get_v0_sd(vi_gumbel),
-     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Gumbel truncated factor vine copula")
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_frank), get_v0_sd(vi_frank),
-     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Frank truncated factor vine copula")
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_joe), get_v0_sd(vi_joe),
-     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Joe truncated factor vine copula")
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
 abline(a= 0, b=1, col="red")
 
+plot(get_v0_sd(hmc_mix), get_v0_sd(vi_mix),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd(v0[vi])),
+     main = "")
+abline(a= 0, b=1, col="red")
+#########################################
 
-plot(get_theta_sd(hmc_gauss), get_theta_sd(vi_gauss),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Gaussian truncated factor vine copula")
+
+plot( c(get_theta(hmc_gauss),
+        get_vine_theta(hmc_gauss)),
+      c(get_theta(vi_gauss),
+        get_vine_theta(vi_gauss)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta_sd(hmc_student), get_theta_sd(vi_student),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Student truncated factor vine copula")
+plot( c(get_theta(hmc_student),
+        get_theta2(hmc_student),
+        get_vine_theta(hmc_student)),
+      c(get_theta(vi_student),
+        get_theta2(vi_student),
+        get_vine_theta(vi_student)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta_sd(hmc_clayton), get_theta_sd(vi_clayton),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Clayton truncated factor vine copula")
+plot( c(get_theta(hmc_clayton),
+        get_vine_theta(hmc_clayton)),
+      c(get_theta(vi_clayton),
+        get_vine_theta(vi_clayton)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta_sd(hmc_gumbel), get_theta_sd(vi_gumbel),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Gumbel truncated factor vine copula")
+plot( c(get_theta(hmc_gumbel),
+        get_vine_theta(hmc_gumbel)),
+      c(get_theta(vi_gumbel),
+        get_vine_theta(vi_gumbel)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta_sd(hmc_frank), get_theta_sd(vi_frank),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Frank truncated factor vine copula")
+plot( c(get_theta(hmc_frank),
+        get_vine_theta(hmc_frank)),
+      c(get_theta(vi_frank),
+        get_vine_theta(vi_frank)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta_sd(hmc_joe), get_theta_sd(vi_joe),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Joe truncated factor vine copula")
+plot( c(get_theta(hmc_joe),
+        get_vine_theta(hmc_joe)),
+      c(get_theta(vi_joe),
+        get_vine_theta(vi_joe)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot.new()
-
-plot(get_theta2_sd(hmc_student), get_theta2_sd(vi_student),
-     xlab = expression(sd(theta2[hmc]) ), ylab = expression(sd (theta2[vi])),
-     main = " Student truncated factor vine copula")
+plot( c(get_theta(hmc_mix),
+        get_vine_theta(hmc_mix)),
+      c(get_theta(vi_mix),
+        get_vine_theta(vi_mix)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot.new()
-plot.new()
-plot.new()
-plot.new()
-dev.off()
-
-###############################################################################
-pdf(file='img/VIvsHMCfvcop.pdf', width = 18, height = 6)
-par(mfrow =c(2,6))
-par(mar=c(5,5,3,1))
-
-plot(get_theta(hmc_gauss), get_theta(vi_gauss) ,
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-     main = " Gaussian truncated factor vine copula")
+##################################
+plot( c(get_theta_sd(hmc_gauss),
+        get_vine_theta_sd(hmc_gauss)),
+      c(get_theta_sd(vi_gauss),
+        get_vine_theta_sd(vi_gauss)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta(hmc_student), get_theta(vi_student),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-     main = " Student truncated factor vine copula")
+plot( c(get_theta_sd(hmc_student),
+        get_theta2_sd(hmc_student),
+        get_vine_theta_sd(hmc_student)),
+      c(get_theta_sd(vi_student),
+        get_theta2_sd(vi_student),
+        get_vine_theta_sd(vi_student)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta(hmc_clayton), get_theta(vi_clayton),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-     main = " Clayton truncated factor vine copula")
+plot( c(get_theta_sd(hmc_clayton),
+        get_vine_theta_sd(hmc_clayton)),
+      c(get_theta_sd(vi_clayton),
+        get_vine_theta_sd(vi_clayton)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta(hmc_gumbel), get_theta(vi_gumbel),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-     main = " Gumbel truncated factor vine copula")
+plot( c(get_theta_sd(hmc_gumbel),
+        get_vine_theta_sd(hmc_gumbel)),
+      c(get_theta_sd(vi_gumbel),
+        get_vine_theta_sd(vi_gumbel)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta(hmc_frank), get_theta(vi_frank),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-     main = " Frank truncated factor vine copula")
+plot( c(get_theta_sd(hmc_frank),
+        get_vine_theta_sd(hmc_frank)),
+      c(get_theta_sd(vi_frank),
+        get_vine_theta_sd(vi_frank)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta(hmc_joe), get_theta(vi_joe),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-     main = " Joe truncated factor vine copula")
+plot( c(get_theta_sd(hmc_joe),
+        get_vine_theta_sd(hmc_joe)),
+      c(get_theta_sd(vi_joe),
+        get_vine_theta_sd(vi_joe)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-
-plot(get_theta_sd(hmc_gauss), get_theta_sd(vi_gauss),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Gaussian truncated factor vine copula")
+plot( c(get_theta_sd(hmc_mix),
+        get_vine_theta_sd(hmc_mix)),
+      c(get_theta_sd(vi_mix),
+        get_vine_theta_sd(vi_mix)),
+      xlab = expression(theta[hmc] ), ylab = expression(theta[vi]),
+      main = "")
 abline(a= 0, b=1, col="red")
 
-plot(get_theta_sd(hmc_student), get_theta_sd(vi_student),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Student truncated factor vine copula")
-abline(a= 0, b=1, col="red")
-
-plot(get_theta_sd(hmc_clayton), get_theta_sd(vi_clayton),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Clayton truncated factor vine copula")
-abline(a= 0, b=1, col="red")
-
-plot(get_theta_sd(hmc_gumbel), get_theta_sd(vi_gumbel),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Gumbel truncated factor vine copula")
-abline(a= 0, b=1, col="red")
-
-plot(get_theta_sd(hmc_frank), get_theta_sd(vi_frank),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Frank truncated factor vine copula")
-abline(a= 0, b=1, col="red")
-
-plot(get_theta_sd(hmc_joe), get_theta_sd(vi_joe),
-     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Joe truncated factor vine copula")
-abline(a= 0, b=1, col="red")
-
+##################################
 dev.off()
 
