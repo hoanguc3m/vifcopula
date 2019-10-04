@@ -129,20 +129,20 @@ using namespace stan;
                                     nud2p1[n] *   logM              ;
 
          // Calculate the derivative when the type is var (not double)
-         if (!is_constant_struct<T_u>::value)
+         if (!is_constant_all<T_u>::value)
             ops_partials.edge1_.partials_[n] += ((nu_value[n] + 1) *  inv_u_dbl[n] / (  nu_value[n] + square(inv_u_dbl[n]) )
                                                 - (nu_value[n] + 2) * (inv_u_dbl[n] - rho_value[n] * inv_v_dbl[n] / M_nu_rho ) ) /
                                                 pdf(s,inv_u_dbl[n]) ;
-         if (!is_constant_struct<T_v>::value)
+         if (!is_constant_all<T_v>::value)
             ops_partials.edge2_.partials_[n] += ((nu_value[n] + 1) *  inv_v_dbl[n] / (  nu_value[n] + square(inv_v_dbl[n]) )
                                             - (nu_value[n] + 2) * (inv_v_dbl[n] - rho_value[n] * inv_u_dbl[n] ) / M_nu_rho ) /
                                             pdf(s,inv_v_dbl[n]);
 
-         if (!is_constant_struct<T_rho>::value)
+         if (!is_constant_all<T_rho>::value)
             ops_partials.edge3_.partials_[n] += - (nu_value[n] + 1) * rho_value[n] / (1 - sq_rho[n]) +
                                                (nu_value[n] + 2) * (nu_value[n] * rho_value[n] + inv_u_dbl[n] * inv_v_dbl[n] ) / M_nu_rho  ;
 
-         if (!is_constant_struct<T_nu>::value) {
+         if (!is_constant_all<T_nu>::value) {
             const T_partials_return     A_arg = nud2[n];
             const T_partials_return     B_arg = 0.5;
 

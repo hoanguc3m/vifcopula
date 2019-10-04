@@ -130,6 +130,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     }
 
+    // Overwrite preconfiguration with user settings
     if ( other.containsElementNamed("iter") )  iter = as<int>(other["iter"]);
     if ( other.containsElementNamed("n_monte_carlo_grad") )  n_monte_carlo_grad  = as<int>(other["n_monte_carlo_grad"]);
     if ( other.containsElementNamed("n_monte_carlo_elbo") )  n_monte_carlo_elbo  = as<int>(other["n_monte_carlo_elbo"]);
@@ -142,9 +143,8 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     if ( other.containsElementNamed("modelselect") ) modelselect  = as<bool>(other["modelselect"]);      // Automated copula selection
     if ( other.containsElementNamed("max_select") ) max_select  = as<int>(other["max_select"]);      // Automated number of selection
 
-    Rcpp::Rcout << " Core set : " << core << std::endl;
+    // Rcpp::Rcout << " Core set : " << core << std::endl;
     Rcpp::Rcout << " General setting :" << " Checked" << std::endl;
-
 
     // Init hyperparams ////////////////////////////////////////////////////////
     Rcpp::List init(init_);
@@ -425,6 +425,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
 
     // Turn back to gid
     transform(gid.begin(), gid.end(), gid.begin(),bind2nd(std::plus<int>(), 1));
+    // Turn negative copula to original type
     for (int i = 0; i < copula_type.size(); i++){
         if ((copula_type[i] == 21) || (copula_type[i] == 22) || (copula_type[i] == 25) ) {
             copula_type[i] -= 20;
@@ -436,6 +437,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
             latent_copula_type[i] -= 20;
         }
     }
+    // Turn negative copula to original type
     for (int i = 0; i < vine_copula_type.size(); i++){
         if ((vine_copula_type[i] == 21) || (vine_copula_type[i] == 22) || (vine_copula_type[i] == 25) ) {
             vine_copula_type[i] -= 20;
@@ -513,7 +515,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     stan::math::check_positive_finite(function, "Period", t_max);
     stan::math::check_positive_finite(function, "Number of variables", n_max);
     stan::math::check_positive_finite(function, "Number of latents", k_max);
-    stan::math::check_positive_finite(function, "factor = 1; bifactor = 2; nestfactor = 3;", structfactor);
+    stan::math::check_positive_finite(function, "factor = 1; bifactor = 2; nestfactor = 3;factorvine = 4;", structfactor);
     //  stan::math::equal(function, "Number of matrix rows",u.rows(), t_max);
     //  stan::math::equal(function, "Number of matrix cols",u.cols(), n_max);
     //  stan::math::check_consistent_size(function, "Number of matrix columns",gid, n_max);

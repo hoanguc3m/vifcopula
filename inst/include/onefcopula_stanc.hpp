@@ -154,7 +154,7 @@ public:
         for (int i = 0; i < n_max; i++){
             if (copula_type[i] == 0){
                 num_params_r__ --;
-            } else if (copula_type[i] == 2){
+            } else if (is_two_params(copula_type[i])){
                 num_params_r__ ++;
             }
 
@@ -249,17 +249,7 @@ public:
         num_params_r__ = 0U;
         param_ranges_i__.clear();
         num_params_r__ += t_max;
-        num_params_r__ += n_max;
-        for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 0) {
-                num_params_r__ --;
-            }
-            else if (copula_type[i] == 2) {
-                num_params_r__ ++;
-            }
-        }
-
-
+        num_params_r__ += count_params(copula_type);
     }
 
     void set_copula_type(std::vector<int> copula_type_) {
@@ -268,28 +258,12 @@ public:
         num_params_r__ = 0U;
         param_ranges_i__.clear();
         num_params_r__ += t_max;
-        num_params_r__ += n_max;
-        for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 0) {
-                num_params_r__ --;
-            }
-            else if (copula_type[i] == 2) {
-                num_params_r__ ++;
-            }
-        }
+        num_params_r__ += count_params(copula_type);
     }
 
     int get_eff_para(void){
         int eff_para = 0;
-        eff_para += n_max;
-        for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 0) {
-                eff_para --;
-            }
-            else if (copula_type[i] == 2) {
-                eff_para ++;
-            }
-        }
+        eff_para += count_params(copula_type);
         return eff_para;
     }
     int get_t_max(void){
@@ -298,48 +272,6 @@ public:
     int get_n_max(void){
         return n_max;
     }
-    // template <typename RNG>
-    // double calc_log_over_v( RNG& base_rng__,
-    //                         Eigen::VectorXd& mean_vi,
-    //                         int eff_num_para){
-    //     std::srand(base_rng__());
-    //
-    //     double logc = 0;
-    //     int MCnum = 1000;
-    //     vector<double> logc_t(t_max,0.0);
-    //
-    //     Eigen::VectorXd theta_12 = mean_vi.tail(eff_num_para);
-    //     int count = 0;
-    //     vector<double> theta(n_max,0.0);
-    //     vector<double> theta2(n_max,0.0);
-    //
-    //     for (int i = 0; i < n_max; i++) {
-    //         if (copula_type[i] == 2) {
-    //             theta[i] = theta_12(count); count++;
-    //             theta2[i] = theta_12(count); count++;
-    //         } else {
-    //             theta[i] = theta_12(count); count++;
-    //         }
-    //     }
-    //     for (int t = 0; t < t_max; t++) {
-    //         Eigen::VectorXd v_t = (Eigen::VectorXd::Random(MCnum)).array().abs() ; // range [-1,1]
-    //         Eigen::VectorXd logc_jt = Eigen::VectorXd::Zero(MCnum);
-    //
-    //         for (int j = 0; j < MCnum; j++) {
-    //             for (int i = 0; i < n_max; i++) {
-    //                 logc_jt(j) += bicop_log_double(copula_type[i], u(t,i), v_t(j), theta[i], theta2[i] )   ;
-    //             }
-    //         }
-    //
-    //         double max_logct = logc_jt.maxCoeff();
-    //         logc_t[t] = max_logct + log ( (logc_jt.array() - max_logct).array().exp().sum())   ;
-    //         logc_t[t] -= log(MCnum);
-    //     }
-    //
-    //     for (auto& log_val : logc_t)
-    //         logc += log_val;
-    //     return logc;
-    // }
 
     template <typename RNG>
     double calc_log_over_v( RNG& base_rng__,
@@ -376,7 +308,7 @@ public:
         vector<double> theta2(n_max,0.0);
 
         for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 2) {
+            if (is_two_params(copula_type[i])) {
                 theta[i] = theta_12(count); count++;
                 theta2[i] = theta_12(count); count++;
             } else {

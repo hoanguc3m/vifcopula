@@ -7,44 +7,19 @@
 			<Cursor1 position="216" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="130" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="bicop_joe_log_test.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1639" topLine="52" />
-		</Cursor>
-	</File>
-	<File name="../dist/bicop_gumbel_log.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4061" topLine="116" />
-		</Cursor>
-	</File>
-	<File name="bicop_student_log_test.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1403" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="imbeder_test.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="63" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="../dist/bicop_clayton_log.hpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4838" topLine="21" />
 		</Cursor>
 	</File>
-	<File name="bicop_frank_log_test.cpp" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="imbeder_test.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2754" topLine="81" />
+			<Cursor1 position="711" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="bicop_clayton_log_test.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="bicop_frank_log_test.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1638" topLine="63" />
+			<Cursor1 position="1612" topLine="66" />
 		</Cursor>
 	</File>
 	<File name="bicop_gumbel_log_test.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -52,19 +27,54 @@
 			<Cursor1 position="1706" topLine="63" />
 		</Cursor>
 	</File>
+	<File name="main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="130" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../dist/bicop_gumbel_log.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4061" topLine="116" />
+		</Cursor>
+	</File>
+	<File name="../dist/bicop_BB1_log.hpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7197" topLine="133" />
+		</Cursor>
+	</File>
+	<File name="bicop_joe_log_test.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="997" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="bicop_clayton_log_test.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1638" topLine="63" />
+		</Cursor>
+	</File>
+	<File name="bicop_BB1_log_test.cpp" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1662" topLine="38" />
+		</Cursor>
+	</File>
 	<File name="../dist/bicop_frank_log.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="3514" topLine="67" />
 		</Cursor>
 	</File>
-	<File name="../dist/bicop_student_log.hpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="bicop_student_log_test.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7035" topLine="0" />
+			<Cursor1 position="1403" topLine="12" />
 		</Cursor>
 	</File>
 	<File name="bicop_normal_log_test.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="83" topLine="4" />
+		</Cursor>
+	</File>
+	<File name="../dist/bicop_student_log.hpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7035" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

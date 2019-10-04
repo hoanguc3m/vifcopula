@@ -1,9 +1,9 @@
 Package: vifcopula
 Type: Package
 Title: Variational Inference for Factor Copulas
-Version: 0.1.0 
-Authors@R: person("Nguyen", "Hoang", role = c("aut", "cre"), email = "hoang.nguyen@uc3m.es")
-Maintainer: Hoang Nguyen  <hoang.nguyen@uc3m.es>
+Version: 0.2.0 
+Authors@R: person("Nguyen", "Hoang", role = c("aut", "cre"), email = "hoang.nguyen@oru.se")
+Maintainer: Hoang Nguyen  <hoang.nguyen@oru.se>
 URL: https://github.com/hoanguc3m/vifcopula
 BugReports: https://github.com/hoanguc3m/vifcopula/issue
 Description: Variational Inference and model selection for multi-factor and structure factor copulas.

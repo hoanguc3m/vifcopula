@@ -31,14 +31,26 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
+			<Add option="-w" />
 			<Add option="-pthread" />
+			<Add option="-std=c++1y" />
+			<Add option="-Wno-sign-compare" />
 			<Add directory="/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include" />
+			<Add directory="/home/hoanguc3m/R/x86_64-pc-linux-gnu-library/3.6/StanHeaders/include" />
+			<Add directory="/home/hoanguc3m/Code/math/lib/eigen_3.3.3" />
+			<Add directory="/home/hoanguc3m/Code/math/lib/boost_1.69.0" />
+			<Add directory="/home/hoanguc3m/Code/math/lib/sundials_4.1.0/include" />
 		</Compiler>
+		<ResourceCompiler>
+			<Add option="-D_REENTRANT" />
+			<Add option="-O3" />
+			<Add option="-DBOOST_DISABLE_ASSERTS" />
+		</ResourceCompiler>
 		<Linker>
 			<Add option="-lgtest" />
 			<Add option="-pthread" />
 		</Linker>
+		<Unit filename="../dist/bicop_BB1_log.hpp" />
 		<Unit filename="../dist/bicop_clayton_log.hpp" />
 		<Unit filename="../dist/bicop_frank_log.hpp" />
 		<Unit filename="../dist/bicop_gumbel_log.hpp" />
@@ -47,6 +59,7 @@
 		<Unit filename="../dist/bicop_log.hpp" />
 		<Unit filename="../dist/bicop_normal_log.hpp" />
 		<Unit filename="../dist/bicop_student_log.hpp" />
+		<Unit filename="bicop_BB1_log_test.cpp" />
 		<Unit filename="bicop_clayton_log_test.cpp" />
 		<Unit filename="bicop_frank_log_test.cpp" />
 		<Unit filename="bicop_gumbel_log_test.cpp" />

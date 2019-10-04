@@ -5,6 +5,8 @@
 
 namespace vifcopula{
 
+using std::vector;
+
 void write_theta(int id, int copula_type,
                 stan::io::reader<double>& in__,
                 std::vector<double>& vars__){
@@ -18,24 +20,11 @@ void write_theta(int id, int copula_type,
         // Independent copula
         break;
     case 1:
-        // Gaussian copula
-        // if (id == 0){
-        //     theta = in__.scalar_lub_constrain(0,1);
-        // } else {
-        //     theta = in__.scalar_lub_constrain(-0.9,1);
-        // }
         theta = in__.scalar_lub_constrain(0,0.99);
 
         vars__.push_back(theta);
         break;
     case 2:
-        // Student copula
-        // if (id == 0){
-        //     theta = in__.scalar_lub_constrain(0,1);
-        // } else {
-        //     theta = in__.scalar_lub_constrain(-0.9,1);
-        // }
-
         theta = in__.scalar_lub_constrain(0,0.99);
         theta2 = in__.scalar_lub_constrain(2.001,30);
         vars__.push_back(theta);
@@ -60,6 +49,13 @@ void write_theta(int id, int copula_type,
         // Joe copula
         theta = in__.scalar_lub_constrain(1,20);
         vars__.push_back(theta);
+        break;
+    case 7:
+        // BB1 copula
+        theta = in__.scalar_lub_constrain(0,7);
+        theta2 = in__.scalar_lub_constrain(1,7);
+        vars__.push_back(theta);
+        vars__.push_back(theta2);
         break;
 
     case 13:
@@ -135,6 +131,32 @@ void write_theta(int id, int copula_type,
     }
 
 
+}
+
+int count_params(vector<int> copula_type){
+    int num_params = 0;
+    int n_max = copula_type.size();
+    num_params += n_max;
+
+    for (int i = 0; i < n_max; i++) {
+        int cop_fam = copula_type[i] % 10;
+        if ( cop_fam == 0) {
+            num_params --;
+        }
+        else if (cop_fam == 2 || cop_fam == 7) {
+            num_params ++;
+        }
+    }
+    return(num_params);
+}
+bool is_two_params(int copula_family){
+    bool bool_two_param = false;
+    int cop_fam = copula_family % 10;
+
+    if (cop_fam == 2 || cop_fam == 7){
+        bool_two_param = true;
+    }
+    return(bool_two_param);
 }
 
 } // namespace

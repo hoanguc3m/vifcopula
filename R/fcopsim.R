@@ -35,30 +35,52 @@ rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8) {
 
     if ((family == 23) | (family == 33) |
             (family == 24) | (family == 34) |
-            (family == 26) | (family == 36) ) {
+            (family == 26) | (family == 36) |
+            (family == 27) | (family == 37)) {
         tau_neg_max = - abs(tau_min)
         tau_neg_min = - abs(tau_max)
         tau_max = tau_neg_max
         tau_min = tau_neg_min
     }
 
-    max_theta = BiCopTau2Par(family, tau_max, check.taus = TRUE)
-    min_theta = BiCopTau2Par(family, tau_min, check.taus = TRUE)
+    if ((family == 7) | (family == 17) | (family == 27) | (family == 37)) {
+        rep = TRUE
+        while (rep) {
+            theta_sample = rgamma(1, shape = .25, rate = .25)
+            delta_sample = 1 + rgamma(1, shape = .25, rate = .25)
+            tau = 1 - 2/(delta_sample * (theta_sample +2))
+            if ((family == 27) | (family == 37)) {
+                theta_sample = - theta_sample
+                delta_sample = - delta_sample
+                tau = -tau
+            }
+            if ( tau <= tau_max & tau >= tau_min & abs(theta_sample) < 7 & abs(delta_sample) < 7){
+                theta_gen = c(theta_sample, delta_sample)
+                rep = FALSE
+            }
 
-    if (family == 1) theta_gen[1] = runif(1, min = min_theta, max = max_theta)
-    if (family == 2) {
-        unif_rand = BiCopSim(1,family = 1, par = 0.8)
-        theta_gen[1] = qunif(unif_rand[1], min = min_theta, max = max_theta)
-        theta_gen[2] = qunif(unif_rand[2], min = 2, max = 15)
+        }
+
+    } else {
+        max_theta = BiCopTau2Par(family, tau_max, check.taus = TRUE)
+        min_theta = BiCopTau2Par(family, tau_min, check.taus = TRUE)
+
+        if (family == 1) theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+        if (family == 2) {
+            unif_rand = BiCopSim(1,family = 1, par = 0.8)
+            theta_gen[1] = qunif(unif_rand[1], min = min_theta, max = max_theta)
+            theta_gen[2] = qunif(unif_rand[2], min = 2, max = 15)
+        }
+        if ((family == 3) | (family == 13) | (family == 23) | (family == 33))
+            theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+        if ((family == 4) | (family == 14) | (family == 24) | (family == 34))
+            theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+        if (family == 5)
+            theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+        if ((family == 6) | (family == 16) | (family == 26) | (family == 36))
+            theta_gen[1] = runif(1, min = min_theta, max = max_theta)
+
     }
-    if ((family == 3) | (family == 13) | (family == 23) | (family == 33))
-        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
-    if ((family == 4) | (family == 14) | (family == 24) | (family == 34))
-        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
-    if (family == 5)
-        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
-    if ((family == 6) | (family == 16) | (family == 26) | (family == 36))
-        theta_gen[1] = runif(1, min = min_theta, max = max_theta)
 
     theta_gen
 }
@@ -285,18 +307,6 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = NULL, famil
 
         }
         #tau_mat[,1] <- BiCopPar2Tau(family = family, par = theta[,1], par2 = theta[,2] )
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     list( u = u,

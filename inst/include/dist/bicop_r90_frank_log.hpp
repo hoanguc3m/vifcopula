@@ -35,6 +35,7 @@ using namespace stan;
       using std::log;
       using std::pow;
       using std::exp;
+      using std::abs;
 
       if (!(stan::length(u)
             && stan::length(v)

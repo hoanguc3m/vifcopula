@@ -67,5 +67,5 @@ TEST(Copula_density, DISABLE_r90_Joe_copula_v) {
         double lp1adj = v.adj();
 
         EXPECT_FLOAT_EQ(lp1val,-0.9951867);
-        EXPECT_FLOAT_EQ(lp1adj,5.377055);
+        EXPECT_FLOAT_EQ(lp1adj,2.3274324);
 }

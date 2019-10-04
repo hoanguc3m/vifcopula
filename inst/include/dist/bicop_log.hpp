@@ -8,6 +8,7 @@
 #include <dist/bicop_gumbel_log.hpp>
 #include <dist/bicop_frank_log.hpp>
 #include <dist/bicop_joe_log.hpp>
+#include <dist/bicop_BB1_log.hpp>
 
 #include <dist/bicop_survival_clayton_log.hpp>
 #include <dist/bicop_survival_gumbel_log.hpp>
@@ -20,6 +21,7 @@
 #include <dist/bicop_r270_clayton_log.hpp>
 #include <dist/bicop_r270_gumbel_log.hpp>
 #include <dist/bicop_r270_joe_log.hpp>
+
 
 namespace vifcopula {
 
@@ -146,7 +148,27 @@ void bicop_log_add(int i,
         lp_accum__.add( log_2 - 2 * log( theta[i] + 2 ) );
 
         break;
+    case 7:
+        // BB1 copula
 
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(0,7,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(0,7);
+
+
+        if (jacobian__)
+            theta2[i] = in__.scalar_lub_constrain(1,7,lp__);
+        else
+            theta2[i] = in__.scalar_lub_constrain(1,7);
+
+        lp_accum__.add(bicop_BB1_log<propto__>(u,
+                                                   v,
+                                                   get_base1(theta,ibase,"theta",1),
+                                                   get_base1(theta2,ibase,"theta",1)));
+        lp_accum__.add( (0.25-1) * log(theta[i]) - 0.25 * theta[i]  ); // Add prior
+        lp_accum__.add( (0.25-1) * log(theta2[i] - 1) - 0.25 * (theta2[i] - 1)  ); // Add prior
+        break;
     case 13:
         // survival Clayton copula
 
@@ -375,6 +397,10 @@ void bicop_log_latent(int i,
         // Joe copula
         lp_accum__.add(bicop_joe_log<propto__>(u,v,theta[i]));
         break;
+    case 7:
+        // BB1 copula
+        lp_accum__.add(bicop_BB1_log<propto__>(u,v,theta[i],theta2[i]));
+        break;
 
     case 13:
         // survival Clayton copula
@@ -478,7 +504,10 @@ double bicop_log_double( const int copula_type,
         // Joe copula
         log_bicop = bicop_joe_log<FALSE>(u,v,theta);
         break;
-
+    case 7:
+        // Student copula
+        log_bicop = bicop_BB1_log<FALSE>(u,v,theta,theta2);
+        break;
     case 13:
         // survival Clayon copula
         log_bicop = bicop_survival_clayton_log<FALSE>(u,v,theta);
