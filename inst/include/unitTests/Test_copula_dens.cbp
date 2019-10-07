@@ -58,7 +58,10 @@
 		<Unit filename="../dist/bicop_joe_log.hpp" />
 		<Unit filename="../dist/bicop_log.hpp" />
 		<Unit filename="../dist/bicop_normal_log.hpp" />
+		<Unit filename="../dist/bicop_r270_BB1_log.hpp" />
+		<Unit filename="../dist/bicop_r90_BB1_log.hpp" />
 		<Unit filename="../dist/bicop_student_log.hpp" />
+		<Unit filename="../dist/bicop_survival_BB1_log.hpp" />
 		<Unit filename="bicop_BB1_log_test.cpp" />
 		<Unit filename="bicop_clayton_log_test.cpp" />
 		<Unit filename="bicop_frank_log_test.cpp" />

@@ -23,8 +23,8 @@ task_nestfcop <- function(seed_num, family, family_latent){
     # gauss_init <- matrix(1, nrow = n_max, ncol = 1)
     # gauss_latent_init <- matrix(1, nrow = k_max-1, ncol = 1)
 
-    copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
-    copfamily_latent_init <- sample(c(1,3,4,5,6),size = k_max-1, replace = T)
+    copfamily_init <- sample(c(1,2,3,4,5,6,7),size = 100, replace = T)
+    copfamily_latent_init <- sample(c(1,3,4,5,6,7),size = k_max-1, replace = T)
 
     datagen <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                        family = family, family_latent = family_latent,

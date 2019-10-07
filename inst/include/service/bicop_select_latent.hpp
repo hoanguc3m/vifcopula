@@ -40,17 +40,18 @@ double bicop_select_latent(std::vector<double>& u,
         return return_cop;
 
     } else {
-        const int cop_seq_size = 8;                     // Change the number
-        std::vector<int> cop_seq = {1, 3, 4, 5, 6, 13, 14, 16};
+        const int cop_seq_size = 10;                     // Change the number
+        std::vector<int> cop_seq = {1, 3, 4, 5, 6, 7, 13, 14, 16, 17};
 
         double tau = biuv.kendall();
         if (tau < 0){
-            cop_seq = {21, 23, 24, 25, 26, 33, 34, 36};
+            cop_seq = {21, 23, 24, 25, 26, 27, 33, 34, 36, 37};
         }
 
-        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0};
-        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0};
-        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0};
+        //Change the number
+        std::vector<double> log_cop(cop_seq_size, 0.0);
+        std::vector<double> AIC(cop_seq_size, 0.0);
+        std::vector<double> BIC(cop_seq_size, 0.0);
 
         int imax=0;
         for (int i = 0; i < cop_seq_size; i++) {
@@ -66,7 +67,7 @@ double bicop_select_latent(std::vector<double>& u,
             log_cop[i] = lp;
 
 
-            if ((cop_seq[i] == 2) || (cop_seq[i] == 22) ){
+            if (is_two_params(cop_seq[i]) ){
                 AIC[i] = -2 * lp + 2 * 2;
                 BIC[i] = -2 * lp + log(t_max) * 2;
             } else {
@@ -99,9 +100,6 @@ double bicop_select_latent(std::vector<double>& u,
     }
     params_out.resize(2); // For theta, theta2 even we dont use it.
 
-    // std::cout << " Select cop latent " << return_cop << " Lp " << lpmax << " "
-    //           << " BIC " << BICmin << " " << params_out[0] << " "
-    //             << params_out[1] << std::endl;
     return return_cop;
 }   // end func
 

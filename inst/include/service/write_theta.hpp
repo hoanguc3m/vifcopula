@@ -73,6 +73,13 @@ void write_theta(int id, int copula_type,
         theta = in__.scalar_lub_constrain(1,20);
         vars__.push_back(theta);
         break;
+    case 17:
+        // survival BB1 copula
+        theta = in__.scalar_lub_constrain(0,7);
+        theta2 = in__.scalar_lub_constrain(1,7);
+        vars__.push_back(theta);
+        vars__.push_back(theta2);
+        break;
 
     case 21:
 
@@ -108,6 +115,13 @@ void write_theta(int id, int copula_type,
         theta = in__.scalar_lub_constrain(-20,-1);
         vars__.push_back(theta);
         break;
+    case 27:
+        // rotated 90 degree BB1 copula
+        theta = in__.scalar_lub_constrain(-7,0);
+        theta2 = in__.scalar_lub_constrain(-7,-1);
+        vars__.push_back(theta);
+        vars__.push_back(theta2);
+        break;
 
     case 33:
         // rotated 270 degree Clayon copula
@@ -124,6 +138,14 @@ void write_theta(int id, int copula_type,
         theta = in__.scalar_lub_constrain(-20,-1);
         vars__.push_back(theta);
         break;
+    case 37:
+        // rotated 270 degree BB1 copula
+        theta = in__.scalar_lub_constrain(-7,0);
+        theta2 = in__.scalar_lub_constrain(-7,-1);
+        vars__.push_back(theta);
+        vars__.push_back(theta2);
+        break;
+
     default:
         // Code to execute if <variable> does not equal the value following any of the cases
         // Send a break message.

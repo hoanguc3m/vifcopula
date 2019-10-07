@@ -59835,13 +59835,28 @@
 	<stan/math/rev/mat/fun/to_var.hpp>
 	<vector>
 
-1569852736 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_BB1_log_test.cpp
+1570192266 source:/home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/unitTests/bicop_BB1_log_test.cpp
 	<stan/math.hpp>
 	<gtest/gtest.h>
 	<dist/bicop_BB1_log.hpp>
+	<dist/bicop_survival_BB1_log.hpp>
+	<dist/bicop_r90_BB1_log.hpp>
+	<dist/bicop_r270_BB1_log.hpp>
 	<iostream>
 
-1569939071 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_BB1_log.hpp
+1569941133 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_BB1_log.hpp
+	<stan/math.hpp>
+	<iostream>
+
+1570188803 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_survival_BB1_log.hpp
+	<stan/math.hpp>
+	<iostream>
+
+1570195717 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r90_BB1_log.hpp
+	<stan/math.hpp>
+	<iostream>
+
+1570189444 /home/hoanguc3m/Dropbox/WP2/code/vifcopula/inst/include/dist/bicop_r270_BB1_log.hpp
 	<stan/math.hpp>
 	<iostream>
 

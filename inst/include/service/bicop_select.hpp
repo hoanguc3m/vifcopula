@@ -6,6 +6,7 @@
 #include <bicopula_stanc.hpp>
 #include <stan/services/optimize/bfgs.hpp>
 #include <stan/optimization/bfgs.hpp>
+#include <iostream>
 
 
 template <class T>
@@ -34,10 +35,7 @@ double bicop_select(std::vector<double>& u,
                     std::vector<double>& params_out,
                     rng_t& base_rng){
 
-    std::vector<double> params_r(2);
-    params_r[0] = 1;
-    params_r[1] = 0;
-    std::vector<int> params_i(0);
+
     bool save_iterations = false;
     int refresh = 0;
     int return_code;
@@ -61,17 +59,24 @@ double bicop_select(std::vector<double>& u,
         if (tau < 0){                                   // Change the number
             cop_seq = {21, 22, 23, 24, 25, 26, 27, 33, 34, 36, 37};
         }
-        // Change the number
-        double log_cop[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        double AIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        double BIC[cop_seq_size] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        //Change the number
+        std::vector<double> log_cop(cop_seq_size, 0.0);
+        std::vector<double> AIC(cop_seq_size, 0.0);
+        std::vector<double> BIC(cop_seq_size, 0.0);
 
         int imax=0;
 
         for (int i = 0; i < cop_seq_size; i++) {
+            std::vector<double> params_r(2);
+            params_r[0] = 1.;
+            params_r[1] = 1.;
+            std::vector<int> params_i(0);
+
             biuv.set_copula_type(cop_seq[i]);
             std::stringstream out;
            Optimizer_BFGS * bfgs = new Optimizer_BFGS(biuv, params_r, params_i);
+           // std::cout << "Check cop " << cop_seq[i] << " " << params_r[0] << " " << params_r[1] << " " << bfgs->logp() << std::endl;
+
            //Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
             double lp = 0;
             int ret = 0;

@@ -13,15 +13,17 @@
 #include <dist/bicop_survival_clayton_log.hpp>
 #include <dist/bicop_survival_gumbel_log.hpp>
 #include <dist/bicop_survival_joe_log.hpp>
+#include <dist/bicop_survival_BB1_log.hpp>
 
 #include <dist/bicop_r90_clayton_log.hpp>
 #include <dist/bicop_r90_gumbel_log.hpp>
 #include <dist/bicop_r90_joe_log.hpp>
+#include <dist/bicop_r90_BB1_log.hpp>
 
 #include <dist/bicop_r270_clayton_log.hpp>
 #include <dist/bicop_r270_gumbel_log.hpp>
 #include <dist/bicop_r270_joe_log.hpp>
-
+#include <dist/bicop_r270_BB1_log.hpp>
 
 namespace vifcopula {
 
@@ -209,7 +211,27 @@ void bicop_log_add(int i,
             get_base1(theta,ibase,"theta",1)));
         lp_accum__.add( log_2 - 2 * log( theta[i] + 2 ) );
         break;
+    case 17:
+        // survival BB1 copula
 
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(0,7,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(0,7);
+
+
+        if (jacobian__)
+            theta2[i] = in__.scalar_lub_constrain(1,7,lp__);
+        else
+            theta2[i] = in__.scalar_lub_constrain(1,7);
+
+        lp_accum__.add(bicop_survival_BB1_log<propto__>(u,
+                                               v,
+                                               get_base1(theta,ibase,"theta",1),
+                                               get_base1(theta2,ibase,"theta",1)));
+        lp_accum__.add( (0.25-1) * log(theta[i]) - 0.25 * theta[i]  ); // Add prior
+        lp_accum__.add( (0.25-1) * log(theta2[i] - 1) - 0.25 * (theta2[i] - 1)  ); // Add prior
+        break;
     case 21:
 
         if (jacobian__)
@@ -298,7 +320,27 @@ void bicop_log_add(int i,
         lp_accum__.add( log_2 - 2 * log( -theta[i] + 2 ) );
 
         break;
+    case 27:
+        // rotated 90 degree BB1 copula
 
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(-7,0,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(-7,0);
+
+
+        if (jacobian__)
+            theta2[i] = in__.scalar_lub_constrain(-7,-1,lp__);
+        else
+            theta2[i] = in__.scalar_lub_constrain(-7,-1);
+
+        lp_accum__.add(bicop_r90_BB1_log<propto__>(u,
+                                               v,
+                                               get_base1(theta,ibase,"theta",1),
+                                               get_base1(theta2,ibase,"theta",1)));
+        lp_accum__.add( (0.25-1) * log(-theta[i]) + 0.25 * theta[i]  ); // Add prior
+        lp_accum__.add( (0.25-1) * log(- theta2[i] - 1) - 0.25 * (-theta2[i] - 1)  ); // Add prior
+        break;
     case 33:
         // rotated 270 degree Clayton copula
 
@@ -340,7 +382,27 @@ void bicop_log_add(int i,
         lp_accum__.add( log_2 - 2 * log( -theta[i] + 2 ) );
 
         break;
+    case 37:
+        // rotated 270 degree BB1 copula
 
+        if (jacobian__)
+            theta[i] = in__.scalar_lub_constrain(-7,0,lp__);
+        else
+            theta[i] = in__.scalar_lub_constrain(-7,0);
+
+
+        if (jacobian__)
+            theta2[i] = in__.scalar_lub_constrain(-7,-1,lp__);
+        else
+            theta2[i] = in__.scalar_lub_constrain(-7,-1);
+
+        lp_accum__.add(bicop_r270_BB1_log<propto__>(u,
+                                               v,
+                                               get_base1(theta,ibase,"theta",1),
+                                               get_base1(theta2,ibase,"theta",1)));
+        lp_accum__.add( (0.25-1) * log(-theta[i]) + 0.25 * theta[i]  ); // Add prior
+        lp_accum__.add( (0.25-1) * log(- theta2[i] - 1) - 0.25 * (-theta2[i] - 1)  ); // Add prior
+        break;
     default:
         // Code to execute if <variable> does not equal the value following any of the cases
         // Send a break message.
@@ -414,7 +476,10 @@ void bicop_log_latent(int i,
         // survival Joe copula
         lp_accum__.add(bicop_survival_joe_log<propto__>(u,v,theta[i]));
         break;
-
+    case 17:
+        // survival BB1 copula
+        lp_accum__.add(bicop_survival_BB1_log<propto__>(u,v,theta[i],theta2[i]));
+        break;
     case 21:
         // Negative Guassian Copula
         lp_accum__.add(bicop_normal_log<propto__>(u,v,theta[i]));
@@ -443,6 +508,11 @@ void bicop_log_latent(int i,
         lp_accum__.add(bicop_r90_joe_log<propto__>(u,v,theta[i]));
         break;
 
+    case 27:
+        // rotated 90 BB1 copula
+        lp_accum__.add(bicop_r90_BB1_log<propto__>(u,v,theta[i],theta2[i]));
+        break;
+
     case 33:
         // rotated 270 degree Clayton copula
         lp_accum__.add(bicop_r270_clayton_log<propto__>(u,v,theta[i]));
@@ -454,6 +524,11 @@ void bicop_log_latent(int i,
     case 36:
         // rotated 270 degree Joe copula
         lp_accum__.add(bicop_r270_joe_log<propto__>(u,v,theta[i]));
+        break;
+
+    case 37:
+        // rotated 270 BB1 copula
+        lp_accum__.add(bicop_r270_BB1_log<propto__>(u,v,theta[i],theta2[i]));
         break;
 
     default:
@@ -520,7 +595,10 @@ double bicop_log_double( const int copula_type,
         // survival Joe copula
         log_bicop = bicop_survival_joe_log<FALSE>(u,v,theta);
         break;
-
+    case 17:
+        // survival BB1 copula
+        log_bicop = bicop_survival_BB1_log<FALSE>(u,v,theta,theta2);
+        break;
     case 21:
         // Gaussian neg corr
         log_bicop = bicop_normal_log<FALSE>(u,v,theta);
@@ -550,6 +628,11 @@ double bicop_log_double( const int copula_type,
         log_bicop = bicop_r90_joe_log<FALSE>(u,v,theta);
         break;
 
+    case 27:
+        // rotated 90 degree BB1 copula
+        log_bicop = bicop_r90_BB1_log<FALSE>(u,v,theta,theta2);
+        break;
+
     case 33:
         // rotated 270 degree Clayon copula
         log_bicop = bicop_r270_clayton_log<FALSE>(u,v,theta);
@@ -563,6 +646,10 @@ double bicop_log_double( const int copula_type,
         log_bicop = bicop_r270_joe_log<FALSE>(u,v,theta);
         break;
 
+    case 37:
+        // rotated 270 degree BB1 copula
+        log_bicop = bicop_r270_BB1_log<FALSE>(u,v,theta,theta2);
+        break;
     default:
         // Code to execute if <variable> does not equal the value following any of the cases
         // Send a break message.

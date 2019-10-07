@@ -6,7 +6,7 @@ set.seed(0)
 t_max = 1000
 n_max = 100
 gauss_init <- rep(1, n_max)
-copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
+copfamily_init <- sample(c(1,2,3,4,5,6,7),size = 100, replace = T)
 
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, family = 1, seed_num = 0)
 datagen <- datagen_gauss
@@ -252,7 +252,7 @@ dev.off()
 
 ###############################################################################
 
-copfamily = matrix(sample(c(1,2,3,4,5,6),size = 100, replace = T),ncol=1)
+copfamily = matrix(sample(c(1,2,3,4,5,6,7),size = 100, replace = T),ncol=1)
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, family = copfamily, family_latent = 0 )
 datagen <- datagen_mix
 data <- list(u = datagen$u,
@@ -265,9 +265,10 @@ init <- list(copula_type = datagen_mix$family)
 other <- list(seed = 126, core = 8, iter = 1000,
               n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
               eval_elbo = 100, adapt_bool = F, adapt_val = 1,
-              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F)
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = F, modelselect = T)
 vi_mix <- vifcopula::vifcop(data,init,other)
-
+plot(vi_mix)
+compare_sim_vi(datagen_mix, vi_mix)
 sum(vi_mix$cop_type == datagen_mix$family)
 
 pdf(file='img/Mix1.pdf', width = 9, height = 4.5)

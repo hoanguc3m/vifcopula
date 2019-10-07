@@ -19,7 +19,7 @@ task_onefcop <- function(seed_num, family){
     set.seed(seed_num)
 
     #gauss_init <- matrix(family, nrow = n_max, ncol = 1)
-    copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
+    copfamily_init <- sample(c(1,2,3,4,5,6,7),size = 100, replace = T)
 
     datagen <- fcopsim(t_max = t_max, n_max = n_max, family = family, seed_num = seed_num)
     data <- list(u = datagen$u,
