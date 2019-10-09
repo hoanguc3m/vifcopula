@@ -53,6 +53,7 @@ task_bifcop <- function(seed_num, family, family_latent){
                   eval_elbo = 100, adapt_bool = F, adapt_val = 1,
                   adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
     vi_rng <- vifcopula::vifcop(data,init,other)
+    compare_sim_vi(datagen, vi_rng)
 
     c( correct = sum(vi_rng$cop_type == datagen$family),
        iteration = vi_rng$iteration,

@@ -81,6 +81,41 @@ RcppExport SEXP _vifcopula_hmcfcop(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SE
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// unitcheck
+void unitcheck(SEXP data_, SEXP init_, SEXP other_);
+static SEXP _vifcopula_unitcheck_try(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< SEXP >::type data_(data_SEXP);
+    Rcpp::traits::input_parameter< SEXP >::type init_(init_SEXP);
+    Rcpp::traits::input_parameter< SEXP >::type other_(other_SEXP);
+    unitcheck(data_, init_, other_);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _vifcopula_unitcheck(SEXP data_SEXP, SEXP init_SEXP, SEXP other_SEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_vifcopula_unitcheck_try(data_SEXP, init_SEXP, other_SEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _vifcopula_RcppExport_validate(const char* sig) { 
@@ -88,6 +123,7 @@ static int _vifcopula_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("List(*vifcop)(SEXP,SEXP,SEXP)");
         signatures.insert("List(*hmcfcop)(SEXP,SEXP,SEXP)");
+        signatures.insert("void(*unitcheck)(SEXP,SEXP,SEXP)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -96,6 +132,7 @@ static int _vifcopula_RcppExport_validate(const char* sig) {
 RcppExport SEXP _vifcopula_RcppExport_registerCCallable() { 
     R_RegisterCCallable("vifcopula", "_vifcopula_vifcop", (DL_FUNC)_vifcopula_vifcop_try);
     R_RegisterCCallable("vifcopula", "_vifcopula_hmcfcop", (DL_FUNC)_vifcopula_hmcfcop_try);
+    R_RegisterCCallable("vifcopula", "_vifcopula_unitcheck", (DL_FUNC)_vifcopula_unitcheck_try);
     R_RegisterCCallable("vifcopula", "_vifcopula_RcppExport_validate", (DL_FUNC)_vifcopula_RcppExport_validate);
     return R_NilValue;
 }

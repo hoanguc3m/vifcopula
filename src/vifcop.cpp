@@ -189,7 +189,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
     clock_t end;
 
     std::vector<int> cop_vec_new(n_max);
-    std::vector<int> latent_cop_vec_new(n_max);
+    std::vector<int> latent_cop_vec_new = latent_copula_type;
     std::vector<int> vine_cop_vec_new(edges.rows());
     matrix_int edges_new = edges;
 
@@ -251,7 +251,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                 t_max, n_max, k, iter, structfactor, copselect);
     }
     break;
-    case 3: // nest factor copula
+    case 3: // nested factor copula
     {
         int k = k_max;
 
@@ -330,7 +330,7 @@ List vifcop(SEXP data_, SEXP init_, SEXP other_)
                 t_max, n_max, k, iter, structfactor, copselect);
     }
         break;
-    case 13: // nest factor copula
+    case 13: // nested factor copula
     {
         int k = k_max;
 
@@ -687,7 +687,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
                  model_pars, sample_hmc, mean_hmc);
     }
     break;
-    case 3: // nest factor copula
+    case 3: // nested factor copula
     {
         int k = k_max;
 
@@ -750,7 +750,7 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
                  model_pars, sample_hmc, mean_hmc);
     }
         break;
-    case 13: // nest factor copula
+    case 13: // nested factor copula
     {
         int k = k_max;
 
@@ -865,6 +865,51 @@ List hmcfcop(SEXP data_, SEXP init_, SEXP other_)
     PutRNGstate();
 
     END_RCPP
+}
+
+//' @export
+// [[Rcpp::export]]
+void unitcheck(SEXP data_, SEXP init_, SEXP other_)
+{
+    static const char* function("unitcheck");
+
+    // Data input /////////////////////////////////////////////////////////////
+    Rcpp::List data(data_);
+    int t_max  = as<int>(data["t_max"]); // number of observations
+    //int n_max  = as<int>(data["n_max"]); // number of variables
+    // int k_max  = as<int>(data["k_max"]); // number of trees
+    matrix_d u = Rcpp::as<matrix_d>(data["u"]); // observations
+    // int structfactor = as<int>(data["structfactor"]); // factor model
+
+    Rcpp::Rcout << " Data input :" << " Checked" << std::endl;
+
+    Rcpp::List init(init_);
+
+    double par = Rcpp::as<double>(init["par"]); // par1
+    double par2 = Rcpp::as<double>(init["par2"]); // par1
+    int copfamily = Rcpp::as<double>(init["copfamily"]); // par1
+
+    std::vector<double> v_temp(t_max);
+    std::vector<double> u_temp(t_max);
+
+    VectorXd::Map(&u_temp[0], t_max) = u.col(0);
+    VectorXd::Map(&v_temp[0], t_max) = u.col(1);
+
+
+    rng_t base_rng(0);
+
+    Eigen::VectorXd logc = Eigen::VectorXd::Zero(t_max);
+    for (int t = 0; t < t_max; t++) {
+        logc(t) = bicop_log_double(copfamily, u_temp[t], v_temp[t], par, par2);
+    }
+    std::cout << "Calc " << logc.sum() << std::endl;
+    //bicopula biuv(copfamily,u,v,t_max,base_rng);
+    // biuv.log_prob()
+
+    std::vector<double> params_out(2);
+    int cop_new = bicop_select(u_temp, v_temp, t_max, params_out, base_rng);
+    //std::cout << "Bestcop " << cop_new << std::endl;
+
 }
 
 #endif // VIFCOPULA_VIFCOP_CPP

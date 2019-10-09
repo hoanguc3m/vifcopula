@@ -103,9 +103,15 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
     outSub # this will become part of the out object
 }
 
+Data_BB1 <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+    cat('Starting ', i, 'th job.\n', sep = '')
+    outSub <- task_onefcop(seed_collection[i], family = 7)
+    cat('Finishing ', i, 'th job.\n', sep = '')
+    outSub # this will become part of the out object
+}
 
 Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
-    copfamily = sample(c(1,2,3,4,5,6),size = 100, replace = T)
+    copfamily = sample(c(1,2,3,4,5,6,7),size = 100, replace = T)
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_onefcop(seed_collection[i], family = copfamily)
     cat('Finishing ', i, 'th job.\n', sep = '')

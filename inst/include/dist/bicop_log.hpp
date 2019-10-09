@@ -580,7 +580,7 @@ double bicop_log_double( const int copula_type,
         log_bicop = bicop_joe_log<FALSE>(u,v,theta);
         break;
     case 7:
-        // Student copula
+        // BB1 copula
         log_bicop = bicop_BB1_log<FALSE>(u,v,theta,theta2);
         break;
     case 13:

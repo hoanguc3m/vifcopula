@@ -46,7 +46,7 @@ rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8) {
     if ((family == 7) | (family == 17) | (family == 27) | (family == 37)) {
         rep = TRUE
         while (rep) {
-            theta_sample = rgamma(1, shape = .25, rate = .25)
+            theta_sample = 0.1 + rgamma(1, shape = .25, rate = .25)
             delta_sample = 1 + rgamma(1, shape = .25, rate = .25)
             tau = 1 - 2/(delta_sample * (theta_sample +2))
             if ((family == 27) | (family == 37)) {

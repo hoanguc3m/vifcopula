@@ -177,7 +177,7 @@ get_latent_theta.vifcop <- function(vi) {
             if (vi$latent_copula_type[i] > 0){
                 count = count + 1
                 latent_theta[i] <- all_theta[count]
-                if (is_two_paramsR(vi$latent_copula_type)){
+                if (is_two_paramsR(vi$latent_copula_type[i])){
                     count = count + 1
                 }
             }

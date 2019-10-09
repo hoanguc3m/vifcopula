@@ -68,26 +68,26 @@ double bicop_select(std::vector<double>& u,
 
         for (int i = 0; i < cop_seq_size; i++) {
             std::vector<double> params_r(2);
-            params_r[0] = 1.;
-            params_r[1] = 1.;
+            params_r[0] = 0.;
+            params_r[1] = 0.;
             std::vector<int> params_i(0);
 
             biuv.set_copula_type(cop_seq[i]);
             std::stringstream out;
-           Optimizer_BFGS * bfgs = new Optimizer_BFGS(biuv, params_r, params_i);
+           //Optimizer_BFGS * bfgs = new Optimizer_BFGS(biuv, params_r, params_i);
            // std::cout << "Check cop " << cop_seq[i] << " " << params_r[0] << " " << params_r[1] << " " << bfgs->logp() << std::endl;
 
-           //Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
+           Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
             double lp = 0;
             int ret = 0;
+
             while (ret == 0) {
-                ret = bfgs->step();
+                ret = bfgs.step(); // ret = bfgs->step();
             }
-            lp = bfgs->logp();
+            lp = bfgs.logp(); //lp = bfgs->logp();
             log_cop[i] = lp;
 
-
-            if ( is_two_params(cop_seq[i]) ){
+            if (is_two_params(cop_seq[i])){
                 AIC[i] = -2 * lp + 2 * 2;
                 BIC[i] = -2 * lp + log(t_max) * 2;
             } else {
@@ -106,14 +106,16 @@ double bicop_select(std::vector<double>& u,
                 BICmin = BIC[i];
                 imax = i;
 
-                bfgs->params_r(params_r);
+                bfgs.params_r(params_r); // bfgs->params_r(params_r);
 
-		        //params_out = params_r;
+		    // params_out = params_r;
                 biuv.write_array(base_rng, params_r, params_i, params_out);
 
             }
-        delete bfgs;
-            bfgs = NULL;
+            // std::cout << "cop " << cop_seq[i] << " " << params_r[0] << " " << params_r[1] << " " << log_cop[i] << " " << BIC[i] << std::endl;
+
+            // delete bfgs;
+            // bfgs = NULL;
         };
 
          return_cop = cop_seq[imax];

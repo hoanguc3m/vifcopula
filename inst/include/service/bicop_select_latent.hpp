@@ -21,10 +21,7 @@ double bicop_select_latent(std::vector<double>& u,
                     std::vector<double>& params_out,
                     rng_t& base_rng){
 
-    std::vector<double> params_r(2);
-    params_r[0] = 1;
-    params_r[1] = 0;
-    std::vector<int> params_i(0);
+
     bool save_iterations = false;
     int refresh = 0;
     int return_code;
@@ -55,6 +52,11 @@ double bicop_select_latent(std::vector<double>& u,
 
         int imax=0;
         for (int i = 0; i < cop_seq_size; i++) {
+            std::vector<double> params_r(2);
+            params_r[0] = 0.;
+            params_r[1] = 0.;
+            std::vector<int> params_i(0);
+
             biuv.set_copula_type(cop_seq[i]);
             std::stringstream out;
             Optimizer_BFGS bfgs(biuv, params_r, params_i, &out);
@@ -67,7 +69,7 @@ double bicop_select_latent(std::vector<double>& u,
             log_cop[i] = lp;
 
 
-            if (is_two_params(cop_seq[i]) ){
+            if (is_two_params(cop_seq[i])){
                 AIC[i] = -2 * lp + 2 * 2;
                 BIC[i] = -2 * lp + log(t_max) * 2;
             } else {

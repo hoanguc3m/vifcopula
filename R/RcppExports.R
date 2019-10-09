@@ -39,6 +39,11 @@ hmcfcop <- function(data_, init_, other_) {
     .Call('_vifcopula_hmcfcop', PACKAGE = 'vifcopula', data_, init_, other_)
 }
 
+#' @export
+unitcheck <- function(data_, init_, other_) {
+    invisible(.Call('_vifcopula_unitcheck', PACKAGE = 'vifcopula', data_, init_, other_))
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_vifcopula_RcppExport_registerCCallable', PACKAGE = 'vifcopula')

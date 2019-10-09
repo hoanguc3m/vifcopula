@@ -67,6 +67,26 @@ namespace vifcopula {
         return Rcpp::as<List >(rcpp_result_gen);
     }
 
+    inline void unitcheck(SEXP data_, SEXP init_, SEXP other_) {
+        typedef SEXP(*Ptr_unitcheck)(SEXP,SEXP,SEXP);
+        static Ptr_unitcheck p_unitcheck = NULL;
+        if (p_unitcheck == NULL) {
+            validateSignature("void(*unitcheck)(SEXP,SEXP,SEXP)");
+            p_unitcheck = (Ptr_unitcheck)R_GetCCallable("vifcopula", "_vifcopula_unitcheck");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_unitcheck(Shield<SEXP>(Rcpp::wrap(data_)), Shield<SEXP>(Rcpp::wrap(init_)), Shield<SEXP>(Rcpp::wrap(other_)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
 }
 
 #endif // RCPP_vifcopula_RCPPEXPORTS_H_GEN_

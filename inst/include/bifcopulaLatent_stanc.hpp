@@ -7,6 +7,8 @@
 #include <stan/model/model_header.hpp>
 #include <dist/bicop_log.hpp>
 #include <transform/hfunc_stan.hpp>
+#include <service/write_theta.hpp>
+
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
 // [[Rcpp::depends(StanHeaders)]]
@@ -176,7 +178,7 @@ public:
 
 
         for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 2) {
+            if (is_two_params(copula_type[i])) {
                 theta[i] = theta_12(count); count++;
                 theta2[i] = theta_12(count); count++;
             } else {
@@ -188,7 +190,7 @@ public:
 
         for (int i = 0; i < n_max; i++)
         {
-            if (latent_copula_type[i] == 2) {
+            if (is_two_params(latent_copula_type[i])) {
                 theta_latent[i] = theta_12(count); count++;
                 theta2_latent[i] = theta_12(count); count++;
             } else {
