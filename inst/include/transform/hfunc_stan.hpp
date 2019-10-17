@@ -35,13 +35,13 @@ double diffhfuncBB1_v(int family,
     if (family == 17){
         u = 1. - u;
         v = 1. - v;
-        sign = -1.;
     }
 
     if (family == 27){
         u = 1. - u;
         theta = - theta;
         delta = - delta;
+        sign = -1.;
     }
     if (family == 37){
         v = 1. - v;
@@ -52,24 +52,25 @@ double diffhfuncBB1_v(int family,
 
     // if (family == 7){
     double x = pow(u, -theta) - 1;
-    double y = pow(v, -theta) - 1; // A3
-    double xde = pow(x, delta);
-    double yde = pow(y, delta);
-    double xyde = xde+yde;          // A2
-    double xy1de = pow(xyde,1./delta);
-    double a1xy1de = 1 + xy1de;      // A1
+    double y = pow(v, -theta) - 1;              // A3
+    double A3 = y;
+    double A2 = pow(x, delta)+pow(y, delta);    // A2
+    double A1 = 1 + pow(A2,1./delta);           // A1
 
     // hfunc = pow(A1, -1/theta - 1) * pow(A2, 1/delta - 1) * pow(A3, delta-1) * pow(u2, -theta-1);
-    double B11 = pow(a1xy1de, -1./theta - 1);
-    double B12 = xy1de / xyde ; // pow(xyde, 1./delta - 1);
-    double B13 = yde / y ; // pow(y, delta-1);
-    double B14 = pow(v, -theta-1);
-    double dydv = -theta * B14;
+    double B4 = pow(v, -theta-1);
+    double dydv = -theta * B4;
+    double B3 = pow(y, delta-1);
+    double B2 = pow(A2, 1./delta - 1);
+    double B1 = pow(A1, -1./theta - 1);
 
-    hfunc2_dv = -(theta+1) * (B14 / v) * B11 * B12 * B13 +         \
-        (delta-1) * pow(y, delta-2) * dydv * B11 * B12 * B14 +     \
-        (1- delta) * (B12 / xyde) * B13 * dydv * B11 * B13 * B14 + \
-        - (1./theta +1) * (B11 / a1xy1de) * B12 * delta * B13 * dydv * B12 * B13 * B14;
+
+
+
+    hfunc2_dv = -(theta+1) * (B4 / v) * B1 * B2 * B3 +         \
+        (delta-1) * (B3/A3) * dydv * B1 * B2 * B4 +     \
+        (1- delta) * (B2 / A2) * B3 * dydv * B1 * B3 * B4 + \
+        - (1./theta +1) * (B1 / A1) * B2 * B3 * dydv * B2 * B3 * B4;
         // }
 
         return(sign*hfunc2_dv);

@@ -886,8 +886,8 @@ void unitcheck(SEXP data_, SEXP init_, SEXP other_)
     Rcpp::List init(init_);
 
     double par = Rcpp::as<double>(init["par"]); // par1
-    double par2 = Rcpp::as<double>(init["par2"]); // par1
-    int copfamily = Rcpp::as<double>(init["copfamily"]); // par1
+    double par2 = Rcpp::as<double>(init["par2"]); // par2
+    int copfamily = Rcpp::as<double>(init["copfamily"]); // copfamily
 
     std::vector<double> v_temp(t_max);
     std::vector<double> u_temp(t_max);
@@ -897,19 +897,60 @@ void unitcheck(SEXP data_, SEXP init_, SEXP other_)
 
 
     rng_t base_rng(0);
+    // Test 1. Bicopula Log fucntion
+    // Eigen::VectorXd logc = Eigen::VectorXd::Zero(t_max);
+    // for (int t = 0; t < t_max; t++) {
+    //     logc(t) = bicop_log_double(copfamily, u_temp[t], v_temp[t], par, par2);
+    // }
+    // std::cout << "Calc " << logc.sum() << std::endl;
 
-    Eigen::VectorXd logc = Eigen::VectorXd::Zero(t_max);
-    for (int t = 0; t < t_max; t++) {
-        logc(t) = bicop_log_double(copfamily, u_temp[t], v_temp[t], par, par2);
-    }
-    std::cout << "Calc " << logc.sum() << std::endl;
-    //bicopula biuv(copfamily,u,v,t_max,base_rng);
-    // biuv.log_prob()
 
-    std::vector<double> params_out(2);
-    int cop_new = bicop_select(u_temp, v_temp, t_max, params_out, base_rng);
-    //std::cout << "Bestcop " << cop_new << std::endl;
+    // Test 2. Bicopula selection
+    // std::vector<double> params_out(2);
+    // int cop_new = bicop_select(u_temp, v_temp, t_max, params_out, base_rng);
+    // std::cout << "Bestcop " << cop_new << std::endl;
 
+    // Test 3. Bicopula transformation
+    double htranout3a = hfunc_trans(copfamily, u_temp[0], v_temp[0], par, par2);
+    std::cout << "htranout 3a " << htranout3a << std::endl;
+
+    stan::math::var par2v(par2);
+    // stan::math::var htranout3b = hfunc_trans(copfamily, u_temp[0], v_temp[0], par, par2v);
+    // std::cout << "htranout 3b " << htranout3b.val() << std::endl;
+    // htranout3b.grad();
+    // std::cout << " d.h / d.par2 = " << par2v.adj() << std::endl;
+
+    stan::math::var par1v(par);
+    // stan::math::var htranout3c = hfunc_trans(copfamily, u_temp[0], v_temp[0], par1v, par2);
+    // std::cout << "htranout 3c " << htranout3c.val() << std::endl;
+    // htranout3c.grad();
+    // std::cout << " d.h / d.par = " << par1v.adj() << std::endl;
+
+    stan::math::var vvar(v_temp[0]);
+    // stan::math::var htranout3d = hfunc_trans(copfamily, u_temp[0], vvar, par, par2);
+    // std::cout << "htranout 3d " << htranout3d.val() << std::endl;
+    // htranout3d.grad();
+    // std::cout << " d.h / d.v = " << vvar.adj() << std::endl;
+
+
+    // stan::math::var htranout4a = hfunc_trans(copfamily, u_temp[0], vvar, par1v, par2);
+    // std::cout << "htranout 4a " << htranout4a.val() << std::endl;
+    // htranout4a.grad();
+    // std::cout << " d.h / d.v = " << vvar.adj() << std::endl;
+    // std::cout << " d.h / d.par = " << par1v.adj() << std::endl;
+
+    // stan::math::var htranout4b = hfunc_trans(copfamily, u_temp[0], v_temp[0], par1v, par2v);
+    // std::cout << "htranout 4b " << htranout4b.val() << std::endl;
+    // htranout4b.grad();
+    // std::cout << " d.h / d.par = " << par1v.adj() << std::endl;
+    // std::cout << " d.h / d.par2 = " << par2v.adj() << std::endl;
+
+    stan::math::var htranout4c = hfunc_trans(copfamily, u_temp[0], vvar, par1v, par2v);
+    std::cout << "htranout 4c " << htranout4c.val() << std::endl;
+    htranout4c.grad();
+    std::cout << " d.h / d.v = " << vvar.adj() << std::endl;
+    std::cout << " d.h / d.par = " << par1v.adj() << std::endl;
+    std::cout << " d.h / d.par2 = " << par2v.adj() << std::endl;
 }
 
 #endif // VIFCOPULA_VIFCOP_CPP

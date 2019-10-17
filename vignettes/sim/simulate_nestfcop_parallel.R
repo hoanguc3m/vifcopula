@@ -24,7 +24,7 @@ task_nestfcop <- function(seed_num, family, family_latent){
     # gauss_latent_init <- matrix(1, nrow = k_max-1, ncol = 1)
 
     copfamily_init <- sample(c(1,2,3,4,5,6,7),size = 100, replace = T)
-    copfamily_latent_init <- sample(c(1,3,4,5,6,7),size = k_max-1, replace = T)
+    copfamily_latent_init <- sample(c(1,3,4,5,6),size = k_max-1, replace = T)
 
     datagen <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                        family = family, family_latent = family_latent,
@@ -84,12 +84,12 @@ Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(se
     outSub # this will become part of the out object
 }
 
-Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
-    cat('Starting ', i, 'th job.\n', sep = '')
-    outSub <- task_nestfcop(seed_collection[i], family = 3, family_latent = 3)
-    cat('Finishing ', i, 'th job.\n', sep = '')
-    outSub # this will become part of the out object
-}
+    Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+        cat('Starting ', i, 'th job.\n', sep = '')
+        outSub <- task_nestfcop(seed_collection[i], family = 3, family_latent = 3)
+        cat('Finishing ', i, 'th job.\n', sep = '')
+        outSub # this will become part of the out object
+    }
 
 Data_Gumbel <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
@@ -112,9 +112,17 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
     outSub # this will become part of the out object
 }
 
+Data_BB1 <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
+    latentcopfamily = sample(c(1,3,4,5,6),size = k_max-1, replace = T)
+    cat('Starting ', i, 'th job.\n', sep = '')
+    outSub <- task_nestfcop(seed_collection[i], family = 7, family_latent = latentcopfamily)
+    cat('Finishing ', i, 'th job.\n', sep = '')
+    outSub # this will become part of the out object
+}
+
 
 Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0)) %dopar% {
-    copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
+    copfamily = sample(c(1,2,3,4,5,6,7),size = n_max, replace = T)
     latentcopfamily = sample(c(1,3,4,5,6),size = k_max-1, replace = T)
 
     cat('Starting ', i, 'th job.\n', sep = '')

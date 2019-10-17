@@ -23,7 +23,7 @@ task_bifcop <- function(seed_num, family, family_latent){
     # gauss_init <- matrix(1, nrow = n_max, ncol = 1)
     # gauss_latent_init <- matrix(1, nrow = k_max-1, ncol = 1)
 
-    copfamily_init <- sample(c(1,3,4,5,6), size = n_max, replace = T)
+    copfamily_init <- sample(c(1,3,4,5,6,7), size = n_max, replace = T)
     copfamily_latent_init <- sample(c(1,3,4,5,6),size = n_max, replace = T)
 
     datagen <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
@@ -53,7 +53,7 @@ task_bifcop <- function(seed_num, family, family_latent){
                   eval_elbo = 100, adapt_bool = F, adapt_val = 1,
                   adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T)
     vi_rng <- vifcopula::vifcop(data,init,other)
-    compare_sim_vi(datagen, vi_rng)
+    # compare_sim_vi(datagen, vi_rng)
 
     c( correct = sum(vi_rng$cop_type == datagen$family),
        iteration = vi_rng$iteration,
@@ -116,9 +116,17 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
     outSub # this will become part of the out object
 }
 
+Data_BB1 <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+    latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
+
+    cat('Starting ', i, 'th job.\n', sep = '')
+    outSub <- task_bifcop(seed_collection[i], family = 7, family_latent = latentcopfamily)
+    cat('Finishing ', i, 'th job.\n', sep = '')
+    outSub # this will become part of the out object
+}
 
 Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
-    copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
+    copfamily = sample(c(1,2,3,4,5,6,7),size = n_max, replace = T)
     latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
     cat('Starting ', i, 'th job.\n', sep = '')

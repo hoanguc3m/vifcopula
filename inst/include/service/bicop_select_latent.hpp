@@ -37,12 +37,12 @@ double bicop_select_latent(std::vector<double>& u,
         return return_cop;
 
     } else {
-        const int cop_seq_size = 10;                     // Change the number
-        std::vector<int> cop_seq = {1, 3, 4, 5, 6, 7, 13, 14, 16, 17};
+        const int cop_seq_size = 8;                     // Change the number
+        std::vector<int> cop_seq = {1, 3, 4, 5, 6, 13, 14, 16};
 
         double tau = biuv.kendall();
         if (tau < 0){
-            cop_seq = {21, 23, 24, 25, 26, 27, 33, 34, 36, 37};
+            cop_seq = {21, 23, 24, 25, 26, 33, 34, 36};
         }
 
         //Change the number
