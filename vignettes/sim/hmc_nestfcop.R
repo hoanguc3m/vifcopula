@@ -1,6 +1,8 @@
 setwd("/home/hoanguc3m/Dropbox/WP2/")
 library(vifcopula)
-set.seed(0)
+seed_num = 1234
+
+set.seed(seed_num)
 t_max = 1000
 n_max = 100
 k_max = 6
@@ -9,12 +11,12 @@ gid = sample(1:(k_max-1),n_max,replace = T)
 gauss_init <- matrix(1, nrow = n_max, ncol = 1)
 gauss_latent_init <- matrix(1, nrow = k_max-1, ncol = 1)
 
-copfamily_init <- sample(c(1,2,3,4,5,6),size = 100, replace = T)
+copfamily_init <- sample(c(1,2,3,4,5,6,7),size = 100, replace = T)
 copfamily_latent_init <- sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
 
 datagen_gauss <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                          family = 1, family_latent = 1,
-                         gid = gid, structfactor = 3, seed_num = 10)
+                         gid = gid, structfactor = 3, seed_num = seed_num)
 
 datagen <- datagen_gauss
 data <- list(u = datagen$u,
@@ -31,7 +33,7 @@ vi_gauss <- vifcopula::vifcop(data,init,other)
 
 #################################################################################
 datagen_Student <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                           family = 2, seed_num = 0,
+                           family = 2, seed_num = seed_num,
                            structfactor = 3, tau_latent_range = c(0.6,0.8),
                            family_latent = sample(c(1,3,4,5,6),size = k_max-1, replace = T) )
 datagen <- datagen_Student
@@ -49,7 +51,7 @@ vi_student <- vifcopula::vifcop(data,init,other)
 
 #################################################################################
 datagen_clayton <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                           family = 3, family_latent = 3, seed_num = 10,
+                           family = 3, family_latent = 3, seed_num = seed_num,
                            structfactor = 3)
 datagen <- datagen_clayton
 data <- list(u = datagen$u,
@@ -65,7 +67,7 @@ hmc_clayton <- vifcopula::hmcfcop(data,init,other)
 vi_clayton <- vifcopula::vifcop(data,init,other)
 #################################################################################
 datagen_gumbel <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                          family = 4, family_latent = 4, seed_num = 100,
+                          family = 4, family_latent = 4, seed_num = seed_num,
                           structfactor = 3)
 datagen <- datagen_gumbel
 data <- list(u = datagen$u,
@@ -83,7 +85,7 @@ vi_gumbel <- vifcopula::vifcop(data,init,other)
 #################################################################################
 
 datagen_frank <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                         family = 5, family_latent = 5, seed_num = 100,
+                         family = 5, family_latent = 5, seed_num = seed_num,
                          structfactor = 3)
 datagen <- datagen_frank
 data <- list(u = datagen$u,
@@ -101,7 +103,7 @@ vi_frank <- vifcopula::vifcop(data,init,other)
 
 #################################################################################
 datagen_joe <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
-                       family = 6, family_latent = 6,  seed_num = 100,
+                       family = 6, family_latent = 6,  seed_num = seed_num,
                        structfactor = 3)
 datagen <- datagen_joe
 data <- list(u = datagen$u,
@@ -116,14 +118,33 @@ other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copsel
 hmc_joe <- vifcopula::hmcfcop(data,init,other)
 vi_joe <- vifcopula::vifcop(data,init,other)
 
+#################################################################################
+latentcopfamily = sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
+datagen_BB1 <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
+                       family = 7, family_latent = latentcopfamily,  seed_num = seed_num,
+                       structfactor = 3)
+datagen <- datagen_BB1
+data <- list(u = datagen$u,
+             n_max = datagen$n_max,
+             t_max = datagen$t_max,
+             k_max = datagen$k_max,
+             gid = datagen$gid,
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family,
+             latent_copula_type = datagen$family_latent)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F)
+hmc_BB1 <- vifcopula::hmcfcop(data,init,other)
+vi_BB1 <- vifcopula::vifcop(data,init,other)
+
 
 #################################################################################
-copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
+#################################################################################
+copfamily = sample(c(1,2,3,4,5,6,7),size = n_max, replace = T)
 latentcopfamily = sample(c(1,2,3,4,5,6),size = k_max-1, replace = T)
 
 datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                        family = copfamily, family_latent = latentcopfamily,
-                       seed_num = 100, structfactor = 3)
+                       seed_num = seed_num, structfactor = 3)
 datagen <- datagen_mix
 data <- list(u = datagen$u,
              n_max = datagen$n_max,

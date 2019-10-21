@@ -182,7 +182,7 @@ public:
 
 
         for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 2) {
+            if (is_two_params(copula_type[i])) {
                 theta[i] = theta_12(count); count++;
                 theta2[i] = theta_12(count); count++;
             } else {
@@ -194,7 +194,7 @@ public:
 
         for (int i = 0; i < vine_copula_type.size(); i++)
         {
-            if (vine_copula_type[i] == 2) {
+            if (is_two_params(vine_copula_type[i])) {
                 theta_vine[i] = theta_12(count); count++;
                 theta2_vine[i] = theta_12(count); count++;
             } else {

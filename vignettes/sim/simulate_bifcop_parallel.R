@@ -116,7 +116,7 @@ Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed =
     outSub # this will become part of the out object
 }
 
-Data_BB1 <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_BB1 <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     latentcopfamily = sample(c(1,3,4,5,6),size = n_max, replace = T)
 
     cat('Starting ', i, 'th job.\n', sep = '')

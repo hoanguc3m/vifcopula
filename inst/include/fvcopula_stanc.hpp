@@ -164,24 +164,8 @@ public:
         num_params_r__ += t_max*(k-1);        // Latent at branch
 
 
-
-        num_params_r__ += n_max;                // Number of params in obs link
-        for (int i = 0; i < n_max; i++){
-        if (copula_type[i] == 0){
-            num_params_r__ --;
-        } else if (copula_type[i] == 2){
-            num_params_r__ ++;
-            }
-        }
-
-        num_params_r__ += (n_max);                // Number of params in latent link
-        for (int i = 0; i < (n_max); i++){
-        if (vine_copula_type[i] == 0){
-            num_params_r__ --;
-        } else if (vine_copula_type[i] == 2){
-            num_params_r__ ++;
-            }
-        }
+        num_params_r__ += count_params(copula_type);
+        num_params_r__ += count_params(vine_copula_type);
 
     }
 
@@ -281,32 +265,8 @@ public:
         param_ranges_i__.clear();
         num_params_r__ += t_max*k;
 
-        num_params_r__ += n_max;
-        for (int i = 0; i < n_max; i++)
-        {
-            if (copula_type[i] == 0)
-            {
-                num_params_r__ --;
-            }
-            else if (copula_type[i] == 2)
-            {
-                num_params_r__ ++;
-            }
-        }
-
-        num_params_r__ += vine_copula_type.size();
-        for (int i = 0; i < vine_copula_type.size(); i++)
-        {
-            if (vine_copula_type[i] == 0)
-            {
-                num_params_r__ --;
-            }
-            else if (vine_copula_type[i] == 2)
-            {
-                num_params_r__ ++;
-            }
-        }
-
+        num_params_r__ += count_params(copula_type);
+        num_params_r__ += count_params(vine_copula_type);
     }
 
     void set_copula_type(std::vector<int> copula_type_)
@@ -317,31 +277,8 @@ public:
         param_ranges_i__.clear();
         num_params_r__ += t_max*k;
 
-        num_params_r__ += n_max;
-        for (int i = 0; i < n_max; i++)
-        {
-            if (copula_type[i] == 0)
-            {
-                num_params_r__ --;
-            }
-            else if (copula_type[i] == 2)
-            {
-                num_params_r__ ++;
-            }
-        }
-
-        num_params_r__ += vine_copula_type.size();
-        for (int i = 0; i < vine_copula_type.size(); i++)
-        {
-            if (vine_copula_type[i] == 0)
-            {
-                num_params_r__ --;
-            }
-            else if (vine_copula_type[i] == 2)
-            {
-                num_params_r__ ++;
-            }
-        }
+        num_params_r__ += count_params(copula_type);
+        num_params_r__ += count_params(vine_copula_type);
     }
 
     void set_vine_copula_type(std::vector<int> vine_copula_type_,
@@ -354,60 +291,14 @@ public:
         param_ranges_i__.clear();
         num_params_r__ += t_max*k;
 
-        num_params_r__ += n_max;
-        for (int i = 0; i < n_max; i++)
-        {
-            if (copula_type[i] == 0)
-            {
-                num_params_r__ --;
-            }
-            else if (copula_type[i] == 2)
-            {
-                num_params_r__ ++;
-            }
-        }
-
-        num_params_r__ += vine_copula_type.size();
-        for (int i = 0; i < vine_copula_type.size(); i++)
-        {
-            if (vine_copula_type[i] == 0)
-            {
-                num_params_r__ --;
-            }
-            else if (vine_copula_type[i] == 2)
-            {
-                num_params_r__ ++;
-            }
-        }
+        num_params_r__ += count_params(copula_type);
+        num_params_r__ += count_params(vine_copula_type);
     }
 
     int get_eff_para(void){
         int eff_para = 0;
-        eff_para += n_max;
-        for (int i = 0; i < n_max; i++)
-        {
-            if (copula_type[i] == 0)
-            {
-                eff_para --;
-            }
-            else if (copula_type[i] == 2)
-            {
-                eff_para ++;
-            }
-        }
-
-        eff_para += vine_copula_type.size();
-        for (int i = 0; i < vine_copula_type.size(); i++)
-        {
-            if (vine_copula_type[i] == 0)
-            {
-                eff_para --;
-            }
-            else if (vine_copula_type[i] == 2)
-            {
-                eff_para ++;
-            }
-        }
+        eff_para += count_params(copula_type);
+        eff_para += count_params(vine_copula_type);
         return eff_para;
     }
     int get_t_max(void){
@@ -454,7 +345,7 @@ public:
 
 
         for (int i = 0; i < n_max; i++) {
-            if (copula_type[i] == 2) {
+            if (is_two_params(copula_type[i])) {
                 theta[i] = theta_12(count); count++;
                 theta2[i] = theta_12(count); count++;
             } else {
@@ -466,7 +357,7 @@ public:
 
         for (int i = 0; i < vine_copula_type.size(); i++)
         {
-            if (vine_copula_type[i] == 2) {
+            if (is_two_params(vine_copula_type[i])) {
                 theta_vine[i] = theta_12(count); count++;
                 theta2_vine[i] = theta_12(count); count++;
             } else {
