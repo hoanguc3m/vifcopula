@@ -27,11 +27,11 @@ pdf(file='img/Gaussian1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_gauss),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_gauss) ,
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -76,17 +76,17 @@ par(mfrow =c(1,3))
 par(mar=c(5,5,3,1))
 
 plot(datagen$v, get_v0(vi_student),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen$theta, get_theta(vi_student), xlim = c(0.2,1),ylim = c(0.2,1),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-     xlab = expression(nu[gen]), ylab = expression(nu[vi]),
+     xlab = expression(nu[true]), ylab = expression(nu[vi]),
      main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -113,12 +113,12 @@ pdf(file='img/Clayton1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_clayton),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Clayton one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_clayton),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Clayton one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -152,12 +152,12 @@ pdf(file='img/Gumbel1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_gumbel),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Gumbel one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_gumbel),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Gumbel one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -192,12 +192,12 @@ pdf(file='img/Frank1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_frank),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Frank one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_frank),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Frank one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -231,12 +231,12 @@ pdf(file='img/Joe1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_joe),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Joe one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_joe),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Joe one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -271,16 +271,23 @@ plot(vi_mix)
 compare_sim_vi(datagen_mix, vi_mix)
 sum(vi_mix$cop_type == datagen_mix$family)
 
+other <- list(seed = 126, core = 8, iter = 1000,
+              n_monte_carlo_grad = 1, n_monte_carlo_elbo = 100,
+              eval_elbo = 100, adapt_bool = F, adapt_val = 1,
+              adapt_iterations = 50, tol_rel_obj = 0.01, copselect = T, modelselect = T,
+              max_select = 5)
+vi_mix_rng <- vifcopula::vifcop(data,init,other)
+
 pdf(file='img/Mix1.pdf', width = 9, height = 4.5)
 par(mfrow =c(1,2))
 par(mar=c(5,5,3,1))
 plot(datagen$v, get_v0(vi_mix),
-     xlab = expression(v[gen]), ylab = expression(v[vi]),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
      main = " Mixed one factor copula")
 
 abline(a= 0, b=1, col="red")
 plot(datagen$theta, get_theta(vi_mix),
-     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
      main = " Mixed one factor copula")
 abline(a= 0, b=1, col="red")
 dev.off()
@@ -314,12 +321,12 @@ dev.off()
 # par(mfrow =c(1,2))
 # par(mar=c(5,5,3,1))
 # plot(datagen$v, get_v0(datagen_rotate),
-#     xlab = expression(v[gen]), ylab = expression(v[vi]),
+#     xlab = expression(v0[true]), ylab = expression(v0[vi]),
 #     main = " Rotated one factor copula")
 #
 # abline(a= 0, b=1, col="red")
 # plot(datagen$theta, get_theta(datagen_rotate),
-#     xlab = expression(theta[gen]), ylab = expression(theta[vi]),
+#     xlab = expression(theta[true]), ylab = expression(theta[vi]),
 #     main = " Rotated one factor copula")
 # abline(a= 0, b=1, col="red")
 # dev.off()
@@ -365,84 +372,110 @@ dev.off()
 
 #############################################################################
 
-pdf(file='img/SimOnefactor.pdf', width = 18, height = 9)
-par(mfrow =c(3,6))
+pdf(file='img/SimOnefactor.pdf', width = 19, height = 9)
+par(mfrow =c(3,7))
 par(mar=c(5,5,3,1))
+cex_main = 1.25
+cex_lab = 2
+cex_axis = 0.75
 
 plot(datagen_gauss$v, get_v0(vi_gauss),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gaussian one factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Gaussian one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v, get_v0(vi_student),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Student one factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Student one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v, get_v0(vi_clayton),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Clayton one factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Clayton one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v, get_v0(vi_gumbel),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gumbel one factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Gumbel one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v, get_v0(vi_frank),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Frank one factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Frank one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v, get_v0(vi_joe),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Joe one factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Joe one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
+plot(datagen_BB1$v, get_v0(vi_BB1),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
+     main = " BB1 one factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+abline(a= 0, b=1, col="red")
 
 
 
 
 plot(datagen_gauss$theta, get_theta(vi_gauss) ,
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gaussian one factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Gaussian one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta, get_theta(vi_student),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Student one factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta, get_theta(vi_clayton),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Clayton one factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Clayton one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta, get_theta(vi_gumbel),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gumbel one factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Gumbel one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta, get_theta(vi_frank),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Frank one factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Frank one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta, get_theta(vi_joe),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Joe one factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Joe one factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(datagen_BB1$theta, get_theta(vi_BB1),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " BB1 one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 
 plot(datagen_student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-    xlab = expression(nu[gen]), ylab = expression(nu[vi]),
-    main = " Student one factor copula")
+    xlab = expression(nu[true]), ylab = expression(nu[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " Student one factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 plot.new()
 plot.new()
 plot.new()
+plot(datagen_BB1$theta2, get_theta2(vi_BB1),
+     xlab = expression(delta[true]), ylab = expression(delta[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+    #main = " BB1 one factor copula")
+abline(a= 0, b=1, col="red")
+
 dev.off()
-save.image("vi_onefcop_plot.RData")
+#save.image("vi_onefcop_plot.RData")

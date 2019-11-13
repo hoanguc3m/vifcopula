@@ -48,11 +48,11 @@ compare_sim_vi(datagen, vi_gauss)
 # compare_sim_vi(datagen, vi_gauss_rng)
 
 #################################################################################
-datagen_student <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
+datagen_Student <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
                            family = 2, seed_num = 0,
                            structfactor = 3, tau_latent_range = c(0.6,0.8),
                            family_latent = sample(c(1,3,4,5,6),size = k_max-1, replace = T) )
-datagen <- datagen_student
+datagen <- datagen_Student
 data <- list(u = datagen$u,
              n_max = datagen$n_max,
              t_max = datagen$t_max,
@@ -77,8 +77,8 @@ compare_sim_vi(datagen, vi_student)
 # vi_student_rng <- vifcopula::vifcop(data,init,other)
 # plot.vifcop(vi_student_rng)
 # compare_sim_vi(datagen, vi_student_rng)
-# sum(vi_student_rng$cop_type == datagen_student$family)
-# sum(vi_student_rng$latent_copula_type == datagen_student$family_latent)
+# sum(vi_student_rng$cop_type == datagen_Student$family)
+# sum(vi_student_rng$latent_copula_type == datagen_Student$family_latent)
 #################################################################################
 
 #################################################################################
@@ -292,117 +292,154 @@ vi_mix <- vifcopula::vifcop(data,init,other)
 
 #############################################################################
 
-pdf(file='img/Nestedfactor.pdf', width = 18, height = 12)
-par(mfrow =c(4,6))
+pdf(file='img/Nestedfactor.pdf', width = 19, height = 12)
+par(mfrow =c(4,7))
 par(mar=c(5,5,3,1))
+cex_main = 1.25
+cex_lab = 2
+cex_axis = 0.75
 
 plot(datagen_gauss$v[,1], get_v0(vi_gauss),
-    xlab = expression(v0[gen]), ylab = expression(v[vi]),
-    main = " Gaussian nested factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Gaussian nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
-plot(datagen_student$v[,1], get_v0(vi_student),
-    xlab = expression(v0[gen]), ylab = expression(v[vi]),
-    main = " Student nested factor copula")
+plot(datagen_Student$v[,1], get_v0(vi_student),
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Student nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v[,1], get_v0(vi_clayton),
-    xlab = expression(v0[gen]), ylab = expression(v[vi]),
-    main = " Clayton nested factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Clayton nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v[,1], get_v0(vi_gumbel),
-    xlab = expression(v0[gen]), ylab = expression(v[vi]),
-    main = " Gumbel nested factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Gumbel nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v[,1], get_v0(vi_frank),
-    xlab = expression(v0[gen]), ylab = expression(v[vi]),
-    main = " Frank nested factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Frank nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v[,1], get_v0(vi_joe),
-    xlab = expression(v0[gen]), ylab = expression(v[vi]),
-    main = " Joe nested factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Joe nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
-
+plot(datagen_BB1$v[,1], get_v0(vi_BB1),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
+     main = " BB1 nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+abline(a= 0, b=1, col="red")
 
 
 plot(datagen_gauss$v[,2:k_max], get_v(vi_gauss),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gaussian nested factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian nested factor copula")
 abline(a= 0, b=1, col="red")
 
-plot(datagen_student$v[,2:k_max], get_v(vi_student),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Student nested factor copula")
+plot(datagen_Student$v[,2:k_max], get_v(vi_student),
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v[,2:k_max], get_v(vi_clayton),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Clayton nested factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Clayton nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v[,2:k_max], get_v(vi_gumbel),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gumbel nested factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v[,2:k_max], get_v(vi_frank),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Frank nested factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Frank nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v[,2:k_max], get_v(vi_joe),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Joe nested factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe nested factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(datagen_BB1$v[,2:k_max], get_v(vi_BB1),
+     xlab = expression(vg[true]), ylab = expression(vg[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 nested factor copula")
 abline(a= 0, b=1, col="red")
 
 
 
 plot(datagen_gauss$theta, get_theta(vi_gauss) ,
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gaussian nested factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian nested factor copula")
 abline(a= 0, b=1, col="red")
 
-plot(datagen_student$theta, get_theta(vi_student),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Student nested factor copula")
+plot(datagen_Student$theta, get_theta(vi_student),
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta, get_theta(vi_clayton),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Clayton nested factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Clayton nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta, get_theta(vi_gumbel),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gumbel nested factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta, get_theta(vi_frank),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Frank nested factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Frank nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta, get_theta(vi_joe),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Joe nested factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe nested factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(datagen_BB1$theta, get_theta(vi_BB1),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 
-plot(datagen_student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-    xlab = expression(nu[gen]), ylab = expression(nu[vi]),
-    main = " Student nested factor copula")
+plot(datagen_Student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
+    xlab = expression(nu[true]), ylab = expression(nu[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 plot.new()
 plot.new()
 plot.new()
+
+plot(datagen_BB1$theta2, get_theta2(vi_BB1),
+     xlab = expression(delta[true]), ylab = expression(delta[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 nested factor copula")
+abline(a= 0, b=1, col="red")
 
 dev.off()
-save.image("vi_nestfcop_plot.RData")
+#save.image("vi_nestfcop_plot.RData")
 

@@ -289,142 +289,181 @@ vi_mix <- vifcopula::vifcop(data,init,other)
 
 #############################################################################
 
-pdf(file='img/Bifactor.pdf', width = 18, height = 12)
-par(mfrow =c(4,6))
+pdf(file='img/Bifactor.pdf', width = 19, height = 12)
+par(mfrow =c(4,7))
 par(mar=c(5,5,3,1))
+cex_main = 1.25
+cex_lab = 2
+cex_axis = 0.75
 
 plot(datagen_gauss$v[,1], get_v0(vi_gauss),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gaussian bi-factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Gaussian bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v[,1], get_v0(vi_student),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Student bi-factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Student bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v[,1], get_v0(vi_clayton),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Clayton bi-factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Clayton bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v[,1], get_v0(vi_gumbel),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gumbel bi-factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Gumbel bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v[,1], get_v0(vi_frank),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Frank bi-factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Frank bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v[,1], get_v0(vi_joe),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Joe bi-factor copula")
+    xlab = expression(v0[true]), ylab = expression(v0[vi]),
+    main = " Joe bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
-
+plot(datagen_BB1$v[,1], get_v0(vi_BB1),
+     xlab = expression(v0[true]), ylab = expression(v0[vi]),
+     main = " BB1 bi-factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+abline(a= 0, b=1, col="red")
 
 
 plot(datagen_gauss$v[,2:k_max], get_v(vi_gauss),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gaussian bi-factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$v[,2:k_max], get_v(vi_student),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Student bi-factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$v[,2:k_max], get_v(vi_clayton),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Clayton bi-factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+# main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$v[,2:k_max], get_v(vi_gumbel),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Gumbel bi-factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$v[,2:k_max], get_v(vi_frank),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Frank bi-factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$v[,2:k_max], get_v(vi_joe),
-    xlab = expression(v[gen]), ylab = expression(v[vi]),
-    main = " Joe bi-factor copula")
+    xlab = expression(vg[true]), ylab = expression(vg[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
+plot(datagen_BB1$v[,2:k_max], get_v(vi_BB1),
+     xlab = expression(vg[true]), ylab = expression(vg[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 bi-factor copula")
+abline(a= 0, b=1, col="red")
 
 
 plot(datagen_gauss$theta, get_theta(vi_gauss) ,
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gaussian bi-factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta, get_theta(vi_student),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Student bi-factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta, get_theta(vi_clayton),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Clayton bi-factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta, get_theta(vi_gumbel),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gumbel bi-factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta, get_theta(vi_frank),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Frank bi-factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta, get_theta(vi_joe),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Joe bi-factor copula")
+    xlab = expression(theta[true]), ylab = expression(theta[vi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
+plot(datagen_BB1$theta, get_theta(vi_BB1),
+     xlab = expression(theta[true]), ylab = expression(theta[vi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1bi-factor copula")
+abline(a= 0, b=1, col="red")
 
 
 plot(datagen_gauss$theta_latent, get_latent_theta(vi_gauss) ,
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gaussian bi-factor copula")
+    xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_student$theta_latent, get_latent_theta(vi_student),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Student bi-factor copula")
+    xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_clayton$theta_latent, get_latent_theta(vi_clayton),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Clayton bi-factor copula")
+    xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Clayton bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_gumbel$theta_latent, get_latent_theta(vi_gumbel),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Gumbel bi-factor copula")
+    xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_frank$theta_latent, get_latent_theta(vi_frank),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Frank bi-factor copula")
+    xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Frank bi-factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(datagen_joe$theta_latent, get_latent_theta(vi_joe),
-    xlab = expression(theta[gen]), ylab = expression(theta[vi]),
-    main = " Joe bi-factor copula")
+    xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+    main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe bi-factor copula")
 abline(a= 0, b=1, col="red")
 
+plot(datagen_BB1$theta_latent, get_latent_theta(vi_BB1),
+     xlab = expression(theta[gtrue]), ylab = expression(theta[gvi]),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe bi-factor copula")
+abline(a= 0, b=1, col="red")
 
 # plot.new()
 #
 # plot(datagen_student$theta2, get_theta2(vi_student), xlim = c(2,20),ylim = c(2,20),
-#     xlab = expression(nu[gen]), ylab = expression(nu[vi]),
+#     xlab = expression(nu[true]), ylab = expression(nu[vi]),
 #     main = " Student bi-factor copula")
 # abline(a= 0, b=1, col="red")
 #

@@ -109,7 +109,7 @@ Data_Frank <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed
     outSub # this will become part of the out object
 }
 
-Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_bifcop(seed_collection[i], family = 6, family_latent = 6)
     cat('Finishing ', i, 'th job.\n', sep = '')

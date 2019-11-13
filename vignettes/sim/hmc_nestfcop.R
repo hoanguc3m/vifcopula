@@ -182,109 +182,150 @@ compare_vi_hmc(vi_mix, hmc_mix)
 
 #############################################################################
 
-pdf(file='img/VIHMCnestfcop.pdf', width = 18, height = 12)
-par(mfrow =c(4,6))
+pdf(file='img/VIHMCnestfcop.pdf', width = 19, height = 12)
+par(mfrow =c(4,7))
 par(mar=c(5,5,3,1))
+cex_main = 1.25
+cex_lab = 1.5
+cex_axis = 0.75
 
 plot(get_v0_sd(hmc_gauss), get_v0_sd(vi_gauss),
      xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Gaussian one factor copula")
+     main = " Gaussian nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_student), get_v0_sd(vi_student),
      xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Student one factor copula")
+     main = " Student nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_clayton), get_v0_sd(vi_clayton),
      xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Clayton one factor copula")
+     main = " Clayton nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_gumbel), get_v0_sd(vi_gumbel),
      xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Gumbel one factor copula")
+     main = " Gumbel nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_frank), get_v0_sd(vi_frank),
      xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Frank one factor copula")
+     main = " Frank nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
 plot(get_v0_sd(hmc_joe), get_v0_sd(vi_joe),
      xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
-     main = " Joe one factor copula")
+     main = " Joe nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
 abline(a= 0, b=1, col="red")
 
+plot(get_v0_sd(hmc_BB1), get_v0_sd(vi_BB1),
+     xlab = expression(sd(v0[hmc]) ), ylab = expression(sd (v0[vi])),
+     main = " BB1 nested factor copula", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+abline(a= 0, b=1, col="red")
+
+
 plot(get_v_sd(hmc_gauss), get_v_sd(vi_gauss),
-     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
-     main = " Gaussian one factor copula")
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_v_sd(hmc_student), get_v_sd(vi_student),
-     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
-     main = " Student one factor copula")
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_v_sd(hmc_clayton), get_v_sd(vi_clayton),
-     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
-     main = " Clayton one factor copula")
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Clayton nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_v_sd(hmc_gumbel), get_v_sd(vi_gumbel),
-     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
-     main = " Gumbel one factor copula")
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_v_sd(hmc_frank), get_v_sd(vi_frank),
-     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
-     main = " Frank one factor copula")
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Frank nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_v_sd(hmc_joe), get_v_sd(vi_joe),
-     xlab = expression(sd(v[hmc]) ), ylab = expression(sd (v[vi])),
-     main = " Joe one factor copula")
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe nested factor copula")
 abline(a= 0, b=1, col="red")
+
+plot(get_v_sd(hmc_BB1), get_v_sd(vi_BB1),
+     xlab = expression(sd(vg[hmc]) ), ylab = expression(sd (vg[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 nested factor copula")
+abline(a= 0, b=1, col="red")
+
 
 plot(get_theta_sd(hmc_gauss), get_theta_sd(vi_gauss),
      xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Gaussian one factor copula")
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gaussian nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_theta_sd(hmc_student), get_theta_sd(vi_student),
      xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Student one factor copula")
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_theta_sd(hmc_clayton), get_theta_sd(vi_clayton),
      xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Clayton one factor copula")
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Clayton nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_theta_sd(hmc_gumbel), get_theta_sd(vi_gumbel),
      xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Gumbel one factor copula")
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Gumbel nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_theta_sd(hmc_frank), get_theta_sd(vi_frank),
      xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Frank one factor copula")
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+# main = " Frank nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot(get_theta_sd(hmc_joe), get_theta_sd(vi_joe),
      xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
-     main = " Joe one factor copula")
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Joe nested factor copula")
+abline(a= 0, b=1, col="red")
+
+plot(get_theta_sd(hmc_BB1), get_theta_sd(vi_BB1),
+     xlab = expression(sd(theta[hmc]) ), ylab = expression(sd (theta[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 
 plot(get_theta2_sd(hmc_student), get_theta2_sd(vi_student),
-     xlab = expression(sd(theta2[hmc]) ), ylab = expression(sd (theta2[vi])),
-     main = " Student one factor copula")
+     xlab = expression(sd(nu[hmc]) ), ylab = expression(sd (nu[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " Student nested factor copula")
 abline(a= 0, b=1, col="red")
 
 plot.new()
 plot.new()
 plot.new()
 plot.new()
+
+plot(get_theta2_sd(hmc_BB1), get_theta2_sd(vi_BB1),
+     xlab = expression(sd(delta[hmc]) ), ylab = expression(sd (delta[vi])),
+     main = "", cex.main=cex_main, cex.lab=cex_lab, cex.axis=cex_axis)
+#main = " BB1 nested factor copula")
+abline(a= 0, b=1, col="red")
 dev.off()
