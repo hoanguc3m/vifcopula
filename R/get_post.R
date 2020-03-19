@@ -243,21 +243,24 @@ get_vine_theta.vifcop <- function(vi) {
     if (structfactor != 4){
         vine_theta = NULL
     }
-
-    vine_theta <- rep(0, n_max - g_max)
-    count = count_paramsR(vi$cop_type)
-    for (i in 1:length(vi$vine_copula_type)){
-        if (vi$vine_copula_type[i] > 0){
-            count = count + 1
-            vine_theta[i] <- all_theta[count]
-
-            if (is_two_paramsR(vi$vine_copula_type[i])){
+    if (structfactor == 4){
+        vine_theta <- rep(0, n_max - g_max)
+        count = count_paramsR(vi$cop_type)
+        for (i in 1:length(vi$vine_copula_type)){
+            if (vi$vine_copula_type[i] > 0){
                 count = count + 1
+                vine_theta[i] <- all_theta[count]
+
+                if (is_two_paramsR(vi$vine_copula_type[i])){
+                    count = count + 1
+                }
             }
         }
+
+        vine_theta
     }
 
-    vine_theta
+
 }
 #' @export
 get_vine_theta2.vifcop <- function(vi) {
@@ -506,16 +509,18 @@ get_vine_theta.hmcfcop <- function(hmc) {
     if (structfactor != 4){
         vine_theta = NULL
     }
-    vine_theta <- rep(0,n_max - g_max)
-    count = count_paramsR(hmc$cop_type)
+    if (structfactor == 4){
+        vine_theta <- rep(0,n_max - g_max)
+        count = count_paramsR(hmc$cop_type)
 
-    for (i in 1:length(hmc$vine_copula_type)){
-        if (hmc$vine_copula_type[i] > 0){
-            count = count + 1
-            vine_theta[i] <- all_theta[count]
-
-            if (is_two_paramsR(hmc$vine_copula_type[i])){
+        for (i in 1:length(hmc$vine_copula_type)){
+            if (hmc$vine_copula_type[i] > 0){
                 count = count + 1
+                vine_theta[i] <- all_theta[count]
+
+                if (is_two_paramsR(hmc$vine_copula_type[i])){
+                    count = count + 1
+                }
             }
         }
     }

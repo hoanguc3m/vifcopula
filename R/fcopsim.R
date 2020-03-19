@@ -46,9 +46,14 @@ rtheta <-  function(family, tau_min = 0.2, tau_max = 0.8) {
     if ((family == 7) | (family == 17) | (family == 27) | (family == 37)) {
         rep = TRUE
         while (rep) {
-            theta_sample = 0.1 + rgamma(1, shape = .25, rate = .25)
-            delta_sample = 1 + rgamma(1, shape = .25, rate = .25)
-            tau = 1 - 2/(delta_sample * (theta_sample +2))
+            # theta_sample = 0.1 + rgamma(1, shape = .25, rate = .25)
+            # delta_sample = 1 + rgamma(1, shape = .25, rate = .25)
+            # tau = 1 - 2/(delta_sample * (theta_sample +2))
+
+            delta_sample <- rgamma(1, 0.25, 0.25) + 1
+            theta_sample <- - log(2) / (delta_sample * log(2 - 2^(1/delta_sample)))
+            tau <- 1 - 2/(delta_sample * (theta_sample+2))
+
             if ((family == 27) | (family == 37)) {
                 theta_sample = - theta_sample
                 delta_sample = - delta_sample
@@ -328,99 +333,188 @@ fcopsim <- function(t_max, n_max, k_max = 1, family, family_latent = NULL, famil
           structfactor = structfactor)
 }
 
+findJ <- function(i, edges){
+    post1 <- which(i == edges[,1])
+    post2 <- which(i == edges[,2])
+    post <- c(post1, post2)
+    j <- c(edges[post1,2], edges[post2,1])
+    return(list(j=j,pos = post))
+}
 
-#' #' @export
-#' fcoppred <- function(vi, iteration, seed_num = 0) {
-#'     set.seed(seed_num)
-#'     n_max = vi$n_max
-#'     k_max = vi$k_max
-#'     family = vi$cop_type
-#'     family_latent = vi$latent_copula_type
-#'     gid = vi$gid
-#'     structfactor = vi$structfactor
-#'     theta = get_theta(vi)
-#'     theta2 = get_theta2(vi)
-#'     theta_latent = get_latent_theta(vi)
-#'     theta_latent2 = get_latent_theta2(vi)
-#'
-#'     if (! all.equal(iteration, as.integer(iteration)))
-#'         stop("'iteration' has to be a integer")
-#'     if (! all.equal(n_max, as.integer(n_max)))
-#'         stop("'n_max' has to be a integer")
-#'     if (! all.equal(k_max, as.integer(k_max)))
-#'         stop("'n_max' has to be a integer")
-#'     if (! (iteration > 0) & (n_max > 0) & (k_max > 0) )
-#'         stop("'iteration', 'n_max', 'k_max' has to be greater than 0")
-#'
-#'     if ( (structfactor == 1) && (k_max > 1))
-#'         stop("Only support one factor model, for two factor model try: structfactor = 2 ")
-#'
-#'
-#'     # Check copula latent family
-#'     u <- matrix(runif(iteration*n_max),nrow=iteration, ncol = n_max)
-#'
-#'     if (structfactor == 1)
-#'     {
-#'         v <- matrix(runif(iteration*1), nrow = iteration, ncol = 1)
-#'         for (i in 1:n_max){
-#'             obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
-#'             u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
-#'         }
-#'     }
-#'
-#'     if (structfactor == 2)
-#'     {
-#'         v <- matrix(runif(iteration*k_max), nrow = iteration, ncol = k_max)
-#'
-#'         for (i in 1:n_max){
-#'             obj <- BiCop(family = family_latent[i], par = theta_latent[i], par2 = theta_latent2[i])
-#'             # common factor is v[,1]
-#'             # group factor are v[,k+1]
-#'             u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
-#'
-#'         }
-#'
-#'         for (i in 1:n_max){
-#'             # group factor
-#'             obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
-#'             u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
-#'
-#'         }
-#'     }
-#'
-#'     if (structfactor == 3)
-#'     {
-#'         v <- matrix(runif(iteration*k_max), nrow = iteration, ncol = k_max)
-#'
-#'         for (k in 2:k_max){
-#'             obj <- BiCop(family = family_latent[k-1], par = theta_latent[k-1], par2 = theta_latent2[k-1])
-#'             # common factor is v[,1]
-#'             # group factor are v[,k]
-#'             v[,k] <- BiCopHinv2(v[,k], v[,1], obj)
-#'         }
-#'
-#'         for (i in 1:n_max){
-#'             # group factor
-#'             obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
-#'             u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
-#'         }
-#'     }
-#'
-#'
-#'     list( u = u,
-#'         v = v,
-#'         iteration = iteration,
-#'         n_max = n_max,
-#'         k_max = k_max,
-#'         family = family,
-#'         theta = theta,
-#'         theta2 = theta2,
-#'         family_latent = family_latent,
-#'         theta_latent = theta_latent,
-#'         theta2_latent = theta_latent2,
-#'         gid = gid,
-#'         structfactor = structfactor)
-#' }
+
+#' @export
+fcoppred <- function(vi, iteration, seed_num = 0) {
+    set.seed(seed_num)
+    n_max = vi$n_max
+    k_max = vi$k_max
+    family = vi$cop_type
+    family_latent = vi$latent_copula_type
+    gid = vi$gid
+    structfactor = vi$structfactor
+    theta = get_theta(vi)
+    theta2 = get_theta2(vi)
+    theta_latent = get_latent_theta(vi)
+    theta_latent2 = get_latent_theta2(vi)
+
+    if (! all.equal(iteration, as.integer(iteration)))
+        stop("'iteration' has to be a integer")
+    if (! all.equal(n_max, as.integer(n_max)))
+        stop("'n_max' has to be a integer")
+    if (! all.equal(k_max, as.integer(k_max)))
+        stop("'n_max' has to be a integer")
+    if (! (iteration > 0) & (n_max > 0) & (k_max > 0) )
+        stop("'iteration', 'n_max', 'k_max' has to be greater than 0")
+
+    if ( (structfactor == 1) && (k_max > 1))
+        stop("Only support one factor model, for two factor model try: structfactor = 2 ")
+
+
+    # Check copula latent family
+    u <- matrix(runif(iteration*n_max),nrow=iteration, ncol = n_max)
+
+    if (structfactor == 1)
+    {
+        v <- matrix(runif(iteration*1), nrow = iteration, ncol = 1)
+        for (i in 1:n_max){
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
+        }
+    }
+
+    if (structfactor == 2)
+    {
+        v <- matrix(runif(iteration*k_max), nrow = iteration, ncol = k_max)
+
+        for (i in 1:n_max){
+            obj <- BiCop(family = family_latent[i], par = theta_latent[i], par2 = theta_latent2[i])
+            # common factor is v[,1]
+            # group factor are v[,k+1]
+            u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
+
+        }
+
+        for (i in 1:n_max){
+            # group factor
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
+
+        }
+    }
+
+    if (structfactor == 3)
+    {
+        v <- matrix(runif(iteration*k_max), nrow = iteration, ncol = k_max)
+
+        for (k in 2:k_max){
+            obj <- BiCop(family = family_latent[k-1], par = theta_latent[k-1], par2 = theta_latent2[k-1])
+            # common factor is v[,1]
+            # group factor are v[,k]
+            v[,k] <- BiCopHinv2(v[,k], v[,1], obj)
+        }
+
+        for (i in 1:n_max){
+            # group factor
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,gid[i]+1], obj)
+        }
+    }
+
+
+    if (structfactor == 4)
+    { # only for full integrate vine, g = 1
+        edges = vi$edges
+        family_vine = vi$vine_copula_type
+        theta_vine = get_vine_theta(vi)
+        theta2_vine = get_vine_theta2(vi)
+
+        #u <- matrix(runif(n_max*t_max), ncol = n_max, nrow = t_max)
+        id <- rep(TRUE,n_max)
+        rank_id <- tabulate(edges)
+
+        n_vine <- nrow(edges)
+        id_vine <- rep(TRUE,n_vine)
+        stack_variable <- list()
+        stack_edges <- list()
+        pointer <- 0
+        # Gen Tree 1
+        while( nrow(edges) >0 ){
+
+            i <- which(min(rank_id[id]) == rank_id[id])[1] # take one from the rank
+            id[i] <- FALSE
+            #stack_variable <- c(stack_variable, i)
+            #getj <- findJ(i, edges[id_vine,])
+            getj <- findJ(i, edges)
+            j = getj$j; pos <- getj$pos
+            id[j] <- FALSE
+            stack_variable <- c(stack_variable, j)
+            pointer <- pointer+1
+
+            stack_edges[[pointer]] <- c(family_vine[pos], i, j, theta_vine[pos], theta2_vine[pos])
+            # id_vine[pos] <- FALSE
+            family_vine <- family_vine[-(pos)]
+            theta_vine <- theta_vine[-(pos)]
+            theta2_vine <- theta2_vine[-(pos)]
+            edges <- matrix(edges[-(pos),], ncol = 2)
+
+            while (length(stack_variable) > 0){
+                getj <- findJ( tail(stack_variable,1), edges)
+                i <- stack_variable[[length(stack_variable)]]
+                stack_variable[[length(stack_variable)]] <- NULL
+                if (length(getj$pos) >0) {
+                    for (k in c(1:length(getj$pos))){
+                        j = getj$j[k]; pos <- getj$pos[k]
+
+                        pointer <- pointer+1
+                        stack_edges[[pointer]] <- c(family_vine[pos], i, j, theta_vine[pos], theta2_vine[pos])
+                        id[j] <- FALSE
+                        stack_variable <- c(stack_variable, j)
+                    }
+                    family_vine <- family_vine[-(getj$pos)]
+                    theta_vine <- theta_vine[-(getj$pos)]
+                    theta2_vine <- theta2_vine[-(getj$pos)]
+                    edges <- matrix(edges[-(getj$pos),], ncol = 2)
+                }
+            }
+        }
+        for (k in c(1:length(stack_edges))){
+            fam_k <- stack_edges[[k]][1]
+            vari_k <- stack_edges[[k]][2]
+            varj_k <- stack_edges[[k]][3]
+            the_k <- stack_edges[[k]][4]
+            the2_k <- stack_edges[[k]][5]
+            obj <- BiCop(family = fam_k, par = the_k, par2 = the2_k)
+            u[,varj_k] <- BiCopHinv2(u[,varj_k], u[,vari_k], obj)
+        }
+
+        # Gen tree 0
+        v <- matrix(runif(iteration*1), nrow = iteration, ncol = 1)
+        for (i in 1:n_max){
+            # group factor
+            obj <- BiCop(family = family[i], par = theta[i], par2 = theta2[i])
+            u[,i] <- BiCopHinv2(u[,i], v[,1], obj)
+
+        }
+    }
+    list( u = u,
+          v = v,
+          iteration = iteration,
+          n_max = n_max,
+          k_max = k_max,
+          family = family,
+          theta = theta,
+          theta2 = theta2,
+          family_latent = family_latent,
+          theta_latent = theta_latent,
+          theta2_latent = theta_latent2,
+          theta_latent = theta_latent,
+          theta2_latent = theta_latent2,
+          edges = vi$edges,
+          family_vine = vi$vine_copula_type,
+          theta_vine = get_vine_theta(vi),
+          theta2_vine = get_vine_theta2(vi),
+          gid = gid,
+          structfactor = structfactor)
+}
 
 
 #' @export

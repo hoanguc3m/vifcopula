@@ -38,6 +38,7 @@ task_fvcop <- function(seed_num, family, family_vine){
 
     datagen <- fcopsim(t_max = t_max, n_max = n_max, k_max = k_max,
                        family = family, family_vine = family_vine,
+                       tau_range = c(0.2,0.8), tau_latent_range = c(0.2,0.6),
                        gid = gid, structfactor = 4, seed_num = seed_num)
 
     data <- list(u = datagen$u,
@@ -78,18 +79,18 @@ task_fvcop <- function(seed_num, family, family_vine){
 
 
 
-nCores <- 16
+nCores <- 4
 registerDoParallel(nCores)
 
 library(doRNG, quietly = TRUE)
 
-Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_Gauss <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_fvcop(seed_collection[i], family = 1, family_vine = 1)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
-save.image("/home/hoanguc3m/MEGA/Doc/Prior/task_fvcop_sim.RData")
+save.image("/home/hoanguc3m/MEGA/data-rev/task_fvcop_sim.RData")
 
 Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
@@ -100,14 +101,14 @@ Data_Student <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(se
 }
 
 
-Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_Clayton <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_fvcop(seed_collection[i], family = 3, family_vine = 3)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
 
-Data_Gumbel <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_Gumbel <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_fvcop(seed_collection[i], family = 4, family_vine = 4)
     cat('Finishing ', i, 'th job.\n', sep = '')
@@ -121,15 +122,22 @@ Data_Frank <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed
     outSub # this will become part of the out object
 }
 
-Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_Joe <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     cat('Starting ', i, 'th job.\n', sep = '')
     outSub <- task_fvcop(seed_collection[i], family = 6, family_vine = 6)
     cat('Finishing ', i, 'th job.\n', sep = '')
     outSub # this will become part of the out object
 }
 
+Data_BB1 <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
+    vinecopfamily = sample(c(1,3,4,5,6),size = n_max - g_max, replace = T)
+    cat('Starting ', i, 'th job.\n', sep = '')
+    outSub <- task_fvcop(seed_collection[i], family = 7, family_vine = vinecopfamily)
+    cat('Finishing ', i, 'th job.\n', sep = '')
+    outSub # this will become part of the out object
+}
 
-Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="stop" ) %dopar% {
+Data_Mix <- foreach(i = 1:num_rep, .combine= 'cbind', .options.RNG = list(seed = 0), .errorhandling="pass" ) %dopar% {
     copfamily = sample(c(1,2,3,4,5,6),size = n_max, replace = T)
     vinecopfamily = sample(c(1,3,4,5,6),size = n_max - g_max, replace = T)
 

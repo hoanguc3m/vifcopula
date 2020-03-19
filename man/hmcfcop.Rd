@@ -6,6 +6,9 @@
 \usage{
 hmcfcop(data_, init_, other_)
 }
+\value{
+
+}
 \description{
 \code{vifcop} returns NUTS estimations.
 }

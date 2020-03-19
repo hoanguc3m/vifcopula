@@ -145,6 +145,7 @@ BIC_init <- c(vi_gauss[7], vi_student[7], vi_clayton[7], vi_gumbel[7], vi_frank[
 logP_init <- c(vi_gauss[8], vi_student[8], vi_clayton[8], vi_gumbel[8], vi_frank[8], vi_joe[8], vi_BB1[8], vi_mix[8])
 
 init_tab <- rbind(ELBO_init, AIC_init, BIC_init, logP_init)/t_max
+library(xtable)
 print(xtable(init_tab, digits = 1))
 
 iter_num <- c(vi_gauss[2], vi_student[2], vi_clayton[2], vi_gumbel[2], vi_frank[2], vi_joe[2], vi_BB1[2], vi_mix[2])

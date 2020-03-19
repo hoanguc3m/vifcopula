@@ -166,6 +166,34 @@ vi_mix <- vifcopula::vifcop(data,init,other)
 
 ###############################################################################
 
+# Mix selected
+###############################################################################
+
+copfamily = c(rep(1, 40), rep(3, 10), rep(4, 10), rep(5, 10), rep(6, 10), rep(2, 10), rep(7, 10))
+latentcopfamily = sample(c(1,3,4,5),size = n_max, replace = T)
+
+datagen_mix <- fcopsim(t_max = 1000, n_max = 100, k_max = k_max, gid = gid,
+                       family = copfamily, family_latent = latentcopfamily,
+                       seed_num = 0, structfactor = 2)
+tail(BiCopPar2Tau(family = datagen_mix$family, par = datagen_mix$theta, par2 = datagen_mix$theta2),10)
+
+datagen <- datagen_mix
+data <- list(u = datagen$u,
+             n_max = datagen$n_max,
+             t_max = datagen$t_max,
+             k_max = datagen$k_max,
+             gid = datagen$gid,
+             structfactor = datagen$structfactor)
+init <- list(copula_type = datagen$family,
+             latent_copula_type = datagen$family_latent)
+other <- list(seed = 126, core = 8, num_warmup = 500, num_samples = 1000, copselect = F,
+              tol_rel_obj = 0.001)
+hmc_mix <- vifcopula::hmcfcop(data,init,other)
+vi_mix <- vifcopula::vifcop(data,init,other)
+
+
+###############################################################################
+
 time_vi <- c(vi_gauss$time, vi_student$time, vi_clayton$time, vi_gumbel$time, vi_frank$time, vi_joe$time, vi_BB1$time, vi_mix$time)
 time_hmc <- c(hmc_gauss$time, hmc_student$time, hmc_clayton$time, hmc_gumbel$time, hmc_frank$time, hmc_joe$time, hmc_BB1$time, hmc_mix$time)
 

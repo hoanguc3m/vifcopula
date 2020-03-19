@@ -6,6 +6,9 @@
 \usage{
 vifcop(data_, init_, other_)
 }
+\value{
+
+}
 \description{
 \code{vifcop} returns variational estimations.
 }
