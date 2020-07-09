@@ -30,7 +30,10 @@ double bicop_select_latent(std::vector<double>& u,
     double BICmin = std::numeric_limits<double>::max();
 
     bicopula biuv(1,u,v,t_max,base_rng);
-
+    // Rcpp::Rcout << " u " << " : " << " here " << std::endl;
+    // PRINT_ELEMENTS(u);
+    // Rcpp::Rcout << " v " << " : " << " here " << std::endl;
+    // PRINT_ELEMENTS(v);
 
     if (biuv.check_Ind()){
         //biuv.set_copula_type(0);

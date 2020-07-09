@@ -174,8 +174,13 @@ public:
                         std::vector<double> params_out(2);
                         cop_new[j] = bicop_select(u1_temp, v_temp, t_max, params_out, base_rng);
 
+                        int cop_temp = cop_new[j];
+                        if (cop_temp == 21 || cop_temp == 22 || cop_temp == 25) {
+                            cop_temp = cop_temp - 20;
+                        }
+
                         for (int t = 0; t < t_max; t++){
-                                u_cond(t,j) = hfunc_trans(cop_new[j],  u1_temp[t], v_temp[t], params_out[0], params_out[1]);
+                                u_cond(t,j) = hfunc_trans(cop_temp,  u1_temp[t], v_temp[t], params_out[0], params_out[1]);
                             }
                         }
 
